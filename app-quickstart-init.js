@@ -39,9 +39,6 @@ app.rq.push(['script',1,app.vars.baseURL+'resources/jquery.ui.jeditable.js']); /
 app.rq.push(['script',1,app.vars.baseURL+'resources/jquery.showloading-v1.0.jt.js']); //used for making text editable (customer address). non-essential. loaded late.
 app.rq.push(['script',0,app.vars.baseURL+'resources/jquery.ui.anyplugins.js']); //in zero pass in case product page is first page.
 
-app.rq.push(['script',0,(document.location.protocol == 'https:' ? 'https:' : 'http:')+'//ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.js']);
-//for banner slideshow used on homepage.
-app.rq.push(['script',1,app.vars.baseURL+'cycle-2.9998.js']);//','validator':function(){return (jQuery().cycle) ? true : false;}});
 
 
 
@@ -156,13 +153,13 @@ app.u.appInitComplete = function(P)	{
 //app.rq.push(['script',0,app.vars.baseURL+'cycle.js']);
 
 //add slideshow to homepage.
-app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
+/*app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
 																			  
 		var $target=$('#wideSlideshow');
 		$target.cycle({prev: '#prev',next: '#next',fx:'fade',speed:'slow',timeout:5000,pager:'#slideshowNav',text: true,pagerAnchorBuilder:function(index,el){return '';},slideExpr:'li'});	
 		//$target.cycle({fx:'swing',speed:3,timeout:5000,pager:'#slideshowNav',pagerAnchorBuilder:function(index,el){return' ';},slideExpr:'li'});
 		}]);
-
+*/
 
 //don't execute script till both jquery AND the dom are ready.
 $(document).ready(function(){
