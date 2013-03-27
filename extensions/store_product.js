@@ -369,7 +369,7 @@ addToCart : function (pid,$form){
 			atcQuantityInput : function($tag,data)	{
 				if(app.ext.store_product.u.productIsPurchaseable(data.value))	{
 					var o = '';
-					o += "<input type='number' value='1' size='3' name='quantity' min='1' class='zform_number' id='quantity_"+data.value+"' />";
+					o += "<select type='number' name='quantity' min='1' class='zform_number' id='quantity_"+data.value+"'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option></select>";
 					$tag.append(o);
 					}
 				else
