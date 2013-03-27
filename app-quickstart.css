@@ -1799,3 +1799,7 @@ CATEGORY TEMPLATE
 	font-size:12px;
     height:80px;  
 }
+.loginShow {display:none;}
+.buyerLoggedIn span.loginShow {display:inline-block;}
+
+.buyerLoggedIn .loginHide {display:none;}

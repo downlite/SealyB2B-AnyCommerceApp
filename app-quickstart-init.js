@@ -88,6 +88,8 @@ app.u.howManyPassZeroResourcesAreLoaded = function(debug)	{
 	}
 
 
+
+
 //gets executed once controller.js is loaded.
 //check dependencies and make sure all other .js files are done, then init controller.
 //function will get re-executed if not all the scripts in app.vars.scripts pass 1 are done loading.

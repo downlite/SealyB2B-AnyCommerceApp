@@ -528,6 +528,11 @@ else	{
 		}, //callbacks
 
 
+/*handleLoginActions : function()  {
+$('body').addClass('buyerLoggedIn');
+$('.username').text(app.u.getUsernameFromCart());
+},*/
+
 
 ////////////////////////////////////   WIKILINKFORMATS    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 

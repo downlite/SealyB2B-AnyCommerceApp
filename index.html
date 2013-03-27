@@ -124,7 +124,12 @@ This file is intended to go along with the 10-step tutorial at:
 
 <div id='appView' class='displayNone'>
 <div class="topbar">
-        <div class="welcome"><span class="fl">Welcome, Guest!(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=newsletter" class='bindByAnchor'>Create An Account</a>)
+        <div class="welcome"><span class="fl"><div id="usernameContainer">
+Welcome,
+<span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});"></span>
+<span class="loginHide">Guest</span>
+!
+</div>(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=newsletter" class='bindByAnchor'>Create An Account</a>)
         </span>
         <span class="fr"><a href="#cart?show=cart" class='bindByAnchor'><span class='cartItemCount'>0</span> item(s)</a> in <a href="#cart?show=cart" class='bindByAnchor'>Shopping Cart</a> | <a href="#checkout?show=checkout" class='bindByAnchor'>Checkout</a>
         <a href="#"><img src="images/que.gif" width="28" height="27" style="margin:-1px 0 -11px 51px;" alt=""></a></span></div>
