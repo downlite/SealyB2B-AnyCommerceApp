@@ -519,7 +519,7 @@ else	{
 			onSuccess : function(tagObj)	{
 				app.vars.cid = app.data[tagObj.datapointer].cid; //save to a quickly referencable location.
 				$('#loginSuccessContainer').show(); //contains 'continue' button.
-				$('#loginMessaging').empty().show().append("Thank you, you are now logged in."); //used for success and fail messaging.
+				$('#loginMessaging').empty().show().append("<p style='font-weight:bold;font-size:15px;'>Thank you, you are now logged in.</font> <div style='text-align:left; width:275px; margin:0 0 0 14px;'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam porta, leo vel pulvinar facilisis, urna nibh tincidunt sapien, sed consectetur tellus diam in leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas est velit, ullamcorper vel euismod ac, accumsan sed eros.<br/><br />Integer ac neque at arcu luctus pellentesque ac ut dui. Morbi est justo, dapibus ut fringilla at, placerat nec elit. Sed enim nisl, vestibulum a tincidunt sed, porttitor a lacus.</div>"); //used for success and fail messaging.
 				$('#loginFormContainer').hide(); //contains actual form.
 				$('#recoverPasswordContainer').hide(); //contains password recovery form.
 				}

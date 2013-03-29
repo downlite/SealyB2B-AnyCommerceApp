@@ -16,7 +16,7 @@
 .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
 .ui-helper-clearfix:after { clear: both; }
 .ui-helper-clearfix { zoom: 1; }
-.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity:0; filter:Alpha(Opacity=0); }
 
 
 /* Interaction Cues
@@ -572,8 +572,25 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
 
 
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	text-transform:uppercase;
+    border:0 !important;
+    color:#128EC7;
+    font-weight: bold;
+}
 
-
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+    background:none !important;
+    border:0 !important;
+    color: #999999 !important;
+    font-weight: bold;
+}
+.previewListContainer .resultsHeader{ padding:7px 10px;}
+.ui-widget-content {
+    background:#fff;
+    border:0 !important;
+    color: #333333;
+}
 
 .rightA{ width:150px; float:right;}
 .rightA h3{ color: #000000;font-size: 12px;margin:0px 0 7px;}
@@ -593,7 +610,9 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     margin: 0px;
 }
 
-
+.zwarn{margin: 0;
+    position: absolute;
+    z-index: 9999;}
 
 /*
 
@@ -656,7 +675,7 @@ h1	{color:#000000; font-size:18px; font-weight:bold; margin:0 0 12px 0; padding:
 .ui-widget-content{ }
 .ui-corner-all li{ clear: both;
     float: left;
-    width: 434px;}
+    width: 504px;}
 /*My CSS*/
 body{ background:url(images/bg.gif); margin:0px; padding:0px; font-family: 'Montserrat', sans-serif;font-size:13px; font-weight:normal;}
 a{ text-decoration:none; color:#128ec7;}
@@ -1550,7 +1569,7 @@ PRODUCT TEMPLATE
 .prodVideoContainer P	{color: #000000; font-size: 12px; margin: 2px 0; padding: 0 0 0 70px;}
 .prodViewerContainer .prodThumbs div {float: left; margin: 12px 12px 10px 0;}
 .LeftS{width:394px; float:left; margin:0 20px 0 0px;}
-.rightS{width:173px; float:left;  text-align: center;}
+.rightS{width:168px; float:left;  text-align: center;}
 .rightS .pricing .basePrice .value {
 	font-weight:bold;
 	font-size:30px;
@@ -1602,7 +1621,7 @@ PRODUCT TEMPLATE
 }
 .ui-widget-content {
     background:#fff !important;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #CCCCCC;
     color: #333333;
 }
 .ui-dialog .ui-dialog-titlebar-close {
@@ -1614,6 +1633,9 @@ PRODUCT TEMPLATE
     top: 50%;
     width: 21px;
 }
+
+#zCheckoutFrm fieldset{ border:#ccc solid 1px !important;}
+
 .qtyAndATCContainer fieldset {margin:0 0 3px;}
 #wishlist{margin: 0 0 0 409px; border-radius:0px; border:0px; background:none; position: absolute;top: 269px;}
 #Quantity select{ width:142px;padding:5px;border:#cccccc solid 1px;}
@@ -1729,7 +1751,7 @@ CATEGORY TEMPLATE
 }
 .pfrom{  display: inline-block;
     padding: 7px 0;}
-.cents{ vertical-align:super; font-size:12px;}
+.cents{ vertical-align:super; font-size:10px;}
 .categoryList li{width:220px;  padding:0px; color:#000; font-size:13px;}
 .categoryList .catName{ height:34px; background:#dedcd5;height: 34px; margin: -50px 0 0; position: relative; padding:16px 0 0 !important; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";filter: alpha(opacity=70);-moz-opacity:0.7;-khtml-opacity: 0.7;opacity: 0.7;}
 .categoryTemplate .fluidList li{ margin:10px 0 0px 13px;}
@@ -1749,7 +1771,7 @@ CATEGORY TEMPLATE
 #chkoutBillAddressFieldset, #chkoutPayOptionsFieldset, #chkoutOrderNotesFieldset, #chkoutShipMethodsFieldset, #chkoutPreflightFieldset{ margin-bottom:15px; padding:10px 10px 15px 40px;}
 #chkoutAccountInfoFieldset{ padding:15px 10px 10px 40px; margin:0 0 15px;}
 #data-bill_email{border:1px solid #CCCCCC;height: 24px;padding: 0 9px; margin:0 10px 20px;}
-#chkoutCartSummary{ padding:15px 10px 10px 40px; line-height:18px;}
+#chkoutCartSummary{ padding:15px 10px 10px 40px; line-height:18px; border:#ccc solid 1px !important;}
 #shipMethodsContainer{ margin:10px 0 0 0px;}
 #billAddressUL li{ margin:0 0 10px 0px;}
 .preflightInputContainer {float: left;margin: 0 30px 0 0; width: 45%;}
@@ -1778,6 +1800,11 @@ CATEGORY TEMPLATE
 .pricing .retailPrice	{text-decoration:line-through}
 .pricing .basePrice	{color:#000;}
 
+
+.ui-state-default .ui-icon {
+    background-image: url("images/ui-icons_ef8c08_256x240.png") !important;
+}
+.ui-dialog-titlebar .ui-icon{ position: absolute; right:0 !important; left:0px !important; top: 0% !important; width: 17px; margin: -10px 0 0 0; padding: 1px; height: 18px;}
 .pricing .savings	{font-size:13px; font-style:italic;}
 .cartStuffContainer ul li{ height:20px;}
 .ui-widget-header {
@@ -1829,3 +1856,5 @@ CATEGORY TEMPLATE
 .buyerLoggedIn span.loginShow {display:inline-block;}
 
 .buyerLoggedIn .loginHide {display:none;}
+
+.hideIfLoggedIn{display:block;}

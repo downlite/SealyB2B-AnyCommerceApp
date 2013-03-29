@@ -366,7 +366,7 @@ the object created here is passed as 'data' into the mulitpage template. that's 
 					var L = obj.csv.length;
 
 //okay, now lets set up some defaults if none were passed and normalize the data.
-					obj.items_per_page = (Number(obj.items_per_page)) ? Number(obj.items_per_page) : 8; //the number of items per page before going to multipage (if enabled)
+					obj.items_per_page = (Number(obj.items_per_page)) ? Number(obj.items_per_page) : 12; //the number of items per page before going to multipage (if enabled)
 					obj.page_in_focus = (Number(obj.page_in_focus)) ? Number(obj.page_in_focus) : 1; //in a multipage format, which page is in focus.
 					obj.hide_summary = (obj.hide_summary) ? true : false;
 					obj.hide_pagination = this.mpControlsShouldBeHidden(obj);

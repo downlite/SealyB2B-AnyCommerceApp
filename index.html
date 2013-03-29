@@ -62,6 +62,8 @@ app.u.loadScript(app.vars.baseURL+"app-quickstart-init.js");
 </script>
 
 
+
+
 </head>
 
 <body>
@@ -124,12 +126,12 @@ This file is intended to go along with the 10-step tutorial at:
 
 <div id='appView' class='displayNone'>
 <div class="topbar">
-        <div class="welcome"><span class="fl"><div id="usernameContainer">
+        <div class="welcome" id="usernameContainer"><span class="fl">
 Welcome,
 <span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});"></span>
 <span class="loginHide">Guest</span>
 !
-</div>(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=newsletter" class='bindByAnchor'>Create An Account</a>)
+(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=newsletter" class='bindByAnchor'>Create An Account</a>)
         </span>
         <span class="fr"><a href="#cart?show=cart" class='bindByAnchor'><span class='cartItemCount'>0</span> item(s)</a> in <a href="#cart?show=cart" class='bindByAnchor'>Shopping Cart</a> | <a href="#checkout?show=checkout" class='bindByAnchor'>Checkout</a>
         <a href="#"><img src="images/que.gif" width="28" height="27" style="margin:-1px 0 -11px 51px;" alt=""></a></span></div>
@@ -137,7 +139,7 @@ Welcome,
     <header>
 <div class="logoSec">
 <div class="logo"><a href="#category?navcat=." class='bindByAnchor'><img src="images/logo.gif" width="93" height="79" alt="Sealy" title="Sealy"></a></div>
-<div class="searchbar"> <span class="number">	 <b>1-866-MY-SEALY</b>&nbsp;&nbsp;&nbsp;M-F 10-4  EST &nbsp;&nbsp;&nbsp;<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Live Chat</a></span><br>
+<div class="searchbar"> <span class="number">	 <b>855-769-3696</b>&nbsp;&nbsp;&nbsp;M-F 10-4  EST &nbsp;&nbsp;&nbsp;<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Live Chat</a></span><br>
 <div class="Smain">
     <div class="Searchbg"><div class="searchBox">
 					<form id='headerSearchFrm' name='headerSearchFrm' action='#' class='productSearchForm' method="get">
@@ -159,7 +161,10 @@ Welcome,
 <nav class="nav_menu"><ul id='tier1categories'></ul><!-- DUAL NAV WILL GO HERE --></nav>
 <div class="cb"></div>
 	
-
+<!--<ul class="cart">
+						<li><a href="#cart?show=cart" class='bindByAnchor'><img src="images/cart_img.png" alt="" /><span class='cartItemCount'>0</span> item(s)</a></li>
+						<li><a href="#checkout?show=checkout" class='bindByAnchor highlight'>Checkout</a></li>
+					</ul>-->
 		<!--<div class="header clearfix">
 			<div class="header_top">
 				<p>White Goose Down Pillows &amp; White Goose Down Comforters Manufacturer Direct.</p>
@@ -242,7 +247,7 @@ Welcome,
     <div class="email"><input required='required' type='text'  value='full name' class='newsSubscribeInput textbox fullname' maxlength='50' size='25' name='fullname' id='subscribeFullnameFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" />
       <input type="image" class="submit" value="" src="images/signup.gif" alt="Sign Up" title="Sign Up" style="width:70px; height:30px;padding:0;"/>
       </form></div>
-    <div class="icons"><a href="http://www.facebook.com/DOWNLITE" target="_blank"><img src="images/fb.gif" width="32" height="32" alt="Facebook" title="Facebook"></a><a href="http://twitter.com/downlite" target="_blank"><img src="images/twitter.gif" width="32" height="32" alt="Twitter" title="Twitter"></a><a href="https://plus.google.com/b/114695199123775476410/" target="_blank"><img src="images/gplus.gif" width="32" height="32" alt="Google Plus" title="Google Plus"></a><a href="http://pinterest.com/downlite/" target="_blank"><img src="images/pinterest.gif" width="32" height="32" alt="Pinterest" title="Pinterest"></a><a href="#"><img src="images/youtube.gif" width="32" height="32" alt="You Tube" title="You Tube"></a></div>
+    <div class="icons"><a href="#."><img src="images/fb.gif" width="32" height="32" alt="Facebook" title="Facebook"></a><a href="#."><img src="images/twitter.gif" width="32" height="32" alt="Twitter" title="Twitter"></a><a href="#."><img src="images/gplus.gif" width="32" height="32" alt="Google Plus" title="Google Plus"></a><a href="#."><img src="images/pinterest.gif" width="32" height="32" alt="Pinterest" title="Pinterest"></a><a href="#"><img src="images/youtube.gif" width="32" height="32" alt="You Tube" title="You Tube"></a></div>
     <div class="cb"></div>
     </div>
 </section>
@@ -287,7 +292,7 @@ Welcome,
 </ul>
 </div>
 <div class="Ques"><b>QUESTIONS OR CONCERNS? CALL US!</b>
-<span>1-866-MY-SEALY</span><br>
+<span>855-769-3696</span><br>
 Monday to Friday 10:00Am - 4:00pm EST<br>
 <img src="images/mca.gif" width="62" height="22" style="margin:18px 0 21px;" alt=""> <br>
 Manufactured by DOWNLITE, a licensee of<br>
@@ -512,17 +517,17 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 	
 	<div>
 	<!--<input type='image' src='images/signin.gif' value='Sign In' class='' />-->
-    <input name="" type="submit" value="Sign In" class="signin"><br clear="all">
+    <input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
 	</div>
 	</fieldset>
-</form>
-</div>
+</form><span class="hideIfLoggedIn">
 <div class="first"><p>First Time Here? Sign Up!</p>
 <p class="start"><a href="#customer?show=newsletter" class='bindByAnchor'>START A BUSINESS ACCOUNT</a></p>
+<span>For Furniture & Mattress Businesses... LEARN MORE</span>
+</div></span>
+</div>
 
-
-<span>For Furniture & Mattress Businesses... LEARN MORE</span></div>
-			</div>
+			</div> 
 			<div class="floatLeft">
 				<div id="slideshowContainer">
                 
@@ -730,7 +735,7 @@ don't modify the 'data-templateid' unless you are changing template names and up
 <div class="needhelp">
 <br><br>
 Need help? Call Us!<br>
-<b>1-866-MY-SEALY</b><br>
+<b>855-769-3696</b><br>
 or<br>
 <a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
 
@@ -1022,10 +1027,9 @@ this will likely become more flexible in the future. ###
     <h5 class='stid' data-bind='var: product(pid); format:text; pretext: Item #: ;'></h5>
      <h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
     <!--<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Manufacturer: ;'></h5>-->
-    
-	
-		<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone'></fieldset>
-        <fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone' id='Quantity'></fieldset>
+   
+		<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone' style='float:left;'></fieldset>
+        <fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone' id='Quantity' style='float:left;'></fieldset>
 		<!--<div class='qtyAndATCContainer clearfix qtyInput'>
 			
 			
@@ -1051,7 +1055,7 @@ this will likely become more flexible in the future. ###
             <div class="needhelp" style="margin:172px 0 0 0;">
 <br><br>
 Need help? Call Us!<br>
-<b>1-866-MY-SEALY</b><br>
+<b>855-769-3696</b><br>
 or<br>
 <a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
 
@@ -1433,7 +1437,7 @@ adding classes is not likely to have any bad effects.
 <div class="needhelp">
 <br><br>
 Need help? Call Us!<br>
-<b>1-866-MY-SEALY</b><br>
+<b>855-769-3696</b><br>
 or<br>
 <a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
 
@@ -1467,7 +1471,7 @@ ON ALL U.S. ORDERS<br>
 	
 	
 		<div id='contactArticle' class='displayNone textContentArea'>
-			<h1>Contact Us</h1>
+			<h1 style="margin-bottom:12px;">Contact Us</h1>
 			<div class="Cleft"><form action='#' onSubmit="app.ext.store_crm.calls.appSendMessage.init($(this).serializeJSON(),{'callback':'showMessaging','parentID':'contactFormMessaging','message':'Thank you, your message has been sent'},'immutable'); app.model.dispatchThis('immutable');  return false;" id='contactForm' name='contactForm'>
 			<fieldset>
 				
@@ -1730,20 +1734,6 @@ onclicks are recursive, so only add it to the parent element.
  
 	<!--</div>--><!-- /.mpControls -->
 </div><!-- /#mpControlSpec -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2154,7 +2144,7 @@ The 'data-action' attribute is used to assign an onclick.
 	</div>
 	
 	<div>
-	<input type='image' src='images/signin.gif' value='log in' class='' />
+	<input type='image' src='images/signin.gif' value='log in' class='' id="login" />
 	</div>
 	</fieldset>
 </form>

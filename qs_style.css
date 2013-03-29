@@ -173,7 +173,7 @@ and override using classes or id's as needed.
 
 .lineItemProdlist .prodThumb	{margin-right:12px;}
 
-.categoryList > li	{width:150px; height:200px;}
+.categoryList > li	{width:220px;}
 
 .productList h4, .productList h5, .productList h6, .categoryList h4, .categoryList h5, .categoryList h6	{padding:0; margin:0;} /* h4 - h6 are used in default templates for name, price, etc */
 
@@ -378,10 +378,10 @@ HELP PAGES
 
 /***** CONTACT US ******/
 #contactForm {float:right; margin: 0 0 12px 12px;}
-#contactForm fieldset	{border:1px solid #cccccc; padding:10px;}
-#contactForm div	{margin-bottom:5px}
+#contactForm fieldset	{}
+#contactForm div	{}
 #contactForm label	{width:105px; display:inline-block; margin-right:6px; vertical-align:top; text-align:right;}
-#contactForm input, #contactForm textarea	{width:145px;}
+#contactForm input, #contactForm textarea	{}
 #contactForm textarea	{height:125px;}
 
 
@@ -405,7 +405,7 @@ NOTE - Some of these classes are also shared with the cart summary that appears 
 
 ***************************************************/
 
-.cartSummaryTotalsContainer h2	{margin:0; border-top:0; border-left:0; border-right:0; padding:2px 12px; font-size:.8em;} /* header */
+.cartSummaryTotalsContainer h2	{margin:0; border-top:0; border-left:0; border-right:0; padding:2px 12px; } /* header */
 .cartSummaryTotalsContainer .cartSummaryContainer	{padding:12px;}
 .cartZipCodeContainer, .cartAltButtonsContainer, .cartSummaryContainer	{margin-bottom:12px; padding-bottom:12px; border-bottom:1px dotted #efefef;}
 
@@ -484,7 +484,7 @@ CHECKOUT
 	}
 
 /* tier 2 nav */
-.ddUlMenu li ul li	{cursor:pointer; color:#000099;} /* click is likely binded to li, so make it all a cursor */
+.ddUlMenu li ul li	{cursor:pointer;} /* click is likely binded to li, so make it all a cursor */
 .ddUlMenu li ul a {
 	background: none;
 	line-height:24px;

@@ -108,9 +108,7 @@ copying the template into memory was done for two reasons:
 		app.sessionId = null;
 		app.vars.extensions = app.vars.extensions || [];
 		
-		if(app.vars.thisSessionIsAdmin)	{
-			app.handleAdminVars(); //needs to be late because it'll use some vars set above.
-			}
+		app.handleAdminVars(); //needs to be late because it'll use some vars set above.
 		app.onReady();
 
 		}, //initialize
@@ -171,21 +169,18 @@ A session ID could be passed in through vars, but app.sessionId isn't set until 
 		else if(app.vars.sessionId)	{
 			app.u.dump(" -> session id set.");
 			app.calls.appCartExists.init(app.vars.sessionId,{'callback':'handleTrySession','datapointer':'appCartExists'});
-			app.calls.whoAmI.init({'callback':'suppressErrors'},'immutable'); //get this info when convenient.
 			app.model.dispatchThis('immutable');
 			}
 //if sessionId is set on URI, there's a good chance a redir just occured from non secure to secure.
 		else if(app.u.isSet(app.u.getParameterByName('sessionId')))	{
 			app.u.dump(" -> session id from URI used.");
 			app.calls.appCartExists.init(app.u.getParameterByName('sessionId'),{'callback':'handleTrySession','datapointer':'appCartExists'});
-			app.calls.whoAmI.init({'callback':'suppressErrors'},'immutable'); //get this info when convenient.
 			app.model.dispatchThis('immutable');
 			}
 //check localStorage
 		else if(app.model.fetchSessionId())	{
 			app.u.dump(" -> session retrieved from localstorage..");
 			app.calls.appCartExists.init(app.model.fetchSessionId(),{'callback':'handleTrySession','datapointer':'appCartExists'});
-			app.calls.whoAmI.init({'callback':'suppressErrors'},'immutable'); //get this info when convenient.
 			app.model.dispatchThis('immutable');
 			}
 		else	{
@@ -209,65 +204,111 @@ If the data is not there, or there's no data to be retrieved (a Set, for instanc
 */
 	calls : {
 
-		appBuyerCreate : {
-			init : function(obj,_tag)	{
-				this.dispatch(obj,_tag);
-				return 1;
-				},
-			dispatch : function(obj,_tag){
-				obj._tag = _tag || {};
-				obj._cmd = "appBuyerCreate";
-				app.model.addDispatchToQ(obj,'immutable');
-				}
-			}, //appBuyerCreate
-			
-		appBuyerLogin : {
-			init : function(obj,_tag)	{
-				var r = 0;
-				if(obj && obj.login && obj.password)	{
-					r = 1;
+//all authentication calls use immutable Q
+		authentication : {
+//the authentication through FB sdk has already taken place and this is an internal server check to verify integrity.	
+//the getFacebookUserData function also updates bill_email and adds the fb.user info into memory in a place quickly accessed
+//the obj passed in is passed into the request as the _tag
+			facebook : {
+				init : function(tagObj)	{
+					app.u.dump('BEGIN app.calls.authentication.facebook.init');
+//Sanity - this call occurs AFTER a user has already logged in to facebook. So though server authentication may fail, the login still occured.
+_gaq.push(['_trackEvent','Authentication','User Event','Logged in through Facebook']);
+					this.dispatch(tagObj);
+					return 1;
+					},
+				dispatch : function(tagObj)	{
+//note - was using FB['_session'].access_token pre v-1202. don't know how long it wasn't working, but now using _authRepsonse.accessToken
+					app.model.addDispatchToQ({'_cmd':'appVerifyTrustedPartner','partner':'facebook','appid':zGlobals.thirdParty.facebook.appId,'token':FB['_authResponse'].accessToken,'state':app.sessionID,"_tag":tagObj},'immutable');
+					}
+				}, //facebook
+//obj is login/password.
+//tagObj is everything that needs to be put into the tag node, including callback, datapointer and/or extension.
+			zoovy : {
+				init : function(obj,tagObj)	{
+//					app.u.dump('BEGIN app.calls.authentication.zoovy.init ');
+//					app.u.dump(' -> username: '+obj.login);
 //email should be validated prior to call.  allows for more custom error handling based on use case (login form vs checkout login)
 					app.calls.cartSet.init({"bill/email":obj.login}) //whether the login succeeds or not, set bill/email in /session
-					this.dispatch(obj,_tag);
+					this.dispatch(obj,tagObj);
+					return 1;
+					},
+				dispatch : function(obj,tagObj)	{
+					obj["_cmd"] = "appBuyerLogin";
+					obj['method'] = "unsecure";
+					obj["_tag"] = tagObj;
+					obj["_tag"]["datapointer"] = "appBuyerLogin";
+					
+					app.model.addDispatchToQ(obj,'immutable');
 					}
-				else	{$('#globalMessaging').anymessage({'message':'In app.calls.appBuyerLogin, login or password not specified.','gMessage':true});}
-				return r;
+				}, //zoovy
+			
+			buyerLogout : {
+				init : function(obj,tagObj)	{
+					this.dispatch(obj,tagObj);
+					return 1;
+					},
+				dispatch : function(obj,tagObj)	{
+					obj["_cmd"] = "buyerLogout";
+					obj["_tag"] = tagObj || {};
+					obj["_tag"]["datapointer"] = "buyerLogout";
+					app.model.addDispatchToQ(obj,'immutable');
+					}
+				}, //appBuyerLogout
+			
+			authAdminLogout : {
+				init : function(tagObj)	{
+					this.dispatch(tagObj);
+					return 1;
+					},
+				dispatch : function(tagObj){
+					app.model.addDispatchToQ({'_cmd':'authAdminLogout',"_tag":tagObj},'immutable');
+					}
+				}, //authAdminLogout
+
+			accountLogin : {
+				init : function(obj,tagObj)	{
+					this.dispatch(obj,tagObj);
+					return 1;
+					},
+				dispatch : function(obj,tagObj){
+					app.u.dump("Attempting to log in");
+					obj._cmd = 'authAdminLogin';
+					app.vars.userid = obj.userid.toLowerCase();	 // important!
+					obj.authtype = "md5";
+					obj.ts = app.u.ymdNow();
+					obj.authid = Crypto.MD5(obj.password+obj.ts);
+					obj._tag = tagObj || {};
+					obj.device_notes = "";
+					if(obj.persitentAuth)	{obj._tag.datapointer = "authAdminLogin"} //this is only saved locally IF 'keep me logged in' is true.
+					delete obj.password;
+					app.model.addDispatchToQ(obj,'immutable');
+					}
+				}
+
+			}, //authentication
+
+		authAccountCreate : {
+			init : function(obj,tagObj){
+				this.dispatch(obj,tagObj);
 				},
-			dispatch : function(obj,_tag)	{
-				obj["_cmd"] = "appBuyerLogin";
-				obj['method'] = "unsecure";
-				obj["_tag"] = _tag || {};
-				obj["_tag"]["datapointer"] = "appBuyerLogin";
-				
+			dispatch : function(obj,tagObj){
+				obj._cmd = 'authUserRegister';
+				tagObj = tagObj || {};
+				obj['tag'] = tagObj;
 				app.model.addDispatchToQ(obj,'immutable');
 				}
-			}, //appBuyerLogin
+			},
 
 		appCartCreate : {
-			init : function(_tag)	{
-				this.dispatch(_tag); 
+			init : function(tagObj)	{
+				this.dispatch(tagObj); 
 				return 1;
 				},
-			dispatch : function(_tag)	{
-				app.model.addDispatchToQ({"_cmd":"appCartCreate","_tag":_tag},'immutable');
+			dispatch : function(tagObj)	{
+				app.model.addDispatchToQ({"_cmd":"appCartCreate","_tag":tagObj},'immutable');
 				}
 			},//getValidSessionID
-//always uses immutable Q
-//formerly canIHaveSession
-		appCartExists : {
-			init : function(cartid,_tag)	{
-//					app.u.dump('BEGIN app.calls.appCartExists');
-				app.sessionId = cartid; //needed for the request. may get overwritten if not valid.
-				this.dispatch(cartid,_tag);
-				return 1;
-				},
-			dispatch : function(cartid,_tag)	{
-				var obj = {};
-				obj["_cmd"] = "appCartExists"; 
-				obj["_tag"] = _tag;
-				app.model.addDispatchToQ(obj,'immutable');
-				}
-			}, //appCartExists
 
 		appCategoryDetail : {
 			init : function(obj,_tag,Q)	{
@@ -306,9 +347,10 @@ If the data is not there, or there's no data to be retrieved (a Set, for instanc
 				obj._tag = _tag;
 				app.model.addDispatchToQ(obj,Q);	
 				}
-			},//appCategoryDetail		
+			},//appCategoryDetail
 
-//get a list of newsletter subscription lists. partition specific.
+
+//get a list of newsletter subscription lists.
 		appNewsletterList : {
 			init : function(_tag,Q)	{
 				var r = 0;
@@ -372,6 +414,128 @@ If the data is not there, or there's no data to be retrieved (a Set, for instanc
 				}
 			}, //appProductGet
 
+//always uses immutable Q
+// ### need to migrate anything using this to use appCartCreate.
+		getValidSessionID : {
+			init : function(callback)	{
+				this.dispatch(callback); 
+				return 1;
+				},
+			dispatch : function(callback)	{
+				app.model.addDispatchToQ({"_cmd":"appCartCreate","_tag":{"callback":callback}},'immutable');
+				}
+			},//getValidSessionID
+
+//always uses immutable Q
+//formerly canIHaveSession
+		appCartExists : {
+			init : function(cartid,tagObj)	{
+//					app.u.dump('BEGIN app.calls.appCartExists');
+				app.sessionId = cartid; //needed for the request. may get overwritten if not valid.
+				this.dispatch(cartid,tagObj);
+				return 1;
+				},
+			dispatch : function(cartid,tagObj)	{
+				var obj = {};
+				obj["_cmd"] = "appCartExists"; 
+				obj["_tag"] = tagObj;
+				app.model.addDispatchToQ(obj,'immutable');
+				}
+			}, //appCartExists
+
+//for now, no fetch is done here. it's assumed if you execute this, you don't know who you are dealing with.
+		whoAmI : {
+			init : function(tagObj,Q)	{
+				this.dispatch(tagObj,Q);
+				return 1;
+				},
+			dispatch : function(tagObj,Q)	{
+				tagObj = $.isEmptyObject(tagObj) ? {} : tagObj; 
+				tagObj.datapointer = "whoAmI"
+				app.model.addDispatchToQ({"_cmd":"whoAmI","_tag" : tagObj},Q);	
+				}
+			},//whoAmI
+
+		canIUse : {
+			init : function(flag,Q)	{
+				this.dispatch(flag,Q);
+				return 1;
+				},
+			dispatch : function(flag,Q)	{
+				app.model.addDispatchToQ({"_cmd":"canIUse","flag":flag,"_tag":{"datapointer":"canIUse|"+flag}},Q);
+				}
+			}, //canIUse
+
+//default immutable Q
+//formerly setSessionVars
+		cartSet : {
+			init : function(obj,tagObj,Q)	{
+				this.dispatch(obj,tagObj,Q);
+				return 1;
+				},
+			dispatch : function(obj,tagObj,Q)	{
+				if(!Q)	{Q = 'immutable'}
+				obj["_cmd"] = "cartSet";
+				if(tagObj)	{obj["_tag"] = tagObj;}
+				app.model.addDispatchToQ(obj,Q);
+				}
+			}, //cartSet
+
+
+//used to get a clean copy of the cart. ignores local/memory. used for logout.
+		cartDetail : {
+			init : function(_tag,Q)	{
+				var r = 0;
+				_tag = _tag || {};
+				_tag.datapointer = "cartDetail";
+				if(app.model.fetchData(_tag.datapointer))	{
+					app.u.handleCallback(_tag);
+					}
+				else	{
+					r = 1;
+					this.dispatch(_tag,Q);
+					}
+				return r;
+				},
+			dispatch : function(_tag,Q)	{
+//				app.u.dump('BEGIN app.ext.store_cart.calls.cartDetail.dispatch');
+				app.model.addDispatchToQ({"_cmd":"cartDetail","_tag": _tag},Q || 'mutable');
+				} 
+			}, // refreshCart removed comma from here line 383
+
+// formerly updateCartQty
+		cartItemUpdate : {
+			init : function(stid,qty,_tag)	{
+//				app.u.dump('BEGIN app.calls.cartItemUpdate.');
+				var r = 0;
+				if(stid && Number(qty) >= 0)	{
+					r = 1;
+					this.dispatch(stid,qty,_tag);
+					}
+				else	{
+					app.u.throwGMessage("In calls.cartItemUpdate, either stid ["+stid+"] or qty ["+qty+"] not passed.");
+					}
+				return r;
+				},
+			dispatch : function(stid,qty,_tag)	{
+//				app.u.dump(' -> adding to PDQ. callback = '+callback)
+				app.model.addDispatchToQ({"_cmd":"cartItemUpdate","stid":stid,"quantity":qty,"_tag": _tag},'immutable');
+				app.ext.store_checkout.u.nukePayPalEC(); //nuke paypal token anytime the cart is updated.
+				}
+			 },
+
+
+		ping : {
+			init : function(tagObj,Q)	{
+				this.dispatch(tagObj,Q);
+				return 1;
+				},
+			dispatch : function(tagObj,Q)	{
+				app.model.addDispatchToQ({"_cmd":"ping","_tag":tagObj},Q); //get new session id.
+				}
+			}, //ping
+
+			
 		appProfileInfo : {
 			init : function(obj,_tag,Q)	{
 				var r = 0; //will return 1 if a request is needed. if zero is returned, all data needed was in local.
@@ -400,192 +564,6 @@ If the data is not there, or there's no data to be retrieved (a Set, for instanc
 				} // dispatch
 			}, //appProfileInfo
 
-//the authentication through FB sdk has already taken place and this is an internal server check to verify integrity.	
-//the getFacebookUserData function also updates bill_email and adds the fb.user info into memory in a place quickly accessed
-//the obj passed in is passed into the request as the _tag
-		appVerifyTrustedPartner : {
-			init : function(partner,_tag,Q)	{
-				var r = 0;
-				if(partner)	{
-					this.dispatch(partner,_tag,Q);
-					r = 1;
-					}
-				else	{
-					$('#globalMessaging').anymessage({'message':'In app.calls.appVerifyTrustedPartner, partner not specified.','gMessage':true});
-					}
-				return r;
-				},
-			dispatch : function(partner,_tag,Q)	{
-//note - was using FB['_session'].access_token pre v-1202. don't know how long it wasn't working, but now using _authRepsonse.accessToken
-				app.model.addDispatchToQ({'_cmd':'appVerifyTrustedPartner','partner':partner,'appid':zGlobals.thirdParty.facebook.appId,'token':FB['_authResponse'].accessToken,'state':app.sessionID,"_tag":_tag},Q || 'immutable');
-				}
-			}, //facebook			
-			
-		authAdminLogout : {
-			init : function(_tag)	{
-				this.dispatch(_tag);
-				return 1;
-				},
-			dispatch : function(_tag){
-				app.model.addDispatchToQ({'_cmd':'authAdminLogout',"_tag":_tag},'immutable');
-				}
-			}, //authAdminLogout
-
-		authAdminLogin : {
-			init : function(obj,_tag)	{
-				this.dispatch(obj,_tag);
-				return 1;
-				},
-			dispatch : function(obj,_tag){
-				app.u.dump("Attempting to log in");
-				obj._cmd = 'authAdminLogin';
-				app.vars.userid = obj.userid.toLowerCase();	 // important!
-				obj.authtype = "md5";
-				obj.ts = app.u.ymdNow();
-				obj.authid = Crypto.MD5(obj.password+obj.ts);
-				obj._tag = _tag || {};
-				obj.device_notes = "";
-				if(obj.persitentAuth)	{obj._tag.datapointer = "authAdminLogin"} //this is only saved locally IF 'keep me logged in' is true.
-				delete obj.password;
-				app.model.addDispatchToQ(obj,'immutable');
-				}
-			}, //authentication
-
-		authAccountCreate : {
-			init : function(obj,_tag){
-				this.dispatch(obj,_tag);
-				},
-			dispatch : function(obj,_tag){
-				obj._cmd = 'authUserRegister';
-				_tag = _tag || {};
-				obj['tag'] = _tag;
-				app.model.addDispatchToQ(obj,'immutable');
-				}
-			},
-
-		buyerLogout : {
-			init : function(_tag)	{
-				this.dispatch(_tag);
-				return 1;
-				},
-			dispatch : function(_tag)	{
-				obj["_cmd"] = "buyerLogout";
-				obj["_tag"] = _tag || {};
-				obj["_tag"]["datapointer"] = "buyerLogout";
-				app.model.addDispatchToQ(obj,'immutable');
-				}
-			}, //appBuyerLogout
-
-		canIUse : {
-			init : function(flag,Q)	{
-				this.dispatch(flag,Q);
-				return 1;
-				},
-			dispatch : function(flag,Q)	{
-				app.model.addDispatchToQ({"_cmd":"canIUse","flag":flag,"_tag":{"datapointer":"canIUse|"+flag}},Q);
-				}
-			}, //canIUse
-
-//used to get a clean copy of the cart. ignores local/memory. used for logout.
-		cartDetail : {
-			init : function(_tag,Q)	{
-				var r = 0;
-				_tag = _tag || {};
-				_tag.datapointer = "cartDetail";
-				if(app.model.fetchData(_tag.datapointer))	{
-					app.u.handleCallback(_tag);
-					}
-				else	{
-					r = 1;
-					this.dispatch(_tag,Q);
-					}
-				return r;
-				},
-			dispatch : function(_tag,Q)	{
-//				app.u.dump('BEGIN app.ext.store_cart.calls.cartDetail.dispatch');
-				app.model.addDispatchToQ({"_cmd":"cartDetail","_tag": _tag},Q || 'mutable');
-				} 
-			}, // refreshCart removed comma from here line 383
-
-		cartItemAppend : {
-			init : function(obj,_tag)	{
-				var r = 0;
-				if(obj && obj.sku && obj.qty)	{
-					obj.uuid = app.u.guidGenerator();
-					this.dispatch(obj,_tag);
-					r = 1;
-					}
-				else	{
-					$('#globalMessaging').anymessage({'message':'Qty or SKU left blank in cartItemAppend'});
-					}
-				
-				return r;
-				},
-			dispatch : function(obj,_tag){
-				obj._tag = _tag;
-				obj._cmd = "cartItemAppend";
-				app.model.addDispatchToQ(obj,'immutable');
-				}
-			}, //cartItemAppend
-
-// formerly updateCartQty
-		cartItemUpdate : {
-			init : function(stid,qty,_tag)	{
-//				app.u.dump('BEGIN app.calls.cartItemUpdate.');
-				var r = 0;
-				if(stid && Number(qty) >= 0)	{
-					r = 1;
-					this.dispatch(stid,qty,_tag);
-					}
-				else	{
-					app.u.throwGMessage("In calls.cartItemUpdate, either stid ["+stid+"] or qty ["+qty+"] not passed.");
-					}
-				return r;
-				},
-			dispatch : function(stid,qty,_tag)	{
-//				app.u.dump(' -> adding to PDQ. callback = '+callback)
-				app.model.addDispatchToQ({"_cmd":"cartItemUpdate","stid":stid,"quantity":qty,"_tag": _tag},'immutable');
-				app.ext.store_checkout.u.nukePayPalEC(); //nuke paypal token anytime the cart is updated.
-				}
-			 },
-
-//default immutable Q
-//formerly setSessionVars
-		cartSet : {
-			init : function(obj,_tag,Q)	{
-				this.dispatch(obj,_tag,Q);
-				return 1;
-				},
-			dispatch : function(obj,_tag,Q)	{
-				if(!Q)	{Q = 'immutable'}
-				obj["_cmd"] = "cartSet";
-				if(_tag)	{obj["_tag"] = _tag;}
-				app.model.addDispatchToQ(obj,Q);
-				}
-			}, //cartSet
-
-//always uses immutable Q
-// ### need to migrate anything using this to use appCartCreate.
-		getValidSessionID : {
-			init : function(callback)	{
-				this.dispatch(callback); 
-				return 1;
-				},
-			dispatch : function(callback)	{
-				app.model.addDispatchToQ({"_cmd":"appCartCreate","_tag":{"callback":callback}},'immutable');
-				}
-			},//getValidSessionID
-
-		ping : {
-			init : function(_tag,Q)	{
-				this.dispatch(_tag,Q);
-				return 1;
-				},
-			dispatch : function(_tag,Q)	{
-				app.model.addDispatchToQ({"_cmd":"ping","_tag":_tag},Q); //get new session id.
-				}
-			}, //ping
-
 //used to get a clean copy of the cart. ignores local/memory. used for logout.
 //this is old and, arguably, should be a utility. however it's used a lot so for now, left as is. !!! fix during cleanup or big release.
 		refreshCart : {
@@ -593,21 +571,7 @@ If the data is not there, or there's no data to be retrieved (a Set, for instanc
 				app.model.destroy('cartDetail');
 				app.calls.cartDetail.init(_tag,Q);
 				}
-			}, // refreshCart removed comma from here line 383
-
-//for now, no fetch is done here. it's assumed if you execute this, you don't know who you are dealing with.
-		whoAmI : {
-			init : function(_tag,Q)	{
-				this.dispatch(_tag,Q);
-				return 1;
-				},
-			dispatch : function(_tag,Q)	{
-				_tag = _tag || {}; 
-				_tag.datapointer = "whoAmI"
-				app.model.addDispatchToQ({"_cmd":"whoAmI","_tag" : _tag},Q);	
-				}
-			}//whoAmI
-
+			} // refreshCart removed comma from here line 383
 		}, // calls
 
 					// //////////////////////////////////   CALLBACKS    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\
@@ -653,6 +617,8 @@ app.u.throwMessage(responseData); is the default error handler.
 // if there are any  extensions(and most likely there will be) add then to the controller.
 // This is done here because a valid cart id is required.
 					app.model.addExtensions(app.vars.extensions);
+//
+					app.calls.whoAmI.init({'callback':'suppressErrors'},'mutable'); //get this info when convenient.
 					}
 				else	{
 					app.u.dump(' -> UH OH! invalid session ID. Generate a new session. nuke localStorage if domain is ssl.zoovy.com.');
@@ -1277,7 +1243,7 @@ AUTHENTICATION/USER
 			app.model.destroy('whoAmI'); //need this nuked too.
 			app.vars.cid = null; //used in soft-auth.
 			
-			app.calls.buyerLogout.init({'callback':'showMessaging','message':'Thank you, you are now logged out'});
+			app.calls.authentication.buyerLogout.init({'callback':'showMessaging','message':'Thank you, you are now logged out'});
 			app.calls.refreshCart.init({},'immutable');
 			app.model.dispatchThis('immutable');
 			},
@@ -1908,8 +1874,8 @@ later, it will handle other third party plugins as well.
 				
 				var L = app.data.cartDetail['@ITEMS'].length;
 				for(var i = 0; i < L; i += 1)	{
-					if(app.data.cartDetail['@ITEMS'][i]['%attribs'] && app.data.cartDetail['@ITEMS'][i]['%attribs']['gc:blocked'])	{obj.googlecheckout = false}
-					if(app.data.cartDetail['@ITEMS'][i]['%attribs'] && app.data.cartDetail['@ITEMS'][i]['%attribs']['paypalec:blocked'])	{obj.paypalec = false}
+					if(app.data.cartDetail['@ITEMS'][i]['%attribs']['gc:blocked'])	{obj.googlecheckout = false}
+					if(app.data.cartDetail['@ITEMS'][i]['%attribs']['paypalec:blocked'])	{obj.paypalec = false}
 					}
 
 				return obj;
@@ -1919,8 +1885,6 @@ later, it will handle other third party plugins as well.
 // ### NOTE! SANITY ! WHATEVER - app.ext.convertSessionToOrder.vars is referenced below. When this is removed, make sure to update checkouts to add an onChange event to update the app.ext.convertSessionToOrder.vars object because otherwise the CC number won't be in memory and possibly won't get sent as part of calls.cartOrderCreate.
 
 			getSupplementalPaymentInputs : function(paymentID,data,isAdmin)	{
-				app.u.dump(" -> USING OLD VERSION of getSupplementalPaymentInputs. CHANGE TO NEW in cco");
-				//NOTE -> this function wasn't just deleted because extensive testing needs to occur to the checkouts/UI and I'm still in dev on the new version of the function.
 //				app.u.dump("BEGIN control.u.getSupplementalPaymentInputs ["+paymentID+"]");
 //				app.u.dump(" -> data:"); app.u.dump(data);
 				var $o; //what is returned. a jquery object (ul) w/ list item for each input of any supplemental data.
@@ -1928,7 +1892,7 @@ later, it will handle other third party plugins as well.
 				var safeid = ''; //used in echeck loop. recycled in loop.
 				var tmp = ''; //tmp var used to put together string of html to append to $o
 				
-				var payStatusCB = "<li><label><input type='checkbox' name='flagAsPaid' \/>Flag as paid<\/label><\/li>"
+				var payStatusCB = "<li><label><input type='checkbox' name='flagAsPaid'>Flag as paid<\/label><\/li>"
 				
 				
 				switch(paymentID)	{
@@ -2613,17 +2577,13 @@ $tmp.empty().remove();
 			$tag.val(data.value);
 			}, //text
 
-//only use this on fields where the value is boolean
-//if setting checked=checked by default, be sure to pass hideZero as false.
+//only use this on fields where the value is b
 		popCheckbox : function($tag,data){
-			app.u.dump(" -> popCheckbox data.value: "+data.value);
+//			app.u.dump(" -> data.value: "+data.value);
 			if(Number(data.value))	{$tag.attr('checked',true);}
 			else if(data.value === 'on')	{$tag.attr('checked',true);}
 			else if(data.value == true)	{$tag.attr('checked',true);}
-			else if(Number(data.value) === 0){ //treat as number in case API return "0"
-				$tag.attr('checked',false); //have to handle unchecking in case checked=checked when template created.
-				}
-			else{}
+			else{} //shouldn't get here if data.value isn't populated.
 			},
 
 
@@ -2663,7 +2623,7 @@ $tmp.empty().remove();
 //					app.u.dump(' -> r = '+r);
 					sr = r.split('.');
 					o = sr[0];
-					if(sr[1])	{o += '<span class="cents">.'+sr[1]+'<\/span>'}
+					if(sr[1])	{o += '.<span class="cents">'+sr[1]+'<\/span>'}
 					$tag.html(o);
 					}
 				else	{
