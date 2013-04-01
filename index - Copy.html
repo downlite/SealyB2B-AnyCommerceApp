@@ -26,7 +26,7 @@ var _gaq = _gaq || {'push':function(){}} //here for testing. REPLACE BEFORE DEPL
 var myCreole;
 
 var app = {vars:{
-	"release":"20130329072315",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
+	"release":"20130326065450",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"", //used in non-local mode.
 	"testURL":"http://www.c812ac9b1.crackle.zoovy.net/" //used ONLY if protocol is file: (for testing)
@@ -60,8 +60,6 @@ css files should be included before any .js file to ensure they are downloaded i
 <script type="text/javascript">
 app.u.loadScript(app.vars.baseURL+"app-quickstart-init.js");
 </script>
-
-
 
 
 </head>
@@ -131,7 +129,7 @@ Welcome,
 <span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});"></span>
 <span class="loginHide">Guest</span>
 !
-(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=createaccount" class='bindByAnchor'>Create An Account</a>)
+(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=newsletter" class='bindByAnchor'>Create An Account</a>)
         </span>
         <span class="fr"><a href="#cart?show=cart" class='bindByAnchor'><span class='cartItemCount'>0</span> item(s)</a> in <a href="#cart?show=cart" class='bindByAnchor'>Shopping Cart</a> | <a href="#checkout?show=checkout" class='bindByAnchor'>Checkout</a>
         <a href="#"><img src="images/que.gif" width="28" height="27" style="margin:-1px 0 -11px 51px;" alt=""></a></span></div>
@@ -143,7 +141,7 @@ Welcome,
 <div class="Smain">
     <div class="Searchbg"><div class="searchBox">
 					<form id='headerSearchFrm' name='headerSearchFrm' action='#' class='productSearchForm' method="get">
-						<input type='search' name='KEYWORDS' id='headerKeywords' class="productSearchKeyword handleDefault box" value="Looking for something specific?" />
+						<input type='search' name='KEYWORDS' id='headerKeywords' class="productSearchKeyword handleDefault box" value="Looking for something specify?" />
 						<input id='headerSearchSubmit' type="image" src="images/search.gif" value="" style="width:70px; height:30px; padding:0px;"/>
 					</form>
 				</div>
@@ -159,123 +157,8 @@ Welcome,
 <section class="Logos"><div><img src="images/Slogo.gif" width="59" height="50" style="margin:25px 0 25px 160px;" alt="Sealy" title="Sealy"><img src="images/posture.gif" width="191" height="31" style="margin:35px 135px 35px 146px;" alt="Posturepedic" title="Posturepedic"><img src="images/stearns.gif" width="142" height="56" style="margin:22px 0;" alt="Stearns &amp; Foster" title="Stearns &amp; Foster"></div><div class="cb"></div></section>
 
 <nav class="nav_menu"><ul id='tier1categories'></ul><!-- DUAL NAV WILL GO HERE --></nav>
-
 <div class="cb"></div>
-    <div class='mainColumn1'>
-<!-- .textContentArea is used as a selector because IE8 doesn't play well  with tag type article as a selector -->
-		<div id='newsletterArticle' class='displayNone textContentArea'>
-			<h1>Subscribe to our Newsletter and Save!</h1>
-			<div id='newsletterFormContainer'></div>
-		</div>
-
-
-		<div id='createaccountArticle' class='displayNone textContentArea'>
-			<div class="Account">
-            <h1>Create a Wholesale Account</h1>
-			<div>
-
-<form action='#' class='inputsAsBreaks' onSubmit="app.ext.myRIA.u.handleAppBuyerCreate($(this)); return false;">
-<input type='hidden' name='form' value='wholesale' />
-
-<fieldset class='marginBottom'>
-	<legend>Account Information</legend>
-	<div class="fieldM"><span class="field">First Name</span><input name='firstname' type='text' size='30' placeholder='First Name' required='required' />
-	<b>Last Name</b><input name='lastname' type='text' size='30' placeholder='Last Name' required='required' /><br></div>
-	<div class="fieldM"><b>Company</b><input name='company' type='text' size='30' placeholder='Company Name' />
-	<b>Email</b><input name='email' type='email' size='30' placeholder='Email' required='required' /><br></div>
-	<div class="fieldM"><b>Address</b><input name='address1' type='text' size='30' placeholder='Address 1'  required='required' />
-	<input name='address2' type='text' size='30' placeholder='Address 2' /><br></div>
-	<div class="fieldM"><b>City</b><input name='city' type='text' size='30' placeholder='City' required='required' />
-	<b>State</b><input name='region' type='text' size='5' placeholder='State' />
-	<b>Zip</b><input name='postal' type='text' size='10' placeholder='Zip' />	</div>
-	<div class="fieldM"><b>AR Contact</b><input name='ar_contact' type='text' size='30' placeholder='AR Contact' />
-	<b>AR Phone #</b><input name='ar_phone' type='tel' size='12' placeholder='AR Phone #' /></div>
-</fieldset>
-
-<fieldset class='marginBottom'>
-	<legend>About Your Business</legend>
 	
-	<div class="fieldM"><input name='order_volume' type='text' size='30' placeholder='Anticipated Order Volume' />
-	<input name='resaleid' type='text' size='30' placeholder='State Resale Permit' /></div>
-	<div class="fieldM"><input name='ein' type='text' size='30' placeholder='Company EIN/Tax ID' />
-	<input name='credit_limit' type='number' step='0.01' min='0' placeholder='Requested Credit Limit' /></div>
-	
-</fieldset>
-
-<button class="createB"><img src="images/create_account.gif" width="300" height="54"></button>
-
-</form>
-
-			</div>
-            </div>
-		</div>
-
-
-
-		<div id='myaccountArticle' class='displayNone textContentArea'>
-			<h1>My Account</h1>
-			<div id='logMessaging'></div>
-			<div><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Log Out</a></div>
-
-			<section id='buyerAddresses' class='clearfix'>
-
-<div class='billAddressContainer'>
-	<h2>Billing Address(es)</h2>
-<!--	<button class='floatRight ui-state-default ui-corner-all'><span class='ui-icon ui-icon-plusthick floatLeft'></span> Add </button> coming soon -->
-	<div class='billAddresses'></div><!-- billing addresses are loaded into here using billAddressTemplate -->
-</div>
-
-<div class='shipAddressContainer'>
-	<h2>Shipping Address(es)</h2>
-	<div class='shipAddresses'></div><!-- shipping addresses are loaded into here using shipAddressTemplate -->
-</div>
-
-
-			</section>
-
-
-		</div>
-
-
-		<div id='ordersArticle' class='displayNone textContentArea'>
-			<h1>Order History</h1>
-			<div id='orderHistoryContainer' class='ui-accordion ui-widget ui-helper-reset ui-accordion-icons '></div>
-		</div>
-
-
-
-		<div id='changepasswordArticle' class='displayNone textContentArea'>
-			<h1>Change Password</h1>
-			<div id='changepasswordContainer'>
-
-<form action='#' id='changePasswordForm' name='changePasswordForm' onSubmit="app.ext.store_crm.u.handleChangePassword('changePasswordForm',{'callback':'showMessaging','message':'Thank you, your password has been changed','targetID':'changepasswordContainer'}); return false">
-<fieldset class='borderNone'>
-
-<div class='marginBottom'><label for='changePassword'>Password</label><input type='password' name='password' id='changePassword' size='35' /></div>
-<div class='marginBottom'><label for='changePassword2'>Confirm Password</label><input type='password' name='password2' id='changePassword2' size='35' /></div>
-<div class='marginBottom'><input type='submit' value='Change Password' class='loadingButton ui-button-text ui-button ui-state-default ui-corner-all'></div>
-
-</fieldset>
-</form>
-			</div>
-		</div>
-
-		<div id='listsArticle' class='displayNone textContentArea'>
-			<h1>List Manager</h1>
-			<div id='listsContainer' class='prodlist loadingBG'></div>
-
-			<div id='listEditorContainer' class='displayNone loadingBG'></div><!-- editor for a given list gets added here -->
-
-		</div>
-
-		<div id='forgetmeArticle' class='displayNone textContentArea'>
-			<h1>Your 'Forget Me' list</h1>
-			<p>Items on this list will not show up anywhere on the site. Use it for items you never want to see again. If you add an item to the list by mistake, use this page to remove it from the list and it will start re-appearing during your shopping experience.</p>
-			<ul id='forgetmeContainer' class='prodlist loadingBG'>
-			</ul>
-		</div>
-
-	</div>
 <!--<ul class="cart">
 						<li><a href="#cart?show=cart" class='bindByAnchor'><img src="images/cart_img.png" alt="" /><span class='cartItemCount'>0</span> item(s)</a></li>
 						<li><a href="#checkout?show=checkout" class='bindByAnchor highlight'>Checkout</a></li>
@@ -356,13 +239,13 @@ Welcome,
     <section class="signmain">
     <div class="signup">
     <form action='#' id='subscribeFrmFooter' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe(this.id); return false">
-    <div class="deals"><b>SIGN UP FOR OUR NEWSLETTER</b><br>
-    Stay updated on important product information</div>
+    <div class="deals"><b>SIGN UP FOR DEALS</b><br>
+    Get Product Updates & Coupons</div>
     <div class="name"><input required='required' type='email' value='email address' class='newsSubscribeInput textbox email'  maxlength='50' size='25' name='login' id='subscribeLoginFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
     <div class="email"><input required='required' type='text'  value='full name' class='newsSubscribeInput textbox fullname' maxlength='50' size='25' name='fullname' id='subscribeFullnameFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" />
       <input type="image" class="submit" value="" src="images/signup.gif" alt="Sign Up" title="Sign Up" style="width:70px; height:30px;padding:0;"/>
       </form></div>
-
+    <div class="icons"><a href="#."><img src="images/fb.gif" width="32" height="32" alt="Facebook" title="Facebook"></a><a href="#."><img src="images/twitter.gif" width="32" height="32" alt="Twitter" title="Twitter"></a><a href="#."><img src="images/gplus.gif" width="32" height="32" alt="Google Plus" title="Google Plus"></a><a href="#."><img src="images/pinterest.gif" width="32" height="32" alt="Pinterest" title="Pinterest"></a><a href="#"><img src="images/youtube.gif" width="32" height="32" alt="You Tube" title="You Tube"></a></div>
     <div class="cb"></div>
     </div>
 </section>
@@ -632,17 +515,17 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 	
 	<div>
 	<!--<input type='image' src='images/signin.gif' value='Sign In' class='' />-->
-    <input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
+    <input name="" type="submit" value="Sign In" class="signin"><br clear="all">
 	</div>
 	</fieldset>
-</form><span class="hideIfLoggedIn">
+</form>
+</div>
 <div class="first"><p>First Time Here? Sign Up!</p>
 <p class="start"><a href="#customer?show=newsletter" class='bindByAnchor'>START A BUSINESS ACCOUNT</a></p>
-<span>For Furniture & Mattress Businesses... LEARN MORE</span>
-</div></span>
-</div>
 
-			</div> 
+
+<span>For Furniture & Mattress Businesses... LEARN MORE</span></div>
+			</div>
 			<div class="floatLeft">
 				<div id="slideshowContainer">
                 
@@ -685,9 +568,6 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 				</div>
 			</div>
 		</div>
-        
-        
-        
 <!--
 		<div class='bannerDuoContainer clearfix'>
 		<div class='floatRight stacked'><img src='blank.gif' width='329' height='215' data-bind="var: category(%page.banner_right_top); format: banner; extension:myRIA; editor:banner;" /><img src='blank.gif' width='329' height='215' data-bind="var: category(%page.banner_right_bottom); format: banner; extension:myRIA; editor:banner;" /></div>
@@ -798,8 +678,6 @@ porttitor a lacus.</div>
 
 	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 -->
-
-
 </div>
 
 
@@ -1147,9 +1025,10 @@ this will likely become more flexible in the future. ###
     <h5 class='stid' data-bind='var: product(pid); format:text; pretext: Item #: ;'></h5>
      <h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
     <!--<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Manufacturer: ;'></h5>-->
-   
-		<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone' style='float:left;'></fieldset>
-        <fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone' id='Quantity' style='float:left;'></fieldset>
+    
+	
+		<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone'></fieldset>
+        <fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone' id='Quantity'></fieldset>
 		<!--<div class='qtyAndATCContainer clearfix qtyInput'>
 			
 			
@@ -2264,7 +2143,7 @@ The 'data-action' attribute is used to assign an onclick.
 	</div>
 	
 	<div>
-	<input type='image' src='images/signin.gif' value='log in' class='' id="login" />
+	<input type='image' src='images/signin.gif' value='log in' class='' />
 	</div>
 	</fieldset>
 </form>
@@ -2327,6 +2206,8 @@ The 'data-action' attribute is used to assign an onclick.
 	</fieldset>
 	<input class="search" type="submit" value="Search" />
 </form>
+
+
 </div>
 
 

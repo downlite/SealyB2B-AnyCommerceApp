@@ -63,6 +63,9 @@
 
 /* Interaction states
 ----------------------------------*/
+.nextPageButton{background:none !important;}
+
+
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { background:none;color: #1690C8; font-size: 15px;font-weight: bold; border:none; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #615e59; text-decoration: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {background:none; font-weight:bold; color: #615e59; }
@@ -80,9 +83,10 @@
 .ui-state-error-text, .ui-widget-content .ui-state-error-text, .ui-widget-header .ui-state-error-text { color: #990000; }
 .ui-priority-primary, .ui-widget-content .ui-priority-primary, .ui-widget-header .ui-priority-primary { font-weight: bold; }
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
-.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled { color: #999999 !important;
+    opacity: 1 !important;background: none !important; }
 
-/* Icons
+/* Iconst
 ----------------------------------*/
 
 /* states and images */
@@ -774,20 +778,43 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
     position: absolute;
     z-index: -1;   
 }
-.signup{ width:940px; margin:0px auto;}
-.deals{ width:166px; float:left; font-size:10px; text-align:right; padding:10px 20px 0 0;}
+.signup{ width:695px; margin:0px auto;}
+.deals{ width:242px; float:left; font-size:10px; text-align:right; padding:10px 20px 0 0;}
 .deals b{ font-size:12px; font-weight:400;}
 .name{ width:148px; float:left; background:#f3f3f3; padding:10px;}
 .name input{ width:127px; height:30px; margin:0px; background:#fff; border:0px;padding:0 10px;font-family: 'Montserrat', sans-serif; font-size:12px;}
 .email input{ width:140px; height:30px; float:left; border:0px; padding:0 10px;font-family: 'Montserrat', sans-serif; font-size:12px;}
 .email img{ margin:0 0 -10px -2px;}
-.email{ width:232px; float:left; padding:10px; margin:0 49px 0 10px;background:#f3f3f3;}
+.email{ width:232px; float:left; padding:10px; margin:0 0px 0 10px;background:#f3f3f3;}
 .icons{ width:273px; float:left; padding:10px 0 0 0;}
 .icons img{ margin-right:21px;}
 .resultsMenuContainer {
     left: 3px;
     position: relative; float:right;
     top: 1px;}
+	
+#createaccountArticle input{ border: 1px solid #CCCCCC;height: 26px; margin: 0 7px;  padding: 0 9px;}
+.createB{ border:0px; background:none;}
+.Account{ width:800px; margin:0px auto;}
+.Account b{ font-weight:normal;}
+.fieldM{ margin:0px; padding:0px 0 10px;}
+.textf{ width:232px; height:26px; border:#cccccc solid 1px; margin:0 0 8px; padding:0 9px;}
+.field{ width:72px; font-weight:normal; text-align:right; display:inline-block;}
+.textfname{ width:100px; height:26px; border:#cccccc solid 1px; margin:0 7px; padding:0 9px;}
+.textfmiddle{ width:12px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
+.textflast{ width:116px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
+.textfadd{ width:253px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
+.textfadd1{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
+.textcity{ width:112px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
+.textfstate{ width:62px; height:26px; border:#cccccc solid 1px;margin:0 14px 0 7px; padding:3px;}
+.textfzip{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
+.textfcountry{ width:245px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:3px;}
+.textfmail{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 26px 0 7px; padding:0 9px;}
+.textfphone{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
+.textfpass{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
+.textfcpass{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
+.stayup{ padding:0 0 0 70px;}
+.createButton{ margin:44px 0 40px 157px;}
 footer{width:100%; 
 	display: block;
     position: relative;}
