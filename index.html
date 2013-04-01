@@ -52,6 +52,7 @@ css files should be included before any .js file to ensure they are downloaded i
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script src="resources/jquery.ui.widget.min.js"></script><!-- here so that plugins that may load before the jqueryui lib load without error -->
 <script type="text/javascript" src="loadscript.js"></script>
+<script type="text/javascript" src="app-wholesale.js"></script>
 <!--<script type="text/javascript" src="downlite_init.js"></script>
 -->
 
@@ -61,12 +62,26 @@ css files should be included before any .js file to ensure they are downloaded i
 app.u.loadScript(app.vars.baseURL+"app-quickstart-init.js");
 </script>
 
-
-
+<script type="text/javascript" language="javascript">// <![CDATA[
+function showHide() {
+    var ele = document.getElementById("showHideDiv");
+    
+    if(ele.style.display == "none") {
+        
+            ele.style.display = "block";
+      }
+    else {
+        ele.style.display = "block";
+    }
+}
+// ]]></script>
 
 </head>
 
 <body>
+
+
+
 <!-- DELETE THIS WHEN YOU GET STARTED -->
 <!--<h1>WELCOME TO QUICKSTART</h1>
 This file is intended to go along with the 10-step tutorial at:
@@ -80,18 +95,17 @@ This file is intended to go along with the 10-step tutorial at:
 <div id='appPreView'>
 <table>
 <tr>
-	<td>
-	<img src="images/logo.gif" width="93" height="79" alt="Sealy" title="Sealy">
-	</td>
-	<td>
-	<h3>One moment please.</h3>
+	<td><br><br>
+	<img src="images/logo.gif" width="93" height="79" alt="Sealy" title="Sealy"><br><br><br>
+	
+	<h3>One moment please.</h3><br>
 	
 	<div class='alignCenter'>
 	<progress id="appPreViewProgressBar" max="100" value="0" /><br />
 	</div>
 	<div id='appPreViewProgressText'>0% Complete</div>
 	
-	<div class='appMessaging'></div>
+	<div class='appMessaging'></div><br><br>
 	</td>
 </tr>
 </table>
@@ -131,7 +145,7 @@ Welcome,
 <span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});"></span>
 <span class="loginHide">Guest</span>
 !
-(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=createaccount" class='bindByAnchor'>Create An Account</a>)
+(Not you? <a href="#customer?show=myaccount" class='bindByAnchor'>Sign-in</a> or <a href="#customer?show=createaccount" class='bindByAnchor' id="account" onclick="return showHide();">Create An Account</a>)
         </span>
         <span class="fr"><a href="#cart?show=cart" class='bindByAnchor'><span class='cartItemCount'>0</span> item(s)</a> in <a href="#cart?show=cart" class='bindByAnchor'>Shopping Cart</a> | <a href="#checkout?show=checkout" class='bindByAnchor'>Checkout</a>
         <a href="#"><img src="images/que.gif" width="28" height="27" style="margin:-1px 0 -11px 51px;" alt=""></a></span></div>
@@ -169,30 +183,47 @@ Welcome,
 		</div>
 
 
-		<div id='createaccountArticle' class='displayNone textContentArea'>
-			<div class="Account">
-            <h1>Create a Wholesale Account</h1>
-			<div>
-
+		<div id='createaccountArticle' style="position: relative; z-index: 9999;" class='displayNone textContentArea'>
+			<div class="CreatAccount" id="showHideDiv">
+            
+<div class="WelcomeB">
+<h1>Welcome Back!</h1>
+<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:115px;">
+<input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
+	<fieldset style="border:none; margin:0px; padding:0px;">
+	
+	<div>
+	<!--<label for='modalLoginlogin'>Login/Email</label>-->
+	<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' id='modalLoginlogin' size='25' />
+	</div>
+	
+	<div>
+	<!--<label for='modalLoginpassword'>Password</label>-->
+	<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' id='modalLoginpassword' size='25' />
+	</div>
+	
+	<div>
+	<!--<input type='image' src='images/signin.gif' value='Sign In' class='' />-->
+    <input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
+	</div>
+	</fieldset>
+</form>
+<p align="center"><a href="#recoverpassword">Forgot your username or password?</a></p>
+</div>
+<div class="Account" >
 <form action='#' class='inputsAsBreaks' onSubmit="app.ext.myRIA.u.handleAppBuyerCreate($(this)); return false;">
-<input type='hidden' name='form' value='wholesale' />
+<h1>Don't have an account?</h1><input type='hidden' name='form' value='wholesale' />
+<div class="fieldM"><span class="field">First Name</span> <input name='firstname' type='text' size='30' class='textfname' placeholder='First Name' required='required' />
+ <b>Middle Initial</b> <input name="" type="text" class="textfmiddle"> <b>Last Name</b> <input name='lastname' type='text' size='30' placeholder='Last Name' required='required' class='textflast'/></div>
+<div class="fieldM"><span class="field">Address</span> <input name='address1' type='text' size='30' placeholder='Address' class='textfadd' required='required' /> 
+<input name='address2' type='text' size='30' placeholder='Address (Line 2)' class='textfadd1'/></div>
+<div class="fieldM"><span class="field">City</span> <input name='city' type='text' size='30' placeholder='City' required='required' class='textcity'/> 	<b>State</b> <input name='region' type='text' size='5' placeholder='State' class='textfstate' /> <b>Zip</b> <input name='postal' type='text' size='10' placeholder='00000-0000' class='textfzip'/></div>
 
-<fieldset class='marginBottom'>
-	<legend>Account Information</legend>
-	<div class="fieldM"><span class="field">First Name</span><input name='firstname' type='text' size='30' placeholder='First Name' required='required' />
-	<b>Last Name</b><input name='lastname' type='text' size='30' placeholder='Last Name' required='required' /><br></div>
-	<div class="fieldM"><b>Company</b><input name='company' type='text' size='30' placeholder='Company Name' />
-	<b>Email</b><input name='email' type='email' size='30' placeholder='Email' required='required' /><br></div>
-	<div class="fieldM"><b>Address</b><input name='address1' type='text' size='30' placeholder='Address 1'  required='required' />
-	<input name='address2' type='text' size='30' placeholder='Address 2' /><br></div>
-	<div class="fieldM"><b>City</b><input name='city' type='text' size='30' placeholder='City' required='required' />
-	<b>State</b><input name='region' type='text' size='5' placeholder='State' />
-	<b>Zip</b><input name='postal' type='text' size='10' placeholder='Zip' />	</div>
-	<div class="fieldM"><b>AR Contact</b><input name='ar_contact' type='text' size='30' placeholder='AR Contact' />
-	<b>AR Phone #</b><input name='ar_phone' type='tel' size='12' placeholder='AR Phone #' /></div>
-</fieldset>
+<div class="fieldM"><span class="field">Country</span> <select name="Country" class="textfcountry"><option>United States of America</option></select></div>
 
-<fieldset class='marginBottom'>
+<div class="fieldM"><span class="field">E-mail</span> <input name='email' type='email' size='30' class='textfmail' placeholder='E-mail Address' required='required' /> <b>Phone Number</b> <input name='ar_phone' type='tel' size='12' placeholder='Phone Number' class='textfphone'/> </div>
+<div class="fieldM"><span class="field">Password</span> <input name='email' type='password' size='30' class='textfpass' placeholder='7-18 Characters' required='required' /> <b>Confirm Password</b> <input name='ar_phone' type='password' size='12' placeholder='Must be a match' class='textfphone' required='required'/> </div>
+<!--<fieldset class='marginBottom'>
 	<legend>About Your Business</legend>
 	
 	<div class="fieldM"><input name='order_volume' type='text' size='30' placeholder='Anticipated Order Volume' />
@@ -200,13 +231,12 @@ Welcome,
 	<div class="fieldM"><input name='ein' type='text' size='30' placeholder='Company EIN/Tax ID' />
 	<input name='credit_limit' type='number' step='0.01' min='0' placeholder='Requested Credit Limit' /></div>
 	
-</fieldset>
+</fieldset>-->
 
-<button class="createB"><img src="images/create_account.gif" width="300" height="54"></button>
+<button class="createButton"><img src="images/create_account.gif" width="300" height="54"></button>
 
 </form>
 
-			</div>
             </div>
 		</div>
 
@@ -257,6 +287,7 @@ Welcome,
 
 </fieldset>
 </form>
+
 			</div>
 		</div>
 
@@ -348,8 +379,9 @@ Welcome,
 		<!-- <div id='breadcrumb'></div> -->
 
 		<div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
+       
 		<div class="wrapper"><div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
-	</div> <!-- wrapper end -->
+	</div> <!-- wrapper end --> <div style="clear:both;"></div>
 
 
 	<div class="footer">
@@ -373,6 +405,7 @@ Welcome,
 <li><a href="#customer?show=ordertracking" class='bindByAnchor'>Order Tracking</a></li>
 <li><a href="#company?show=shipping" class='bindByAnchor'>Shipping Info</a></li>
 <li><a href="#company?show=return" class='bindByAnchor'>Returns & Exchanges</a></li>
+<li><a href="#company?show=about" class='bindByAnchor'>About Us</a></li>
 <li><a href="#company?show=contact" class='bindByAnchor'>Contact Us</a></li>
 <li><a href="#company?show=privacy" class='bindByAnchor'>Your Privacy</a></li>
 </ul>
@@ -416,7 +449,7 @@ Sealy Corporation, 8153 Duke Blvd, Mason Oh 45040.<br>
 2013 All rights reserved. E-commerce by <b style="color:#128EC7;">Zoovy</b></div><div class="cb"></div>
 </div>
 </footer>
-
+ <div style="clear:both;"></div>
 		<!--<div class="sign_up_form">
 			<div class="sign_up_form_inner">
 				<div class="social_icon">
@@ -533,7 +566,7 @@ Sealy Corporation, 8153 Duke Blvd, Mason Oh 45040.<br>
 
 </div>
 
-
+ <div style="clear:both;"></div>
 
 
 
@@ -637,8 +670,8 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 	</fieldset>
 </form><span class="hideIfLoggedIn">
 <div class="first"><p>First Time Here? Sign Up!</p>
-<p class="start"><a href="#customer?show=newsletter" class='bindByAnchor'>START A BUSINESS ACCOUNT</a></p>
-<span>For Furniture & Mattress Businesses... LEARN MORE</span>
+<p class="start"><a href="#customer?show=createaccount" class='bindByAnchor'>START A BUSINESS ACCOUNT</a></p>
+<span>For Furniture & Mattress Businesses... <a href="#">LEARN MORE</a></span>
 </div></span>
 </div>
 
@@ -1585,8 +1618,26 @@ ON ALL U.S. ORDERS<br>
 	<div class='mainColumn'>
 <!-- .textContentArea is used as a selector in quickstart.js because article tag type isn't ie8 friendly -->
 		<div id='aboutArticle' class='textContentArea article'>
-			<h1>About Us</h1>
-			<div data-bind='var: profile(zoovy:about); format:wiki; wikiFormats:myRIA;' id='aboutUsContent'></div>
+			<h1 style="margin-bottom:7px; font-size:18px;">About Us</h1>
+			<div data-bind='var: profile(zoovy:about); format:wiki; wikiFormats:myRIA;' id='aboutUsContent'>
+            <span style="padding:0 0 0 35px;">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.<br><br></span>
+
+
+
+Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia.<br><br><br>
+
+
+<strong>FREE SHIPPING ON ALL DOMESTIC ORDERS ABOVE $100</strong><br>
+	
+<span style="padding:0 0 0 35px;">All orders of $50 and more qualify for free standard shipping. Applicable only to address in the continental United States (HI and AK are not included). Free shipping does not apply to orders shipped to PO Boxes or international destinations. Not applicable to eBay or Amazon purchases.<br><br></span>
+
+
+
+<strong>BACK ORDERS</strong><br>
+	
+
+<span style="padding:0 0 0 35px;">All preorders paid with a credit card will be charged at the time of shipment. All preorders paid with Google Checkout, Paypal or Amazon Payments will be charged when your order is placed. If you do not wish to pay for your preorder until it ships then you must use the checkout button and pay with a credit card. Orders that have both preorder and instock items we be shipped at the same time in one shipment.</span>
+            </div>
 		</div>
 	
 	
@@ -1698,19 +1749,19 @@ For general product questions and order inquiries you can also email us at <a hr
 <!-- loadingBG needed on this for app init (content may take a moment to load) -->
 <div id='customerTemplate' class='clearfix loadingBG'>
 
-	<div class='sideline' >
+	<!--<div class='sideline' >
 	<nav id='customerNav'>
 	<ul class='listStyleNone noPadOrMargin' style="line-height:22px;">
-<!-- before restoring this, test cuz news form on left was causing some conflicts -->
+ before restoring this, test cuz news form on left was causing some conflicts -->
 <!--		<li><a href='#newsletter' id='navLink_newsletter'>Newsletter Subscription</a></li>
-		<li><a href='#recoverpassword' id='navLink_recoverpassword'>Recover Password</a></li> -->
+		<li><a href='#recoverpassword' id='navLink_recoverpassword'>Recover Password</a></li> 
 		<li><a href='#customer?show=myaccount' id='navLink_myaccount'>My Account</a></li>
 		<li><a href='#customer?show=changepassword' id='navLink_changepassword'>Change Password</a></li>
 		<li><a href='#customer?show=orders' id='navLink_orders'>Order History</a></li>
 		<li><a href='#customer?show=lists' id='navLink_orders'>Manage Lists</a></li>
 	</ul>
 	</nav>
-	</div>
+	</div>-->
 
 	<div class='mainColumn'>
 <!-- .textContentArea is used as a selector because IE8 doesn't play well  with tag type article as a selector -->

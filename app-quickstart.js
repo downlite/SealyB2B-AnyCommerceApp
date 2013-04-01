@@ -58,6 +58,10 @@ var myRIA = function() {
 			'shipAddressTemplate'],
 		"sotw" : {}, //state of the world. set to most recent page info object.
 		"hotw" : new Array(15), //history of the world. contains 15 most recent sotw objects.
+        "thisPageIsPublic" : {
+			'company':['contact','about'],
+			'customer':['createaccount']
+			},        
 		"session" : {
 			"recentSearches" : [],
 			"recentlyViewedItems" : [],
@@ -479,7 +483,23 @@ else	{
 				}
 			}, //showBuyerList
 
-
+handleAppBuyerCreate : function($form)	{
+				if($form)	{
+					var formObj = $form.serializeJSON();
+					app.calls.appBuyerCreate.init(formObj,{'callback':function(rd){
+						if(app.model.responseHasErrors(rd)){
+							$form.anymessage({'message':rd});
+							}
+						else	{
+							$form.empty().anymessage({'message':'Thank you, your account request has been submitted. you will be notified by email when you are approved.'})
+							}
+						}});
+					app.model.dispatchThis('immutable');
+					}
+				else	{
+					$('#globalMessaging').anymessage({'message':'$form not passed into myRIA.u.handleBuyerAccountCreate','gMessage':true});
+					}
+				},
 
 //this is used for showing a customer list of product, such as wish or forget me lists
 //formerly showlist

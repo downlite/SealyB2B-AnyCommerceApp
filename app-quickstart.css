@@ -792,14 +792,17 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
     left: 3px;
     position: relative; float:right;
     top: 1px;}
-	
+#aboutUsContent{font-family: "Open Sans"; line-height:22px; font-size: 14px;}
 #createaccountArticle input{ border: 1px solid #CCCCCC;height: 26px; margin: 0 7px;  padding: 0 9px;}
+.CreatAccount{width:940px; margin:0px auto;font-family:"Open Sans"; font-size:12px;}
+.CreatAccount h1{ font-size:18px; font-weight:bold; text-transform:uppercase; margin-bottom:27px;font-family: 'Montserrat', sans-serif;}
+.WelcomeB{ width:252px; margin:40px 48px 0 24px; float:left;}
 .createB{ border:0px; background:none;}
-.Account{ width:800px; margin:0px auto;}
-.Account b{ font-weight:normal;}
+.Account{ width:570px; margin-top:40px; float:left;}
+.Account b{ font-weight:bold;}
 .fieldM{ margin:0px; padding:0px 0 10px;}
-.textf{ width:232px; height:26px; border:#cccccc solid 1px; margin:0 0 8px; padding:0 9px;}
-.field{ width:72px; font-weight:normal; text-align:right; display:inline-block;}
+.textf{ width:232px; height:26px; border:#cccccc solid 1px; margin:0 0 8px !important; padding:0 9px;}
+.field{ width:72px; font-weight:bold; text-align:right; display:inline-block;}
 .textfname{ width:100px; height:26px; border:#cccccc solid 1px; margin:0 7px; padding:0 9px;}
 .textfmiddle{ width:12px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
 .textflast{ width:116px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
@@ -807,14 +810,18 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
 .textfadd1{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .textcity{ width:112px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
 .textfstate{ width:62px; height:26px; border:#cccccc solid 1px;margin:0 14px 0 7px; padding:3px;}
-.textfzip{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
+.textfzip{ width:148px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .textfcountry{ width:245px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:3px;}
-.textfmail{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 26px 0 7px; padding:0 9px;}
+.textfmail{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 26px 0 7px !important; padding:0 9px;}
 .textfphone{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
 .textfpass{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .textfcpass{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .stayup{ padding:0 0 0 70px;}
-.createButton{ margin:44px 0 40px 157px;}
+.createButton{ margin:44px 0 40px 157px; border:0px; background:non}
+.marginBottom {
+    margin-bottom: 12px;
+    padding: 0;
+}
 footer{width:100%; 
 	display: block;
     position: relative;}
@@ -1472,13 +1479,7 @@ footer:after {
 	color:#60d9ec;
 }
 #customerNav{ width:auto;}
-.textf {
-    border:1px solid #CCCCCC;
-    height: 26px;
-    margin: 0 0 8px;
-    padding: 0 9px;
-    width: 232px;
-}
+
 #privacyArticle{font-family:"Open Sans"; font-size:12px;}
 .Cleft{ width:282px; float:left;}
 .Cleft input{ width:274px; height:14px; border:#cccccc solid 1px;}
@@ -1511,7 +1512,7 @@ footer:after {
     position: absolute;
     z-index: -1;   }
 .bannerDuoContainer .stacked h1{ text-align:center; font-size:18px; color:#000000; margin:30px 0 19px;}
-.stacked input{ width:238px; height:26px; border:#cccccc solid 1px; padding:0 10px; margin:0 20px 10px;}
+.stacked input{ width:238px; height:26px; border:#cccccc solid 1px; padding:0 10px; margin:0 20px 10px !important;}
 .signin{ background:#1690c8; font-size:12px; font-weight:bold; color:#fff; padding:0 30px !important; float:right; text-transform:uppercase; width:auto !important; border:0px !important; height:30px !important;}
 .first{text-align:center; padding:15px 0 22px; display: block;position: relative; }
 .first:after {
@@ -1530,7 +1531,7 @@ footer:after {
 .first input{width:238px; height:26px; border:#cccccc solid 1px; font-size:12px; padding:0 20px; margin:7px 30px 0px; font-family:"Open Sans", arial, sans-serif;}
 .first p{ font-size:14px; margin:0px; padding:0px; font-weight:normal; color:#000;font-family: 'Montserrat', sans-serif;}
 .first span{font-size:10px;font-family:"Open Sans";}
-.signin{ background:#1690c8; font-size:11px; font-weight:bold; color:#fff; text-transform:uppercase; width:auto !important; border:0px !important; height:30px !important;}
+.signin{ background:#1690c8; cursor:pointer; font-size:11px; font-weight:bold; color:#fff; text-transform:uppercase; width:auto !important; border:0px !important; height:30px !important;}
 .start{padding:12px 0px 12px !important;}
 .start a{background:#1690c8; font-size:12px; padding:7px 25px; font-weight:bold; color:#fff; text-transform:uppercase; width:auto !important; border:0px !important; height:30px !important;}
 .start:hover{color:#fff; text-decoration:none;}
@@ -1885,3 +1886,6 @@ CATEGORY TEMPLATE
 .buyerLoggedIn .loginHide {display:none;}
 
 .hideIfLoggedIn{display:block;}
+
+
+

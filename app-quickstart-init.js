@@ -163,11 +163,11 @@ app.rq.push(['script',1,app.vars.baseURL+'cycle-2.9998.js']);
 		//$target.cycle({fx:'swing',speed:3,timeout:5000,pager:'#slideshowNav',pagerAnchorBuilder:function(index,el){return' ';},slideExpr:'li'});
 		}]);
 */
-app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
+/*app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
 		var $target=$('#wideSlideshow');
 		$target.cycle({prev: '#prev',next: '#next',fx:'fade',speed:'slow',timeout:5000,pager:'#slideshowNav',text: true,pagerAnchorBuilder:function(index,el){return '';},slideExpr:'li'});	
 		//$target.cycle({fx:'swing',speed:3,timeout:5000,pager:'#slideshowNav',pagerAnchorBuilder:function(index,el){return' ';},slideExpr:'li'});
-		}]);//don't execute script till both jquery AND the dom are ready.
+		}]);//don't execute script till both jquery AND the dom are ready.*/
 $(document).ready(function(){
 	app.u.handleRQ(0)
 	});
