@@ -216,7 +216,7 @@ P.query = { 'and':{ 'filters':[ {'term':{'profile':'E31'}},{'term':{'tags':'IS_S
 						event.preventDefault();
 						app.ext.store_search.u.changePage($list,(pageInFocus - 1),_rtag);
 						});
-					var $nextPageBtn = $("<div style='float:right; right:-118px; position:relative;' \/>").text("Next").button({icons: {primary: ""},text: true}).addClass('nextPageButton').on('click.multipageNext',function(event){
+					var $nextPageBtn = $("<div style='float:right;position:relative;' \/>").text("Next").button({icons: {primary: ""},text: true}).addClass('nextPageButton').on('click.multipageNext',function(event){
 						event.preventDefault();
 						app.ext.store_search.u.changePage($list,(pageInFocus + 1),_rtag);
 						});
@@ -280,9 +280,9 @@ P.query = { 'and':{ 'filters':[ {'term':{'profile':'E31'}},{'term':{'tags':'IS_S
 						else	{
 							$pagination = $("<div \/>").addClass('pagination resultsMenu');
 							$pagination.addClass('hideInMinimalMode').append($("<div \/>").html("<a href='#' style='display:none;'><\/a>"));
-							var $pages = $("<div style='width:100px; margin:-2px 0 0; float:left;' \/>");
+							var $pages = $("<div style='margin:-2px 0 0; float:left;' \/>");
 							for(var i = 1; i <= totalPageCount; i+= 1)	{
-								$("<div style='width:40px; float:left;' \/>").html("<a href='#' data-page='"+i+"'><span  style='display:inline;'\/>"+i+"<\/span><\/a>").appendTo($pages);
+								$("<div style='width:30px; float:left;' \/>").html("<a href='#' data-page='"+i+"'><span  style='display:inline;'\/>"+i+"<\/span><\/a>").appendTo($pages);
 								}
 							$("div:first",$pagination).append($pages);
 							$("a",$pages).each(function(){

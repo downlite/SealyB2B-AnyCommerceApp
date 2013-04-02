@@ -484,8 +484,10 @@ else	{
 			}, //showBuyerList
 
 handleAppBuyerCreate : function($form)	{
+                              
 				if($form)	{
 					var formObj = $form.serializeJSON();
+
 					app.calls.appBuyerCreate.init(formObj,{'callback':function(rd){
 						if(app.model.responseHasErrors(rd)){
 							$form.anymessage({'message':rd});
