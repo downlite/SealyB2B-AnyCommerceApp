@@ -352,10 +352,17 @@ SEARCH RESULTS PAGE
 ***************************************************/
 
 #mainContentArea_search	{position:relative;}
-
+.ui-menu .ui-menu-item a {
+    display: block;
+    font-weight: normal;
+    line-height: 1.5;
+    min-height: 0;
+    padding:0 !important;
+    text-decoration: none;
+}
 .resultsHeader	{position:relative;}
-.resultsMenuContainer	{position:relative; top:1px; left:-50px;}
-.resultsMenuContainer .resultsMenu	{margin:3px 12px 0 0px;} /* used for sorting and pagination menus */
+.resultsMenuContainer	{position:relative; top:1px;}
+.resultsMenuContainer .resultsMenu	{margin:0px;} /* used for sorting and pagination menus */
 .resultsMenuContainer ul.ui-menu ul	{z-index:10000;}
 
 .resultsHeader .nextPageButton, .resultsHeader .prevPageButton	{float:right;}
