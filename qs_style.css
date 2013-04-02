@@ -354,8 +354,8 @@ SEARCH RESULTS PAGE
 #mainContentArea_search	{position:relative;}
 
 .resultsHeader	{position:relative;}
-.resultsMenuContainer	{position:relative; top:1px; }
-.resultsMenuContainer .resultsMenu	{margin:3px 0px 0 0px;} /* used for sorting and pagination menus */
+.resultsMenuContainer	{position:relative; top:1px; left:-50px;}
+.resultsMenuContainer .resultsMenu	{margin:3px 12px 0 0px;} /* used for sorting and pagination menus */
 .resultsMenuContainer ul.ui-menu ul	{z-index:10000;}
 
 .resultsHeader .nextPageButton, .resultsHeader .prevPageButton	{float:right;}
@@ -484,7 +484,7 @@ CHECKOUT
 	}
 
 /* tier 2 nav */
-.ddUlMenu li ul li	{cursor:pointer;} /* click is likely binded to li, so make it all a cursor */
+.ddUlMenu li ul li	{cursor:pointer; color:#000099;} /* click is likely binded to li, so make it all a cursor */
 .ddUlMenu li ul a {
 	background: none;
 	line-height:24px;

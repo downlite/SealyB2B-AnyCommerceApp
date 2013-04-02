@@ -389,6 +389,7 @@
 	zoom:1;
 	color:#1690C8;
 	font-weight:bold;
+	text-align:center;
 }
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active {
@@ -785,7 +786,6 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
 .icons{ width:273px; float:left; padding:10px 0 0 0;}
 .icons img{ margin-right:21px;}
 .resultsMenuContainer {
-    left: 3px;
     position: relative; float:right;
     top: 1px;}
 #aboutUsContent{font-family: "Open Sans"; line-height:22px; font-size: 14px;}

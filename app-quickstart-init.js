@@ -152,7 +152,6 @@ app.u.appInitComplete = function(P)	{
 	app.u.dump("Executing myAppIsLoaded code...");
 	}
 
-app.rq.push(['script',0,(document.location.protocol == 'https:' ? 'https:' : 'http:')+'//ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.js']);
 app.rq.push(['script',0,app.vars.baseURL+'cycle-2.9998.js']);
 
 //add slideshow to homepage.
@@ -167,7 +166,9 @@ app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
 		var $target=$('#wideSlideshow');
 		$target.cycle({prev: '#prev',next: '#next',fx:'fade',speed:'slow',timeout:5000,pager:'#slideshowNav',text: true,pagerAnchorBuilder:function(index,el){return '';},slideExpr:'li'});	
 		//$target.cycle({fx:'swing',speed:3,timeout:5000,pager:'#slideshowNav',pagerAnchorBuilder:function(index,el){return' ';},slideExpr:'li'});
-		}]);//don't execute script till both jquery AND the dom are ready.
+		}]);
+
+//don't execute script till both jquery AND the dom are ready.
 $(document).ready(function(){
 	app.u.handleRQ(0)
 	});
