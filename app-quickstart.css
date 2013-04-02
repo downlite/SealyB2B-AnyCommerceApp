@@ -1884,5 +1884,7 @@ CATEGORY TEMPLATE
 
 .hideIfLoggedIn{display:block;}
 
-
+.hideIfLoggedOut	{display:none;}
+.buyerLoggedIn .hideIfLoggedOut	{display: block;} /* may be 'block' */
+.buyerLoggedIn span.hideIfLoggedOut	{display: inline;}
 

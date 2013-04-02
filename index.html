@@ -129,7 +129,7 @@ This file is intended to go along with the 10-step tutorial at:
 <div class="topbar">
         <div class="welcome" id="usernameContainer"><span class="fl">
 Welcome,
-<span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});" ><div><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Log Out</a></div></span>
+<span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});" ></span><span class='hideIfLoggedOut'>(Not you?<a href='#logout' onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Log Out</a>)</span>
 <span class="loginHide">Guest(<a href="#customer?show=createaccount" class='bindByAnchor' id="account">Create An Account</a>)</span>
         </span>
         <span class="fr"><a href="#cart?show=cart" class='bindByAnchor'><span class='cartItemCount'>0</span> item(s)</a> in <a href="#cart?show=cart" class='bindByAnchor'>Shopping Cart</a> | <a href="#checkout?show=checkout" class='bindByAnchor'>Checkout</a>
