@@ -2818,6 +2818,7 @@ else	{
 //executed in checkout when 'next/submit' button is pushed for 'existing account' after adding an email/password. (preflight panel)
 //handles inline validation
 			loginFrmSubmit : function(email,password)	{
+			  
 				var errors = '';
 				var $errorDiv = $("#loginMessaging").empty(); //make sure error screen is empty. do not hide or callback errors won't show up.
 
@@ -2829,7 +2830,9 @@ else	{
 					}
 					
 				if(errors == ''){
+				   
 					app.calls.appBuyerLogin.init({"login":email,"password":password},{'callback':'authenticateBuyer','extension':'myRIA'});
+                   
 					app.calls.refreshCart.init({},'immutable'); //cart needs to be updated as part of authentication process.
 //					app.ext.store_crm.calls.buyerProductLists.init('forgetme',{'callback':'handleForgetmeList','extension':'store_prodlist'},'immutable');
 					
@@ -2840,7 +2843,25 @@ else	{
 					}
 				}, //loginFrmSubmit
 			
-			
+			handleAppBuyerCreate : function($form)	{
+				if($form)	{
+					var formObj = $form.serializeJSON();
+					app.calls.appBuyerCreate.init(formObj,{'callback':function(rd){
+						if(app.model.responseHasErrors(rd)){
+							$form.anymessage({'message':rd});
+                            $form.empty().anymessage({'message':'Thank you, your account request has been submitted. you will be notified by email when you are approved.'})
+                            return true;
+							}
+						else	{
+							$form.empty().anymessage({'message':'Thank you, your account request has been submitted. you will be notified by email when you are approved.'})
+							}
+						}});
+					app.model.dispatchThis('immutable');
+					}
+				else	{
+					$('#globalMessaging').anymessage({'message':'$form not passed into myRIA.u.handleBuyerAccountCreate','gMessage':true});
+					}
+				},
 //obj currently supports one param w/ two values:  action: modal|message
 			handleAddToCart : function($form,obj)	{
 
