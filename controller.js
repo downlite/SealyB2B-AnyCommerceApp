@@ -469,6 +469,7 @@ If the data is not there, or there's no data to be retrieved (a Set, for instanc
 				return 1;
 				},
 			dispatch : function(_tag)	{
+				var obj={};
 				obj["_cmd"] = "buyerLogout";
 				obj["_tag"] = _tag || {};
 				obj["_tag"]["datapointer"] = "buyerLogout";
