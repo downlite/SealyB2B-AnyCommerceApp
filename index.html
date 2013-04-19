@@ -714,68 +714,7 @@ each of the 'sections' are used to load another template. don't change the id.
 don't modify the 'data-templateid' unless you are changing template names and updating everywhere appropriate.
 -->
 <div id='categoryTemplate' class='loadingBG categoryTemplate'>
-<div class='marginBottom'>
-		<div class='catMediaContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'>
-		<div class='catBigImageContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'><img src='blank.gif' data-bind='var: category(%page.picture1); format:imageURL;' width='298' height='300' /></div>
-			
-		</div>
-     <div class="catSideBar floatRight">
-		<h3>HELPFUL LINKS</h3>
-		<ul>
-			<li><a href="#">Selecting a Pillow</a></li>
-			<li><a href="#">Different Types of Sleep</a></li>
-			<li><a href="#">Positions</a></li>
-			<li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
-		</ul>
 
-		<div class="needhelp">
-			<br><br>
-			Need help? Call Us!<br>
-			<b>855-769-3696</b><br>
-			or<br>
-			<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
-
-			<br><br><br>
-
-			<b>FREE SHIPPING</b><br>
-			ON ALL U.S. ORDERS<br>
-			<a href="#">Learn more</a>
-		</div>	   
-	</div>
-<div class="categoryDescriptionContainer" >	
-		<h1 data-bind="var: category(pretty); format: catText; extension: myRIA;"></h1>
-		<div class='textBlock' data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
-		<div class='textBlock' data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
-	</div>
-    <div class='displayNone clear' data-bind='var:category(%page.youtube_videoid); format:showIfSet;'>
-		<div class='catVideoContainer clearfix pointer' data-bind='var:category(%page.youtube_videoid);format:assignAttribute; attribute:data-videoid;' onClick="app.ext.myRIA.a.showYoutubeInModal($(this).attr('data-videoid'));" >
-			<div class='vidThumb'><img src='blank.gif' data-bind='var: category(%page.youtube_videoid); format:youtubeThumbnail; extension:myRIA;'  width='120' height='90' /></div>
-			<h2 data-bind="var: category(%page.youtube_videoheader); format: text;"></h2>
-			<p  data-bind="var: category(%page.youtube_videodescription); format: text;"></p>
-		</div>
-
-	</div>
-	<!--
-<div class='catDesc' style="width:590px;">	
-		
-        <div class='displayNone' data-bind='var:category(%page.youtube_videoid); format:showIfSet;'>
-     
-<div style="width:420px; float:left;"><div class='textBlock' data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
-
-	 COMMENTING OUT UNTIL FRAMEWORK ALLOWS MULTIPLE FORMAT/CATEGORY CALLS ON A PAGE; AS OF 201248 IT DOES NOT
-		<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: breadcrumbTemplate; detail:max;" class='listStyleNone clearfix noPadOrMargin categoryList noUnderline'></ul>
-		
-		<div class='textBlock' data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
-				<div class='catVideoContainer clearfix pointer' data-bind='var:category(%page.youtube_videoid);format:assignAttribute; attribute:data-videoid;' onClick="app.ext.myRIA.a.showYoutubeInModal($(this).attr('data-videoid'));" >
-				<div class='vidThumb'><img src='blank.gif' data-bind='var: category(%page.youtube_videoid); format:youtubeThumbnail; extension:myRIA;'  width='120' height='90' /></div>
-				<h2 data-bind="var: category(%page.youtube_videoheader); format: text;"></h2>
-				<p  data-bind="var: category(%page.youtube_videodescription); format: text;"></p>
-				</div></div>
-                
-            </div>
--->
-<div class="clearfix"></div>
-	</div>
 	<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
 
 <div class='clearfix'></div>
