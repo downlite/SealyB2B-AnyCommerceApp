@@ -17,7 +17,7 @@
 .ui-helper-clearfix:after { clear: both; }
 .ui-helper-clearfix { zoom: 1; }
 .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity:0; filter:Alpha(Opacity=0); }
-.cb{ clear:both;}
+
 
 /* Interaction Cues
 ----------------------------------*/
@@ -1750,7 +1750,7 @@ CATEGORY TEMPLATE
 
 .catVideoContainer .vidThumb	{float:left; margin-right:8px;}
 .catVideoContainer h2	{color:#655e4e; font-size:16px; font-weight:normal; padding:0; margin:0;}
-.catVideoContainer P	{margin:2px 0; padding:0; font-size:13px; width:380px;}
+.catVideoContainer P	{margin:2px 0; padding:0; font-size:13px;}
 .catDesc {float:left; margin-right: 20px; width: 445px;}
 .textBlock {display:inline;font-family:"Open Sans"; font-size:12px;}
 .sideline a {
@@ -1884,22 +1884,10 @@ CATEGORY TEMPLATE
 
 .hideIfLoggedIn{display:block;}
 
-.hideIfLoggedOut	{display:none;}
-.buyerLoggedIn .hideIfLoggedOut	{display: block;} /* may be 'block' */
-.buyerLoggedIn span.hideIfLoggedOut	{display: inline;}
-
-
-.catSideBar ul, .catSideBar li{
-	padding: 0px;
-	margin: 0px;
-	list-style:none;
+.categoryDescriptionContainer h1{ margin-bottom:25px;}
+.catSideBar {
+    margin: 0 -10px 0 0;
 }
 
-.clear {
-	clear: both;
-}
 
-.catSideBar{
-	margin-left: 20px;
-}
 
