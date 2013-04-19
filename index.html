@@ -26,7 +26,7 @@ var _gaq = _gaq || {'push':function(){}} //here for testing. REPLACE BEFORE DEPL
 var myCreole;
 
 var app = {vars:{
-	"release":"20130329072315",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
+	"release":"20130419105420",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"", //used in non-local mode.
 	"testURL":"http://www.c812ac9b1.crackle.zoovy.net/" //used ONLY if protocol is file: (for testing)
@@ -129,7 +129,7 @@ This file is intended to go along with the 10-step tutorial at:
 <div class="topbar">
         <div class="welcome" id="usernameContainer"><span class="fl">
 Welcome,
-<span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});" ><div><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Log Out</a></div></span>
+<span class="loginShow username" onClick="return showContent('customer',{'show':'myaccount'});" ></span><span class='hideIfLoggedOut'>(Not you?<a href='#logout' onClick="app.ext.myRIA.u.handleLogoutActions(); return true;">Log Out</a>)</span>
 <span class="loginHide">Guest(<a href="#customer?show=createaccount" class='bindByAnchor' id="account">Create An Account</a>)</span>
         </span>
         <span class="fr"><a href="#cart?show=cart" class='bindByAnchor'><span class='cartItemCount'>0</span> item(s)</a> in <a href="#cart?show=cart" class='bindByAnchor'>Shopping Cart</a> | <a href="#checkout?show=checkout" class='bindByAnchor'>Checkout</a>
@@ -715,62 +715,79 @@ don't modify the 'data-templateid' unless you are changing template names and up
 -->
 <div id='categoryTemplate' class='loadingBG categoryTemplate'>
 
-	<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
+	<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'> </ul>
 
 <div class='clearfix'></div>
 <div class='marginBottom'>
-<!--	<div class='catMediaCol'>-->
 		<div class='catMediaContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'>
-			<div class='catBigImageContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'><img src='blank.gif' data-bind='var: category(%page.picture1); format:imageURL;' width='298' height='300' /></div>
+		<div class='catBigImageContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'><img src='blank.gif' data-bind='var: category(%page.picture1); format:imageURL;' width='298' height='300' /></div>
 			
 		</div>
-<!--	</div>-->
-	<div class='catDesc' style="width:590px;">	
+     <div class="catSideBar floatRight">
+		<h3>HELPFUL LINKS</h3>
+		<ul>
+			<li><a href="#">Selecting a Pillow</a></li>
+			<li><a href="#">Different Types of Sleep</a></li>
+			<li><a href="#">Positions</a></li>
+			<li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
+		</ul>
+
+		<div class="needhelp">
+			<br><br>
+			Need help? Call Us!<br>
+			<b>855-769-3696</b><br>
+			or<br>
+			<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
+
+			<br><br><br>
+
+			<b>FREE SHIPPING</b><br>
+			ON ALL U.S. ORDERS<br>
+			<a href="#">Learn more</a>
+		</div>	   
+	</div>
+<div class="categoryDescriptionContainer" >	
+		<h1 data-bind="var: category(pretty); format: catText; extension: myRIA;"></h1>
+		<div class='textBlock' data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
+		<div class='textBlock' data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
+	</div>
+    <div class='displayNone clear' data-bind='var:category(%page.youtube_videoid); format:showIfSet;'>
+		<div class='catVideoContainer clearfix pointer' data-bind='var:category(%page.youtube_videoid);format:assignAttribute; attribute:data-videoid;' onClick="app.ext.myRIA.a.showYoutubeInModal($(this).attr('data-videoid'));" >
+			<div class='vidThumb'><img src='blank.gif' data-bind='var: category(%page.youtube_videoid); format:youtubeThumbnail; extension:myRIA;'  width='120' height='90' /></div>
+			<h2 data-bind="var: category(%page.youtube_videoheader); format: text;"></h2>
+			<p  data-bind="var: category(%page.youtube_videodescription); format: text;"></p>
+		</div>
+
+	</div>
+	<!--
+<div class='catDesc' style="width:590px;">	
 		
         <div class='displayNone' data-bind='var:category(%page.youtube_videoid); format:showIfSet;'>
-        <div style="width:420px; float:left;"><div class='textBlock' data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
-		<!-- COMMENTING OUT UNTIL FRAMEWORK ALLOWS MULTIPLE FORMAT/CATEGORY CALLS ON A PAGE; AS OF 201248 IT DOES NOT
+     
+<div style="width:420px; float:left;"><div class='textBlock' data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
+
+	 COMMENTING OUT UNTIL FRAMEWORK ALLOWS MULTIPLE FORMAT/CATEGORY CALLS ON A PAGE; AS OF 201248 IT DOES NOT
 		<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: breadcrumbTemplate; detail:max;" class='listStyleNone clearfix noPadOrMargin categoryList noUnderline'></ul>
-		-->
+		
 		<div class='textBlock' data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
 				<div class='catVideoContainer clearfix pointer' data-bind='var:category(%page.youtube_videoid);format:assignAttribute; attribute:data-videoid;' onClick="app.ext.myRIA.a.showYoutubeInModal($(this).attr('data-videoid'));" >
 				<div class='vidThumb'><img src='blank.gif' data-bind='var: category(%page.youtube_videoid); format:youtubeThumbnail; extension:myRIA;'  width='120' height='90' /></div>
 				<h2 data-bind="var: category(%page.youtube_videoheader); format: text;"></h2>
 				<p  data-bind="var: category(%page.youtube_videodescription); format: text;"></p>
 				</div></div>
-                <div class="rightA">
-<h3>HELPFUL LINKS</h3>
-<ul>
-<li><a href="#">Selecting a Pillow</a></li>
-<li><a href="#">Different Types of Sleep</a></li>
-<li><a href="#">Positions</a></li>
-<li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
-</ul>
-
-<div class="needhelp">
-<br><br>
-Need help? Call Us!<br>
-<b>855-769-3696</b><br>
-or<br>
-<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
-
-<br><br><br>
-
-<b>FREE SHIPPING</b><br>
-ON ALL U.S. ORDERS<br>
-<a href="#">Learn more</a>
-</div>
-</div>
+                
             </div>
+-->
+<div class="clearfix"></div>
 	</div>
     
-    
-	<div class="clearfix"></div>
+    <ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail: max;" class='listStyleNone clearfix noPadOrMargin fluidList categoryList marginBottom' style="margin-bottom:25px;"></ul>
+
+	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; pretext: <h4 >PRODUCTS IN THIS CATEGORY</h4>;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>	
+	
 </div>
 
-	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail: max;" class='listStyleNone clearfix noPadOrMargin fluidList categoryList marginBottom'></ul>
-
-	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>	
+	
 	
 <!-- DEFAULT CODE
 	<img data-bind="var: category(%page.banner1); format: banner; editor: banner; height:250; width:750; extension: myRIA;" />
@@ -847,7 +864,8 @@ remember to NOT put the button inside the 'onclick' container or two events will
 				</div>
 				
 				<div class='savings' data-bind="var: product(pid); format:priceRetailSavingsDifference; currencySign: $;  hideZero:true; pretext: You Save: ; extension:myRIA;"></div>			
-			</div>	</span>		
+			</div>			
+            </span>
 		</div>
 		<!--
 		<h6 data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6>
@@ -945,8 +963,8 @@ remember to NOT put the button inside the 'onclick' container or two events will
 		</div>
 		
 		<h5 data-bind='var: product(prod_name); format:text;'></h5>
-	
-		<h6 data-bind='var: product(base_price); format:money; isElastic:1; currencySign: $;  hideZero:true; className:price; before:<span class="pfrom"> Price From:</span> ;'></h6>
+	<span class="loginShow">
+		<h6 data-bind='var: product(base_price); format:money; isElastic:1; currencySign: $;  hideZero:true; className:price; before:<span class="pfrom"> Price From:</span> ;'></h6></span>
 	</div>
 </li>
 </ul>
@@ -1057,6 +1075,7 @@ this will likely become more flexible in the future. ###
     </div>
     
     <div class="rightS"><div class='priceContainer pricing marginTop marginBottom'>
+    <span class="loginShow">
 		<div class='basePrice' >
 			<span class='value' data-bind="var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; posttext: <span class='prompt pricePrompt'><br/>Price From:&nbsp;</span>;"></span>		</div>
 		<div>
@@ -1064,6 +1083,7 @@ this will likely become more flexible in the future. ###
 			<span class='savings marginLeft'>
 			<span class='savingsDifference' data-bind='var: product(pid); format:priceRetailSavingsDifference; extension:myRIA;'></span>
 				<span class='savingsPercentage' data-bind='var: product(pid); format:priceRetailSavingsPercentage; extension:myRIA; posttext:<br/> You Save: ;'></span>			</span>		</div>
+                </span>
 	</div>
     <input type='submit' value='Add to Cart' class='ui-button ui-button-text ui-corner-all ui-state-default addToCartButton displayNone' data-bind='var: product(pid); format:addToCartButton; extension:store_product;' id='addToCartBtn' />
     <div class='clearfix alignRight'>
@@ -1429,11 +1449,7 @@ adding classes is not likely to have any bad effects.
     <div class="rightA1">
 <h3>HELPFUL LINKS</h3>
 <ul>
-<li><a href="#">Selecting a Pillow</a></li>
-<li><a href="#">Different Types of Sleep</a></li>
-<li><a href="#">Positions</a></li>
-<li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
-
+<li><a href="#company?show=bedding" class='bindByAnchor'>Bedding Tips</a></li>
 </ul>
 <h3>CUSTOMER SERVICE</h3>
 <ul>
@@ -1500,6 +1516,63 @@ Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Ma
 	
 
 <span style="padding:0 0 0 35px;">All preorders paid with a credit card will be charged at the time of shipment. All preorders paid with Google Checkout, Paypal or Amazon Payments will be charged when your order is placed. If you do not wish to pay for your preorder until it ships then you must use the checkout button and pay with a credit card. Orders that have both preorder and instock items we be shipped at the same time in one shipment.</span>
+            </div>
+		</div>
+        
+        <div id='beddingArticle' class='textContentArea article'>
+			<h1 style="margin-bottom:7px; font-size:18px;">Bedding Tips</h1>
+			<div data-bind='var: profile(zoovy:bedding); format:wiki; wikiFormats:myRIA;' id='beddingContent'>
+          <p>Buying bedding online can be daunting because you can't touch the items. As the leading supplier of bedding to the best stores, hotels, resorts and cruise lines - we know how to keep you comfortable.</p>
+		<p>Many common questions are answered below - you can also visit our sleeping blog at NocJournal.com or call us for more advice.</p>
+		<h2 style="font-size:16px;">Fill Power Information</h2>
+        <ul>
+        <li> Often times the fill power of an item can be confused as a barometer for quality.</li>
+		<li> Fill power simply measures how fluffy the down is and makes the most sense when comparing comforters.</li>
+		<li> Most consumers love cloud lift soft bedding - and to get that experience a higher fill power is needed.</li>
+		<li> For Pillows a fill power of 550 - 600 is perfectly fine</li>
+		<li> For comforters a fill power of 600-800 is amazing (the higher the number the more cloud like you will feel</li>
+		</ul>
+        <h2 style="margin:0 0 10px 0px; font-size:16px;">Pillow Tips</h2><p>Pillows are sold by density level - regardless of filling material. White Goose Down is considered the gold standard closely followed by PrimaLoft which is our Luxury Down Alternative</p><ul>
+		<li> If you sleep on your side (50% of us do) then choose a firmer density pillow.</li>
+		<li> If you sleep on your back (25% of us do) then choose a medium density pillow.</li>
+		<li> If you sleep face down or on your stomach (25% of us do) - then choose a soft density pillow.</li>
+		</ul><p>
+		100% of DOWNLITE's pillows are made in the USA of Hypoallergenic materials.
+		</p><p>
+		Most pillows are machine washable & dryable (except silk and rayon).
+		</p><p>
+		Pillows can last 1-25 years based on the fillings, usage and care. Polyester pillows last 1-2 years usually versus down and feather pillows which can last 5-25 years.
+		</p><p>
+		Fluff Your pillows in the dryer on high heat once a month for 15 minutes to keep them fluffy, fresh and in good shape.
+		</p><h2 style="font-size:16px;">Comforter Tips</h2>
+        <ul>
+        <li> We also suggest buying the biggest size you can to allow for less tug of war with the covers</li>
+		<li> Most comforters can be machine washed and dried in a commercial laundry mat</li>
+		<li> Try using a duvet to add color and protection to a comforter (duvet size should be within plus or minus two inches of the comforter dimensions).</li>
+		<li> Fills can shift in baffle box constructions - so look for PermaBaffle design comforters or sewn thru constructions.</li>
+		</ul>
+		<h2 style="font-size:16px;">Feather Bed Tips</h2>
+        <ul>
+        <li> 90% of all our feather beds are made in the USA.</li>
+		<li> Feather beds are too large to wash - so spot care paired with a protector works best.</li>
+		<li> Adding a mattress pad on a featherbed is a great way to limit any feather poking and extend usage.</li>
+		<li> Fluff you feather bed daily or every other day for optimum softness.</li>
+		</ul>
+		<h2 style="font-size:16px;">Sheeting, Duvets & Fine Linens</h2>
+        <ul>
+        <li> We suggest Tencel Lyocell for fabrics which is really a miracle material with a soft to the touch hand, excellent moisture wicking and relatively easy care.</li>
+		<li> Tencel Lyocell comes from sustainably grown Eucalyptus trees and is processed in a very eco efficient manner.</li>
+		<li> Don't wash sheets, duvet covers or fine linens with towels.</li>
+		</ul>
+		<h2 style="font-size:16px;">Fabrics & Thread Counts</h2>
+        <ul><li> Most of us have been conditioned to assume higher thread counts means a better product - this is not always the case.</li>
+		<li> We prefer Supima Cotton when available for it's long staple fibers (this means a more durable and silky product).</li>
+		<li> Higher thread counts mean a more dense fabric - which means  a stiffer fabric (generally we limit our fabrics to 500 TC or lower with most in the 300-400 range).</li>
+		<li> The weave and finishing of fabric can greatly impact it's hand (Which greatly impacts german fabrics which typically have the best hand but a relatively lower thread count due to amazing finishing).</li>
+		<li> DOWNLITE does not add FR (Flame Retardent) treatments to it's fabrics.</li>
+		<li> Wrinkle resistant fabric is usually chemically treated with an agent. DOWNLITE seldom uses these finishes for it's bedding (if an agent or finish was applied we would clearly mention it on the product information).</li>
+		<li> The finest cotton in the world is a German Batiste - very light weight and made with long staple cotton.</li>
+        </ul>
             </div>
 		</div>
 	
@@ -1636,8 +1709,10 @@ For general product questions and order inquiries you can also email us at <a hr
 			<div class="CreatAccount">
             
 <div class="WelcomeB">
-<h1>Welcome Back!</h1>
-<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:115px;">
+<p id='loginMessaging' class='marginBottom appMessaging'></p>
+            <div id='loginFormContainer'>
+            <form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:159px;">
+				<h1>Welcome Back!</h1>
 <input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
 	<fieldset style="border:none; margin:0px; padding:0px;">
 	
@@ -1656,22 +1731,25 @@ For general product questions and order inquiries you can also email us at <a hr
     <input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
 	</div>
 	</fieldset>
-</form>
+</form><span class="hideIfLoggedIn">
 <p align="center"><a href="#recoverpassword">Forgot your username or password?</a></p>
+</span>
+</div>
+
 </div>
 <div class="Account" >
-<form action='#' class='inputsAsBreaks' onSubmit="app.ext.myRIA.u.handleAppBuyerCreate($(this)); return true;">
+<form action='#' class='inputsAsBreaks' onSubmit="app.ext.myRIA.u.handleAppBuyerCreate($(this)); return false;">
 <h1>Don't have an account?</h1><input type='hidden' name='form' value='Business' />
 <div class="fieldM"><span class="field">First Name</span> <input name='firstname' type='text' size='30' class='textfname' placeholder='First Name' required='required' />
- <b>Middle Initial</b> <input name="" type="text" class="textfmiddle"> <b>Last Name</b> <input name='lastname' type='text' size='30' placeholder='Last Name' required='required' class='textflast'/></div>
+ <b>Last Name</b> <input name='lastname' type='text' size='30' placeholder='Last Name' required='required' class='textflast'/></div>
 <div class="fieldM"><span class="field">Address</span> <input name='address1' type='text' size='30' placeholder='Address' class='textfadd' required='required' /> 
 <input name='address2' type='text' size='30' placeholder='Address (Line 2)' class='textfadd1'/></div>
 <div class="fieldM"><span class="field">City</span> <input name='city' type='text' size='30' placeholder='City' required='required' class='textcity'/> 	<b>State</b> <input name='region' type='text' size='5' placeholder='State' class='textfstate' /> <b>Zip</b> <input name='postal' type='text' size='10' placeholder='00000-0000' class='textfzip'/></div>
 
 <div class="fieldM"><span class="field">Country</span> <select name="Country" class="textfcountry"><option>United States of America</option></select></div>
 
-<div class="fieldM"><span class="field">E-mail</span> <input name='email' type='email' size='30' class='textfmail' placeholder='E-mail Address' required='required' /> <b>Phone Number</b> <input name='ar_phone' type='text' size='12' placeholder='Phone Number' class='textfphone'/> </div>
-<div class="fieldM"><span class="field">Password</span> <input name='pass' type='password' size='30' class='textfpass' placeholder='7-18 Characters' required='required' /> <b>Confirm Password</b> <input name='confirm_email' type='password' size='12' placeholder='Must be a match' class='textfphone' required='required'/> </div>
+<div class="fieldM"><span class="field">E-mail</span> <input name='email' type='email' size='30' class='textfmail' placeholder='E-mail Address' required='required' /> <b>Phone Number</b> <input name='ar_phone' type='tel' size='12' placeholder='Phone Number' class='textfphone'/> </div>
+<!--<div class="fieldM"><span class="field">Password</span> <input name='pass' type='password' size='30' class='textfpass' placeholder='7-18 Characters' required='required' /> <b>Confirm Password</b> <input name='confirm_email' type='password' size='12' placeholder='Must be a match' class='textfphone' required='required'/> </div>-->
 <!--<fieldset class='marginBottom'>
 	<legend>About Your Business</legend>
 	
