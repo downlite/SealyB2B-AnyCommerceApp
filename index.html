@@ -26,7 +26,7 @@ var _gaq = _gaq || {'push':function(){}} //here for testing. REPLACE BEFORE DEPL
 var myCreole;
 
 var app = {vars:{
-	"release":"20130404032220",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
+	"release":"20130419105420",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"", //used in non-local mode.
 	"testURL":"http://www.c812ac9b1.crackle.zoovy.net/" //used ONLY if protocol is file: (for testing)
@@ -852,6 +852,7 @@ remember to NOT put the button inside the 'onclick' container or two events will
 		</div>
 		<div class='productInfoPadding'>
 			<h5 data-bind='var: product(zoovy:prod_name); format:text;' class='pointer'></h5>
+            <span class="loginShow">
 			<div class='pricing'>
 				<div class='basePrice' >
 				<span class='value' data-bind="var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; before: <span class='prompt pricePrompt'>Price From: </span>;">
@@ -864,6 +865,7 @@ remember to NOT put the button inside the 'onclick' container or two events will
 				
 				<div class='savings' data-bind="var: product(pid); format:priceRetailSavingsDifference; currencySign: $;  hideZero:true; pretext: You Save: ; extension:myRIA;"></div>			
 			</div>			
+            </span>
 		</div>
 		<!--
 		<h6 data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6>
