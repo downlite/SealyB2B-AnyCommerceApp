@@ -1886,7 +1886,7 @@ CATEGORY TEMPLATE
 
 .categoryDescriptionContainer h1{ margin-bottom:25px;}
 .catSideBar {
-    margin: 0 -10px 0 0 !important;
+    margin: 0 -10px 0 0;
 }
 
 
