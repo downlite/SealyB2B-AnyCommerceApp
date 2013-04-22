@@ -162,7 +162,20 @@ Welcome,
 </div>
 </header>
 
-<section class="Logos"><div><img src="images/Slogo.gif" width="59" height="50" style="margin:25px 0 25px 160px;" alt="Sealy" title="Sealy"><img src="images/posture.gif" width="191" height="31" style="margin:35px 135px 35px 146px;" alt="Posturepedic" title="Posturepedic"><img src="images/stearns.gif" width="142" height="56" style="margin:22px 0;" alt="Stearns &amp; Foster" title="Stearns &amp; Foster"></div><div class="cb"></div></section>
+<section class="Logos">
+	<div>
+		<a href="#category?navcat=.brands.100-sealy-brand-bedding" class="bindByAnchor">
+			<img src="images/Slogo.gif" width="59" height="50" style="margin:25px 0 0 160px;" alt="Sealy" title="Sealy" />
+		</a>
+		<a href="#category?navcat=.brands.200-sealy-posturepedic-brand-bedding" class="bindByAnchor">
+			<img src="images/posture.gif" width="191" height="31" style="margin:35px 135px 0 146px;" alt="Posturepedic" title="Posturepedic" />
+		</a>
+		<a href="#category?navcat=.brands.400-stearns-and-foster-brand-bedding" class="bindByAnchor">
+			<img src="images/stearns.gif" width="142" height="56" style="margin:22px 0 0 0;" alt="Stearns &amp; Foster" title="Stearns &amp; Foster" />
+		</a>
+	</div>
+	<div class="cb"></div>
+</section>
 
 <nav class="nav_menu"><ul id='tier1categories'></ul><!-- DUAL NAV WILL GO HERE --></nav>
 
@@ -304,7 +317,6 @@ Welcome,
 <li><a href="http://downandfeathercouncil.com/" target='_blank'>Hypoallergenic Down</a></li>
 <li><a href="http://www.thefabricofourlives.com/" target='_blank'>Natural Cotton Bedding</a></li>
 <li><a href="http://www.sealybedding.com" target='_blank'>Sealy Bedding</a></li>
-<li><a href="#category?navcat=.617-downlite-partners" class="bindByAnchor">Partner Links</a></li>
 <li><a href="#customer?show=createaccount" class="bindByAnchor">Become a Retailer</a></li>
 </ul>
 </div>
@@ -517,7 +529,7 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 	<div class="bannerDuoContainer clearfix">
 		<div class="floatRight stacked">
             <p id='loginMessaging' class='marginBottom appMessaging'></p>
-            <div id='loginFormContainer'>
+            <div class="loginHide" id='loginFormContainer'>
 				<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#homeLoginlogin").val(),$("#homeLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:159px;">
 					<h1>Welcome Back!</h1>
 					<input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
@@ -598,95 +610,52 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 	<div><img src='blank.gif' width='992' height='120' data-bind="var: category(%page.banner_wide1); format: banner; extension:myRIA; editor:banner;" /></div>
 -->
 <section class="pagecontent">
-<div class="bedtime"><b>A Bedtime Classic</b>
+<div class="bedtime">
+<h1>A Bedtime Classic</h1>
 
-	<span>Lorem ipsum dolor sit amet,
-consectetur adipiscing elit. Aliquam porta, leo vel pulvinar facilisis, urna nibh
-tincidunt sapien, sed consectetur tellus diam in leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas est velit,
-ullamcorper vel euismod ac, accumsan sed eros.</span><br><br>
+<p>
+	Sealy is one of the oldest bedding brands in the world with a strong heritage for American made products. Sealy has partnered with DOWNLITE to manufacturer a line of bedding that offers unparalleled comfort and support for 'whatever you do in bed'.
+</p>
+<p>
+	Over the next couple months the Sealy bedding line will be expanded with a broad range of pillows, mattress pads, comforters, sheet sets and more. Our initial collection of items offers a 'best of' assortment of items, ready to provide you with comfort.
+</p>
+<p>
+	The entire assortment will include Sealy plus Sealy Posturepedic, Sealy Posturepedic Optimum and Stearns & Foster.
+</p>
 
-Integer ac neque at arcu luctus<br>
-pellentesque ac ut dui. Morbi est justo, dapibus ut fringilla at, placerat nec elit. Sed enim nisl, vestibulum a tincidunt sed,
-porttitor a lacus.</div>
+</div>
 <div class="Quite">
-<p><img src="images/pic1.jpg" width="130" height="156" alt=""><b>Q</b>uiet teger ac neque at arcu luctus pellen tesque ac ut dui. Morbi est justo, dapibus ut fringilla at, placerat nec elit. Sed enim nisl, vestibulum a tincidunt sed statis... <br>
-  <a href="#">READ MORE</a></p>
-<div class="cb"></div>
-<p><img src="images/pic2.jpg" width="130" height="156" alt=""><b>H</b>ealthier ac neque at arcu luctus pellen tesque ac ut dui. Morbi est justo, dapibus ut fringilla at, placerat nec elit. Sed enim nisl, vestibulum a tincidunt sed... <br>
-  <a href="#">READ MORE</a></p></div>
+	<p>
+		<img src="images/130x156_sealy_feather_pillows.jpg" width="130" height="156" alt="">
+		<b>E</b>xperience the new Sealy collection of items including premium feather pillows. Made in the USA, these pillows are perfect for the side and back sleepers...
+		<br />
+		<a href="#" onClick="return showContent('product',{'pid':'DOW555PI0000'});">READ MORE</a>
+	</p>
+	<div class="cb"></div>
+	<p>
+		<img src="images/130x156_sealy_down_alternative_comforter.jpg" width="130" height="156" alt="">
+		<b>S</b>tay warm and toasty with the Sealy Posturepedic down alternative comforter - featuring silky soft cotton sateen...
+		<br />
+		<a href="#" onClick="return showContent('product',{'pid':'DOW555CO0000'});">READ MORE</a>
+	</p>
+</div>
+
 <div class="Affrodable">
-<p><img src="images/pic3.jpg" width="130" height="156" alt=""><b>A</b>ffordable et teger ac neque at arcu luctus pellen tesque ac ut dui. Morbi est justo, dapibus ut fringilla at, placerat nec elit. Sed enim nisllatis initica fringilla... <a href="#"><br>
-  READ MORE</a></p>
-<div class="cb"></div>
-<p><img src="images/pic4.jpg" width="130" height="156" alt=""><b>C</b>omfortable neque at arcu luctus pellen tesque ac ut dui. Morbi est justo, dapibus ut fringilla at, placerat nec elit. Sed enim nisl, vestibum... <a href="#"><br>
-  READ MORE</a></p></div>
+	<p>
+		<img src="images/130x156_sealy_primaloft_pillows.jpg" width="130" height="156" alt="">
+		<b>S</b>lumber to rest with PrimaLoft luxury down alternative pillows under the Sealy Posturepedic line of bedding...
+		<br />
+		<a href="#" onClick="return showContent('product',{'pid':'DOW555PI0010'});">READ MORE</a>
+	</p>
+	<div class="cb"></div>
+	<p>
+		<img src="images/130x156_sealy_bedding_search_show_all.jpg" width="130" height="156" alt="">
+		<b>N</b>ot sure what to get - see everything under Sealy, Sealy Posturepedic and Stearns and Foster...
+		<br />
+		<a href="#" onClick="return showContent('category',{'navcat':'.brands'});">READ MORE</a>
+	</p>
+</div>
 </section><div class="cb"></div>
-<!--<div class="floatRight homeTextBannerBlock">
-	<img alt="Down Bedding - Manufacturer Direct" src="images/150x150_downlite_down_bedding.jpg" height="90" width="90">
-	<div class="textBlock"><h1>Down Bedding</h1><p>Enjoy the luxury of down bedding at home manufacturer direct. Offering hypoallergenic down bedding including limited edition and overstock down bedding choices. Click to learn about down bedding.</p></div>
-</div>
-
-<div class="floatLeft homeTextBannerBlock">
-	<img alt="Hotel Bedding Direct To Home" src="images/150x150_downlite_hotel_bedding_room.jpg" height="90" width="90">
-	<div class="textBlock"><h1>Hotel Bedding</h1><p>Have you returned from a trip and want to get the same bedding you enjoyed at your favorite hotel, resort, casino or B&amp;B at home? Click to get your own hotel bedding.</p></div>
-</div>
-<div class="clearfix"></div>
-
-
-<div class="floatRight homeTextBannerBlock">
-	<a title="American Made Bedding" href="#category?navcat=.613-made-in-the-usa-bedding" class="bannerBind"><img alt="American Made Bedding" src="images/150x150_downlite_made_in_america_bedding.jpg" height="90" width="90"></a>
-	<div class="textBlock"><p>More than 70% of everything DOWNLITE makes is made in the USA in one of our several factories supporting local economies. Learn about our proud American made bedding.</p></div>
-</div>
-
-<div class="floatLeft homeTextBannerBlock">
-	<a title="Eddie Bauer Bedding" href="#category?navcat=.brands.100-eddiebauer-bedding" class="bannerBind"><img alt="Eddie Bauer Bedding" src="images/150x150_classic_american_brands_eddie_bauer_bedding.jpg" height="90" width="90"></a>
-	<div class="textBlock"><p>Eddie Bauer, Tommy Bahama, Good Housekeeping and Jessica McClintock are brands that DOWNLITE has an exclusive partnership with. Learn about our classic American brands.</p></div>
-</div>
-<div class="clearfix"></div>
-<div class="textBlock">
-	<p>DOWNLITE is a 100 year old family business based in the United States supplying Luxury Down Bedding for the finest department stores, catalogs, hotels and resorts in the country. DOWNLITE is unique because we do not just make down bedding for stores, we also supply our RestAssured Hypoallergenic down fillings to other manufacturers.</p>
-	<p>Many of our customers find us because they enjoyed sleeping on one of our hotel pillows or hotel comforters at a fine resort or luxury hotel. Some of our hotel bedding has one of our HotelDownShop.com labels attached to the piece of hotel linens.</p>
-</div>-->
-<!--
-<div class='floatRight homeTextBannerBlock'>
-	<img src='blank.gif' width='90' height='90' data-bind="var: category(%page.banner_square1); format: banner; extension:myRIA; editor:banner;" />
-	<div data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;" class='textBlock'></div>
-</div>
-
-<div class='floatLeft homeTextBannerBlock'>
-	<img src='blank.gif' width='90' height='90' data-bind="var: category(%page.banner_square2); format: banner; extension:myRIA; editor:banner;" />
-	<div data-bind="var: category(%page.description3); format:wiki; wikiFormats:myRIA; editor: textarea;" class='textBlock'></div>
-</div>
-<div class='clearfix'></div>
-
-
-<div class='floatRight homeTextBannerBlock'>
-	<img src='blank.gif' width='90' height='90' data-bind="var: category(%page.banner_square3); format: banner; extension:myRIA; editor:banner;" />
-	<div data-bind="var: category(%page.description4); format:wiki; wikiFormats:myRIA; editor: textarea;" class='textBlock'></div>
-</div>
-
-<div class='floatLeft homeTextBannerBlock'>
-	<img src='blank.gif' width='90' height='90' data-bind="var: category(%page.banner_square4); format: banner; extension:myRIA; editor:banner;" />
-	<div data-bind="var: category(%page.description5); format:wiki; wikiFormats:myRIA; editor: textarea;" class='textBlock'></div>
-</div>
-<div class='clearfix'></div>
-
-
-	
-<div data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;" class='textBlock'></div>
--->
-
-
-
-<!-- DEFAULT CODE
-	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
-	
-	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; before:<h2>Featured Items</h2>; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
-	<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
-
-	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
--->
-
 
 </div>
 
