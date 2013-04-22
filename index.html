@@ -29,7 +29,7 @@ var app = {vars:{
 	"release":"20130419083510",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"", //used in non-local mode.
-	"testURL":"http://www.c812ac9b1.crackle.zoovy.net/" //used ONLY if protocol is file: (for testing)
+	"testURL":"http://www.d4fc09f3a.crackle.zoovy.net/" //used ONLY if protocol is file: (for testing)
 	},u:{},rq:[]};
 
 //set base url so images, css, js, etc all load from appropriate location once deployed.
@@ -264,7 +264,7 @@ Welcome,
 <div class="footerM">
 <div class="cust"><b>CUSTOMER SERVICE</b>
 <ul>
-<li><a href="#customer?show=ordertracking" class='bindByAnchor'>Order Tracking</a></li>
+<li><a href="#customer?show=orders" class='bindByAnchor'>Order Tracking</a></li>
 <li><a href="#company?show=shipping" class='bindByAnchor'>Shipping Info</a></li>
 <li><a href="#company?show=return" class='bindByAnchor'>Returns & Exchanges</a></li>
 <li><a href="#company?show=about" class='bindByAnchor'>About Us</a></li>
@@ -296,8 +296,8 @@ Welcome,
 <ul>
 <li><a href="http://downandfeathercouncil.com/" target='_blank'>Hypoallergenic Down</a></li>
 <li><a href="http://www.thefabricofourlives.com/" target='_blank'>Natural Cotton Bedding</a></li>
-<li><a href="#category?navcat=." target='_blank'>Sealy Bedding</a></li>
-<li><a href="#category?navcat=.617-downlite-partners" target='_blank'>Partner Links</a></li>
+<li><a href="http://www.sealybedding.com" target='_blank'>Sealy Bedding</a></li>
+<li><a href="#category?navcat=.617-downlite-partners" class="bindByAnchor">Partner Links</a></li>
 <li><a href="#">Become a Retailer</a></li>
 </ul>
 </div>
@@ -1483,7 +1483,9 @@ ON ALL U.S. ORDERS<br>
 		<div id='aboutArticle' class='textContentArea article'>
 			<h1 style="margin-bottom:7px; font-size:18px;">About Us</h1>
 			<div data-bind='var: profile(zoovy:about); format:wiki; wikiFormats:myRIA;' id='aboutUsContent'>
-            <span style="padding:0 0 0 35px;">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.<br><br></span>
+<!--
+
+<span style="padding:0 0 0 35px;">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.<br><br></span>
 
 
 
@@ -1500,6 +1502,7 @@ Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Ma
 	
 
 <span style="padding:0 0 0 35px;">All preorders paid with a credit card will be charged at the time of shipment. All preorders paid with Google Checkout, Paypal or Amazon Payments will be charged when your order is placed. If you do not wish to pay for your preorder until it ships then you must use the checkout button and pay with a credit card. Orders that have both preorder and instock items we be shipped at the same time in one shipment.</span>
+			-->
             </div>
 		</div>
 	

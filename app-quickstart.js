@@ -1512,6 +1512,13 @@ if(ps.indexOf('?') >= 1)	{
 			
 			
 			handleLogoutActions : function()  {
+				//HIJACK -- to avoid the fact that cart and login info are tied together,
+				//we are just flushing everything and reloading the app(not needed after 
+				//upgrade to 201314) - mc 20130422
+				document.location = zGlobals.appSettings['http'+((document.location.protocol === "https:") ? 's':'')+'_app_url'] + "?flush=1";
+				
+				
+				//The usual behavior
 				$('body').removeClass('buyerLoggedIn');
 				$('.username').empty();
 				app.u.logBuyerOut();
