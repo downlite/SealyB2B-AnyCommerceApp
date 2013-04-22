@@ -46,6 +46,7 @@ all css includes need to be after the js that changes the base url.
 css files should be included before any .js file to ensure they are downloaded in parallel
 -->
 <link rel="stylesheet" type="text/css" href="app-quickstart.css" />
+<link rel="stylesheet" type="text/css" href="_sealy_b2b_styles.css" />
 <link rel="stylesheet" type="text/css" href="qs_style.css"/>
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/ui-lightness/jquery-ui.css" />
 
@@ -512,80 +513,66 @@ COMMONLY EDITED TEMPLATES
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
 <div id='homepageTemplate' class='homeTemplate'>
+
 	<div class="bannerDuoContainer clearfix">
-			<div class="floatRight stacked">
+		<div class="floatRight stacked">
             <p id='loginMessaging' class='marginBottom appMessaging'></p>
             <div id='loginFormContainer'>
-            <form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:159px;">
-				<h1>Welcome Back!</h1>
-<input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
-	<fieldset style="border:none; margin:0px; padding:0px;">
-	
-	<div>
-	<!--<label for='modalLoginlogin'>Login/Email</label>-->
-	<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' id='modalLoginlogin' size='25' />
-	</div>
-	
-	<div>
-	<!--<label for='modalLoginpassword'>Password</label>-->
-	<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' id='modalLoginpassword' size='25' />
-	</div>
-	
-	<div>
-	<!--<input type='image' src='images/signin.gif' value='Sign In' class='' />-->
-    <input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
-	</div>
-	</fieldset>
-</form><span class="hideIfLoggedIn">
-<div class="first"><p>First Time Here? Sign Up!</p>
-<p class="start"><a href="#customer?show=createaccount" class='bindByAnchor'>START A BUSINESS ACCOUNT</a></p>
-<span>For Furniture & Mattress Businesses... <a href="#">LEARN MORE</a></span>
-</div></span>
-</div>
-
-			</div> 
-			<div class="floatLeft">
-				<div id="slideshowContainer">
-                
-					<!--<div id="slideshowNav"><a class="" href="#">1</a><a class="" href="#">2</a><a class="" href="#">3</a><a class="activeSlide" href="#">4</a><a class="" href="#">5</a></div>-->
-                    
-					<ul style="position: relative;" id="wideSlideshow" class="pics slideshow"><a href="#" id="prev"><img src="images/prev.png" width="30" height="100"></a><a href="#" id="next"><img src="images/next.png" width="30" height="100"></a>
-						<a title="Buy Your Own 50/50 Pillow For Home That You Enjoyed On Vacation" caption="hello" onClick="return showContent('product',{'pid':'750105088655'});" href="#" class="bannerBind">
-							<li style="position: absolute; top: 0px; left: 0px; display: none; z-index: 5; opacity: 0; width: 661px; height: 432px;">
-								<img alt="Buy Your Own 50/50 Pillow For Home That You Enjoyed On Vacation" src="images/600x400_2013_50_50_hotel_pillow.jpg" height="432" width="661"><div class="box1"><h3>Slider 1</h3><span>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus </span>
-                                </div>
-							</li>
-						</a>
-						<a title="Sleep Through Winter With Our High Fill Power American Made Down Comforters" onClick="return showContent('product',{'pid':'SDL100CO0320'});" href="#" class="bannerBind">
-							<li style="position: absolute; top: 0px; left: 0px; display: none; z-index: 5; opacity: 0; width: 661px; height: 432px;">
-								<img alt="Sleep Through Winter With Our High Fill Power American Made Down Comforters" src="images/600x400_homepage_650_fp_comforters.jpg" height="432" width="661"> <div class="box1"><h3>Slider 2</h3><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the </span>
-                                </div>
-							</li>
-						</a>
-						<a title="Hotel Bedding Search For Home - Hundreds Of The Best Hotels" onClick="return showContent('category',{'navcat':'.hotels'});" href="#" class="bannerBind">
-							<li style="position: absolute; top: 0px; left: 0px; display: none; z-index: 5; opacity: 0; width: 661px; height: 432px;">
-								<img alt="Hotel Bedding Search For Home - Hundreds Of The Best Hotels" src="images/600x400_2013_hotel_bedding_search.jpg" height="432" width="661">
-							<div class="box1"><h3>Slider 3</h3><span>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised</span>
-                                </div>
-                            </li>
-						</a>
-						<a title="Good Housekeeping PrimaLoft Pillows - Easy Care" onClick="return showContent('product',{'pid':'750105095080'});" href="#" class="bannerBind">
-							<li style="position: absolute; top: 0px; left: 0px; display: block; z-index: 6; opacity: 1; width: 661px; height: 432px;">
-								<img src="images/600x400_2013_50_50_hotel_pillow.jpg" width="661" height="301" alt="">
-                                <!--<div class="box1"><h3>Slider 4</h3><span>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution</span>
-                                </div>-->
-							</li>
-						</a>
-						<a title="Best Entry Level Feather Pillow For Only $25 - Made In The USA" onClick="return showContent('product',{'pid':'SDL100PI0170'});" href="#" class="bannerBind">
-							<li style="position: absolute; top: 0px; left: 0px; display: none; z-index: 5; opacity: 0; width: 661px; height: 432px;">
-								<img alt="Best Entry Level Feather Pillow For Only $25 - Made In The USA" src="images/600x400_2013_best_feather_pillow.jpg" height="432" width="661">
-                   <div class="box1"><h3>Slider 5</h3><span>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</span></div>
-							</li>
-						</a>
-					</ul>
-				</div>
+				<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#homeLoginlogin").val(),$("#homeLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:159px;">
+					<h1>Welcome Back!</h1>
+					<input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
+					<fieldset style="border:none; margin:0px; padding:0px;">
+						<div>
+							<!--<label for='modalLoginlogin'>Login/Email</label>-->
+							<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' id='homeLoginlogin' size='25' />
+						</div>
+						<div>
+							<!--<label for='modalLoginpassword'>Password</label>-->
+							<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' id='homeLoginpassword' size='25' />
+						</div>
+						<div>
+							<!--<input type='image' src='images/signin.gif' value='Sign In' class='' />-->
+							<input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
+						</div>
+					</fieldset>
+				</form>
+				<span class="hideIfLoggedIn">
+					<div class="first">
+						<p>First Time Here? Sign Up!</p>
+						<p class="start"><a href="#customer?show=createaccount" class='bindByAnchor'>START A BUSINESS ACCOUNT</a></p>
+						<span>For Furniture & Mattress Businesses... <a href="#">LEARN MORE</a></span>
+					</div>
+				</span>
+			</div>
+			<div class="loginShow">
+				<p>
+					Welcome to the Sealy bedding wholesale website. You can now browse the various collections of items available for 
+					purchase from DOWNLITE including Sealy, Sealy Posturepedic, Sealy Posturepedic Optimum and Stearns & Foster.
+				</p>
+				<p>
+					Once approved you will be able to see item prices on the website and be able to place your orders using a credit 
+					card or paypal. We can ship to your store, warehouse or even drop ship to your customers so you can keep your 
+					inventory levels minimized.
+				</p>
+				<p>
+					If you have any questions regarding item selections please contact us <strong>Monday-Friday from 10 Am to 4 PM EST</strong>. 
+					If at anytime you need escalated help, please contact our Director of eCommerce Stefan Hunter - <a href="mailto:shunter@downlite.com" target="_blank">shunter@downlite.com</a>.
+				</p>
+			</div>
+		</div> 
+		<div class="floatLeft">
+			<div id="slideshowContainer">
+				<ul style="position: relative;" id="wideSlideshow" class="pics slideshow">
+					<li>
+						<img src="images/620x301_sealy_supports_it_2.jpg" width="620" height="301" />
+					</li>
+					<li>
+						<img src="images/620x301_sealy_supports_it_3.jpg" width="620" height="301" />
+					</li>
+				</ul>
 			</div>
 		</div>
+	</div>
         
         
         

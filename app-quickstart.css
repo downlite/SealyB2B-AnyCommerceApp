@@ -1879,6 +1879,7 @@ CATEGORY TEMPLATE
 .loginShow {display:none;}
 
 .buyerLoggedIn span.loginShow {display:inline-block;}
+.buyerLoggedIn .loginShow {display:block;}
 
 .buyerLoggedIn .loginHide {display:none;}
 
