@@ -14,8 +14,6 @@ strong {
 	text-align: center;
 }
 
-//.productButtons .addToCartButton.prodButton { position: relative; right: -3px; }
-
 .productButtons .prodButton {
 	margin: 4px auto;
 	width: 180px;
@@ -27,4 +25,19 @@ strong {
 
 .prodQty select {
 	width:130px;
+}
+
+
+.catSideBar ul, .catSideBar li{
+	padding: 0px;
+	margin: 0px;
+	list-style:none;
+}
+
+.clear {
+	clear: both;
+}
+
+.catSideBar{
+	margin-left: 20px;
 }

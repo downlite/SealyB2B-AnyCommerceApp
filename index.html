@@ -677,76 +677,60 @@ don't modify the 'data-templateid' unless you are changing template names and up
 -->
 <div id='categoryTemplate' class='loadingBG categoryTemplate'>
 
-	<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
+<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
 
 <div class='clearfix'></div>
 <div class='marginBottom'>
-<!--	<div class='catMediaCol'>-->
-		<div class='catMediaContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'>
-			<div class='catBigImageContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'><img src='blank.gif' data-bind='var: category(%page.picture1); format:imageURL;' width='298' height='300' /></div>
-			
-		</div>
-<!--	</div>-->
-	<div class='catDesc' style="width:590px;">	
-		
-        <div class='displayNone' data-bind='var:category(%page.youtube_videoid); format:showIfSet;'>
-        <div style="width:420px; float:left;"><div class='textBlock' data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
-		<!-- COMMENTING OUT UNTIL FRAMEWORK ALLOWS MULTIPLE FORMAT/CATEGORY CALLS ON A PAGE; AS OF 201248 IT DOES NOT
-		<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: breadcrumbTemplate; detail:max;" class='listStyleNone clearfix noPadOrMargin categoryList noUnderline'></ul>
-		-->
-		<div class='textBlock' data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
-				<div class='catVideoContainer clearfix pointer' data-bind='var:category(%page.youtube_videoid);format:assignAttribute; attribute:data-videoid;' onClick="app.ext.myRIA.a.showYoutubeInModal($(this).attr('data-videoid'));" >
-				<div class='vidThumb'><img src='blank.gif' data-bind='var: category(%page.youtube_videoid); format:youtubeThumbnail; extension:myRIA;'  width='120' height='90' /></div>
-				<h2 data-bind="var: category(%page.youtube_videoheader); format: text;"></h2>
-				<p  data-bind="var: category(%page.youtube_videodescription); format: text;"></p>
-				</div></div>
-                <div class="rightA">
-<h3>HELPFUL LINKS</h3>
-<ul>
-<li><a href="#">Selecting a Pillow</a></li>
-<li><a href="#">Different Types of Sleep</a></li>
-<li><a href="#">Positions</a></li>
-<li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
-</ul>
-
-<div class="needhelp">
-<br><br>
-Need help? Call Us!<br>
-<b>855-769-3696</b><br>
-or<br>
-<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
-
-<br><br><br>
-
-<b>FREE SHIPPING</b><br>
-ON ALL U.S. ORDERS<br>
-<a href="#">Learn more</a>
-</div>
-</div>
-            </div>
+	<div class='catMediaContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'>
+		<div class='catBigImageContainer displayNone' data-bind='var:category(%page.picture1);format:showIfSet;'><img src='blank.gif' data-bind='var: category(%page.picture1); format:imageURL;' width='298' height='300' /></div>
 	</div>
+		
+	<div class="catSideBar floatRight">
+		<h3>HELPFUL LINKS</h3>
+		<ul>
+			<li><a href="#top" onClick="return showContent('company',{'show':'tip'});">Helpful Tips</a></li>
+			<li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
+		</ul>
+
+		<div class="needhelp">
+			<br><br>
+			Need help? Call Us!<br>
+			<b>855-769-3696</b><br>
+			or<br>
+			<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
+
+			<br><br><br>
+
+			<b>FREE SHIPPING</b><br>
+			ON ALL U.S. ORDERS<br>
+			<a href="#">Learn more</a>
+		</div>	   
+	</div>		   
+
+	<div class="categoryDescriptionContainer" >	
+		<h1 data-bind="var: category(pretty); format: catText; extension: myRIA;"></h1>
+		<div class='textBlock' data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
+		<div class='textBlock' data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></div>
+	</div>
+ 
+	<div class='displayNone clear' data-bind='var:category(%page.youtube_videoid); format:showIfSet;'>
+		<div class='catVideoContainer clearfix pointer' data-bind='var:category(%page.youtube_videoid);format:assignAttribute; attribute:data-videoid;' onClick="app.ext.myRIA.a.showYoutubeInModal($(this).attr('data-videoid'));" >
+			<div class='vidThumb'><img src='blank.gif' data-bind='var: category(%page.youtube_videoid); format:youtubeThumbnail; extension:myRIA;'  width='120' height='90' /></div>
+			<h2 data-bind="var: category(%page.youtube_videoheader); format: text;"></h2>
+			<p  data-bind="var: category(%page.youtube_videodescription); format: text;"></p>
+		</div>
+
+	</div>
+               
     
     
-	<div class="clearfix"></div>
+<div class="clear"></div>
 </div>
 
 	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail: max;" class='listStyleNone clearfix noPadOrMargin fluidList categoryList marginBottom'></ul>
 
 	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>	
-	
-<!-- DEFAULT CODE
-	<img data-bind="var: category(%page.banner1); format: banner; editor: banner; height:250; width:750; extension: myRIA;" />
 
-	<h2 data-bind="var: category(%page.header); format: text; editor: text;"></h2>
-	
-	<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
-	
-	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul><!-- outputs a list of subcategories 
-
-	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; withReviews:1; items_per_page: 25;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul><!-- outputs the product list 
-	
-	<p data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
--->
 		
 </div>
 
@@ -797,19 +781,23 @@ remember to NOT put the button inside the 'onclick' container or two events will
 		</div>
 		<div class='productInfoPadding'>
 			<h5 data-bind='var: product(zoovy:prod_name); format:text;' class='pointer'></h5>
-            <span class="loginShow">
-			<div class='pricing'>
-				<div class='basePrice' >
-				<span class='value' data-bind="var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; before: <span class='prompt pricePrompt'>Price From: </span>;">
-				</span>
-				</div>
-				
-				<div class='retailPrice'>
-					<span data-bind="var: product(zoovy:prod_msrp); format:money; currencySign: $;  hideZero:true; before: <span class='prompt retailPricePrompt'>MSRP: </span>;"></span>
-				</div>
-				
-				<div class='savings' data-bind="var: product(pid); format:priceRetailSavingsDifference; currencySign: $;  hideZero:true; pretext: You Save: ; extension:myRIA;"></div>			
-			</div>	</span>		
+            <div class="loginHide">
+				<h1>Log in for pricing details</h1>
+			</div>
+			<span class="loginShow">
+				<div class='pricing'>
+					<div class='basePrice' >
+					<span class='value' data-bind="var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; before: <span class='prompt pricePrompt'>Price From: </span>;">
+					</span>
+					</div>
+					
+					<div class='retailPrice'>
+						<span data-bind="var: product(zoovy:prod_msrp); format:money; currencySign: $;  hideZero:true; before: <span class='prompt retailPricePrompt'>MSRP: </span>;"></span>
+					</div>
+					
+					<div class='savings' data-bind="var: product(pid); format:priceRetailSavingsDifference; currencySign: $;  hideZero:true; pretext: You Save: ; extension:myRIA;"></div>			
+				</div>	
+			</span>		
 		</div>
 		<!--
 		<h6 data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6>
@@ -1006,9 +994,10 @@ this will likely become more flexible in the future. ###
 		<div id='prodDescTopContainer'>
 			<span id="prodDescTop" data-bind='var: product(zoovy:prod_desc); format:wiki; wikiFormats:myRIA;' class='clearfix'></span>
 		</div>
-			
-		<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone' style='float:left;'></fieldset>
-        <fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone prodQty' style='float:left;'></fieldset>
+		<div class="loginShow">
+			<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone' style='float:left;'></fieldset>
+			<fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone prodQty' style='float:left;'></fieldset>
+		</div>	
 		<h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
     </div>
     <!--<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Manufacturer: ;'></h5>-->
@@ -1021,7 +1010,10 @@ this will likely become more flexible in the future. ###
 	
     
     <div class="rightS">
-		<div class='priceContainer pricing marginTop marginBottom'>
+		<div class="loginHide">
+			<h1><strong>Log in for pricing details</strong></h1>
+		</div>
+		<div class='priceContainer pricing marginTop marginBottom loginShow'>
 			<div class='basePrice' >
 				<span class='value' data-bind="var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; posttext: <span class='prompt pricePrompt'><br/>Price From:&nbsp;</span>;"></span>		
 			</div>
@@ -1033,16 +1025,14 @@ this will likely become more flexible in the future. ###
 				</span>		
 			</div>
 		</div>
-		<div class="productButtons">
+		<div class="productButtons loginShow">
 			<input type='submit' value='Add to Cart' class='prodButton ui-button ui-button-text ui-corner-all ui-state-default addToCartButton displayNone' data-bind='var: product(pid); format:addToCartButton; extension:store_product;' id='addToCartBtn' />
-			<button id="wishlist" 
-				data-bind="var:product(pid); format:assignAttribute; attribute: data-pid;" 
+			<button data-bind="var:product(pid); format:assignAttribute; attribute: data-pid;" 
 				class='prodButton ui-button-text ui-button ui-state-default ui-corner-all'  
 				onClick="app.ext.myRIA.a.add2BuyerList({pid:$(this).attr('data-pid'),'listid':'wishlist'}); return false;">
 					<img src="images/wishlist.gif" width="180" height="50">
 			</button>
-			<button id="reviewB" 
-				data-bind="var:product(pid); format:assignAttribute; attribute: data-pid;" 
+			<button data-bind="var:product(pid); format:assignAttribute; attribute: data-pid;" 
 				class='prodButton ui-button-text ui-button ui-state-default ui-corner-all' 
 				onClick='app.ext.store_crm.u.showReviewFrmInModal({"pid":$(this).attr("data-pid"),"templateID":"reviewFrmTemplate"});'>
 					<img src="images/writeareview.gif" width="180" height="50">
