@@ -5,3 +5,26 @@ strong {
 .Logos a {
 	text-decoration: none;
 }
+
+.rightS {
+	position:relative;
+}
+
+.productButtons {
+	text-align: center;
+}
+
+//.productButtons .addToCartButton.prodButton { position: relative; right: -3px; }
+
+.productButtons .prodButton {
+	margin: 4px auto;
+	width: 180px;
+}
+
+.productButtons .prodButton img{
+	margin: 0px;
+}
+
+.prodQty select {
+	width:130px;
+}

@@ -1001,51 +1001,72 @@ this will likely become more flexible in the future. ###
 	<td class='prodSummaryContainer marginBottom no_underline'>
     <form data-bind='var: product(pid); format:atcForm; extension:store_product;' class='prodViewerAddToCartForm clearfix' action='#' onSubmit="app.ext.myRIA.u.handleAddToCart($(this),{'action':'modal'}); return false;">
     <div class="LeftS">
-    <h1 data-bind='var: product(zoovy:prod_name); format:text;'></h1>
-    <h5 class='stid' data-bind='var: product(pid); format:text; pretext: Item #: ;'></h5>
-     <h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
+		<h1 data-bind='var: product(zoovy:prod_name); format:text;'></h1>
+		<h5 class='stid' data-bind='var: product(pid); format:text; pretext: Item #: ;'></h5>
+		<div id='prodDescTopContainer'>
+			<span id="prodDescTop" data-bind='var: product(zoovy:prod_desc); format:wiki; wikiFormats:myRIA;' class='clearfix'></span>
+		</div>
+			
+		<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone' style='float:left;'></fieldset>
+        <fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone prodQty' style='float:left;'></fieldset>
+		<h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
+    </div>
     <!--<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Manufacturer: ;'></h5>-->
    
-		<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone' style='float:left;'></fieldset>
-        <fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone' id='Quantity' style='float:left;'></fieldset>
 		<!--<div class='qtyAndATCContainer clearfix qtyInput'>
 			
 			
 			<img class='floatLeft' src='images/free_shipping-147x38.png' width='147' height='38' alt='free shipping on orders over $150' />
 		</div>-->
 	
-    <div id='prodDescTopContainer'>
-		<span id="prodDescTop" data-bind='var: product(zoovy:prod_desc); format:wiki; wikiFormats:myRIA;' class='clearfix'></span>	</div>
-    </div>
     
-    <div class="rightS"><div class='priceContainer pricing marginTop marginBottom'>
-		<div class='basePrice' >
-			<span class='value' data-bind="var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; posttext: <span class='prompt pricePrompt'><br/>Price From:&nbsp;</span>;"></span>		</div>
-		<div>
-			<span class='retailPrice prodMSRP' data-bind="var: product(zoovy:prod_msrp); format:money; currencySign: $;  hideZero:true; posttext: <span class='prompt retailPricePrompt'><br/>MSRP:&nbsp;</span> ;"></span><br/>
-			<span class='savings marginLeft'>
-			<span class='savingsDifference' data-bind='var: product(pid); format:priceRetailSavingsDifference; extension:myRIA;'></span>
-				<span class='savingsPercentage' data-bind='var: product(pid); format:priceRetailSavingsPercentage; extension:myRIA; posttext:<br/> You Save: ;'></span>			</span>		</div>
-	</div>
-    <input type='submit' value='Add to Cart' class='ui-button ui-button-text ui-corner-all ui-state-default addToCartButton displayNone' data-bind='var: product(pid); format:addToCartButton; extension:store_product;' id='addToCartBtn' />
-    <div class='clearfix alignRight'>
+    <div class="rightS">
+		<div class='priceContainer pricing marginTop marginBottom'>
+			<div class='basePrice' >
+				<span class='value' data-bind="var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; posttext: <span class='prompt pricePrompt'><br/>Price From:&nbsp;</span>;"></span>		
+			</div>
+			<div>
+				<span class='retailPrice prodMSRP' data-bind="var: product(zoovy:prod_msrp); format:money; currencySign: $;  hideZero:true; posttext: <span class='prompt retailPricePrompt'><br/>MSRP:&nbsp;</span> ;"></span><br/>
+				<span class='savings marginLeft'>
+					<span class='savingsDifference' data-bind='var: product(pid); format:priceRetailSavingsDifference; extension:myRIA;'></span>
+					<span class='savingsPercentage' data-bind='var: product(pid); format:priceRetailSavingsPercentage; extension:myRIA; posttext:<br/> You Save: ;'></span>			
+				</span>		
+			</div>
+		</div>
+		<div class="productButtons">
+			<input type='submit' value='Add to Cart' class='prodButton ui-button ui-button-text ui-corner-all ui-state-default addToCartButton displayNone' data-bind='var: product(pid); format:addToCartButton; extension:store_product;' id='addToCartBtn' />
+			<button id="wishlist" 
+				data-bind="var:product(pid); format:assignAttribute; attribute: data-pid;" 
+				class='prodButton ui-button-text ui-button ui-state-default ui-corner-all'  
+				onClick="app.ext.myRIA.a.add2BuyerList({pid:$(this).attr('data-pid'),'listid':'wishlist'}); return false;">
+					<img src="images/wishlist.gif" width="180" height="50">
+			</button>
+			<button id="reviewB" 
+				data-bind="var:product(pid); format:assignAttribute; attribute: data-pid;" 
+				class='prodButton ui-button-text ui-button ui-state-default ui-corner-all' 
+				onClick='app.ext.store_crm.u.showReviewFrmInModal({"pid":$(this).attr("data-pid"),"templateID":"reviewFrmTemplate"});'>
+					<img src="images/writeareview.gif" width="180" height="50">
+			</button>
+		</div>
+		<div class='clearfix alignRight'>
 			
-            <div class="needhelp" style="margin:172px 0 0 0;">
-<br><br>
-Need help? Call Us!<br>
-<b>855-769-3696</b><br>
-or<br>
-<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
+			<div class="needhelp">
+				<br><br>
+				Need help? Call Us!<br>
+				<b>855-769-3696</b><br>
+				or<br>
+				<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
 
-<br><br><br>
+				<br><br><br>
 
-<b>FREE SHIPPING</b><br>
-ON ALL U.S. ORDERS<br>
-<a href="#">Learn more</a></div>
+				<b>FREE SHIPPING</b><br>
+				ON ALL U.S. ORDERS<br>
+				<a href="#">Learn more</a>
+			</div>
 		</div>
     </div>
-	</form><button id="wishlist"  class='ui-button-text ui-button ui-state-default ui-corner-all'  onClick="app.ext.myRIA.a.add2BuyerList({pid:$(this).parent().attr('data-pid'),'listid':'wishlist'}); return false;"><img src="images/wishlist.gif" width="180" height="50">
-</button><button id="reviewB" class='ui-button-text ui-button ui-state-default ui-corner-all' onClick='app.ext.store_crm.u.showReviewFrmInModal({"pid":$(this).attr("data-pid"),"templateID":"reviewFrmTemplate"});' data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;'><img src="images/writeareview.gif" width="180" height="50"></button>
+		
+	</form>
     
     
     

@@ -1592,8 +1592,8 @@ PRODUCT TEMPLATE
 .prodVideoContainer h2	{color: #000000;font-size: 12px; font-weight: bold; padding:0; margin:0;}
 .prodVideoContainer P	{color: #000000; font-size: 12px; margin: 2px 0; padding: 0 0 0 70px;}
 .prodViewerContainer .prodThumbs div {float: left; margin: 12px 12px 10px 0;}
-.LeftS{width:394px; float:left; margin:0 20px 0 0px;}
-.rightS{width:168px; float:left;  text-align: center;}
+.LeftS{width:382px; float:left; margin:0 20px 0 0px;}
+.rightS{width:180px; float:left;  text-align: center;}
 .rightS .pricing .basePrice .value {
 	font-weight:bold;
 	font-size:30px;
@@ -1661,9 +1661,7 @@ PRODUCT TEMPLATE
 #zCheckoutFrm fieldset{ border:#ccc solid 1px !important;}
 
 .qtyAndATCContainer fieldset {margin:0 0 3px;}
-#wishlist{margin: 0 0 0 409px; border-radius:0px; border:0px; background:none; position: absolute;top: 269px;}
-#Quantity select{ width:142px;padding:5px;border:#cccccc solid 1px;}
-#addToCartBtn	{ padding:0; position: absolute; top:209px; margin:0px; right:-5px; overflow:hidden; border:0px; border-radius:0px; background: url(images/addtocart.gif) no-repeat 0px 0px;width:180px; height:50px; text-indent:-1000px;cursor:pointer;}
+#addToCartBtn	{ padding:0;margin:0px; overflow:hidden; border:0px; border-radius:0px; background: url(images/addtocart.gif) no-repeat 0px 0px;width:180px; height:50px; text-indent:-1000px;cursor:pointer;}
 .prodViewerAddToCartForm select{ width:230px; padding:5px;border:#cccccc solid 1px;}
 .zform_number { width: 128px; padding:6px; margin-left:18px; border:#cccccc solid 1px;}
 .qtyInput	{font-size:10px; line-height:14px; border:#cccccc solid 1px;}
@@ -1817,7 +1815,6 @@ CATEGORY TEMPLATE
 .categoryList .catName, .productList .productInfoPadding	{text-align:center; padding:8px;}
 #addGiftcardBtn, #guestCheckoutBtn, #userLoginBtn, #addCouponBtn, #continueS, #StoreC, #Review{ background:#0099cc; border-radius:0px; border:0px; color:#fff;font-family: 'Montserrat', sans-serif; font-size:12px; padding:3px 9px;}
 #Review{ background:#0099cc; border-radius:0px; border:0px !important; color:#fff;font-family: 'Montserrat', sans-serif; font-size:12px; padding:3px 9px;}
-#reviewB{ position:absolute; margin:0px 0 0 409px;position: absolute;border-radius:0px; border:0px; background:none;top: 329px;}
 .appMessage{ width:380px;}
 #chkoutPlaceOrderBtn{background:#0099cc; border-radius:0px; border:0px; color:#fff;font-family: 'Montserrat', sans-serif; font-size:18px; padding:5px 25px;}
 .productInfoPadding h5	{font-weight:normal; margin-bottom:8px;font-size:13px;}
