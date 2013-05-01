@@ -13,7 +13,7 @@
 //		* node is a server side javascript engine based on chromes v8 javascript engine.
 //		* node can be downloaded from http://www.nodejs.org
 // 1b. in a dos cmd window:
-//		# npm install http-proxy colors mime optimist
+//		# npm install http-proxy colors mime
 // 1c. open dos/cmd window, then change directory to where the proxy is installed then run:
 //		# node nodeproxy.js
 // 1d. open firefox, chrome, ie, etc. on your machine go to the proxy settings and put in 127.0.0.1:8081 and select 'proxy all protocols'
@@ -61,36 +61,12 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 3a. change any of these variables to match your project:
-var TESTING_DOMAIN = "www.c812ac9b1.crackle.zoovy.net";
+var TESTING_DOMAIN = "www.zoovy.com";
 var PROJECT_DIRECTORY = process.cwd() + "/../..";		// the root directory where your project files are located
 
 // 3b. run: node nodeproxy.js
 // 3c. (as instructed) - configure your browser's proxy port
 
-// these are all modules you may need to install 
-//	npm install modulename 
-var path = require('path'),
-    fs = require('fs'),
-	httpProxy = require('http-proxy'),
-	url = require('url'),
-	net = require('net'),
-	http = require('http'),
-	https = require('https'),
-	util = require('util'),
-	colors = require('colors'),
-	mime = require('mime'),
-	argv = require('optimist').argv,
-	crypto = require('crypto');
-
-var help = [
-    "usage: nodeproxy.js [options] ",
-    "",
-    "Starts a anyCommerce developer webserver/proxy using the specified command-line options",
-    "",
-    "options:",
-    "  --domain www.domain.com   Location of the configuration file for the proxy server",
-    "  -h, --help                You're staring at it"
-].join('\n');
 
  
 // these are all modules you may need to install 
@@ -105,34 +81,7 @@ var path = require('path'),
 	util = require('util'),
 	colors = require('colors'),
 	mime = require('mime'),
-	argv = require('optimist').argv,
 	crypto = require('crypto');
-	
-	
-	
-//
-// FUTURE CONFIG FILE CODE: 
-//
-// if (argv.h || argv.help || Object.keys(argv).length === 2) {
-  // return util.puts(help);
-  // }
-
-// var location, config = {};
-
-
-// If we were passed a config, parse it
-//
-// if (argv.config) {
-  // try {
-    // var data = fs.readFileSync(argv.config);
-    // config = JSON.parse(data.toString());
-  // } catch (ex) {
-    // util.puts('Error starting node-http-proxy: ' + ex);
-    // process.exit(1);
-  // }
-// }	
-	
-	
  
  var welcome = [
 '                     ______                                            ',

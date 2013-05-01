@@ -195,7 +195,8 @@ A special translate template for product so that reviews can be merged into the 
 					tmp['reviews'] = app.ext.store_prodlist.u.summarizeReviews(pid); //generates a summary object (total, average)
 					tmp['reviews']['@reviews'] = app.data['appReviewsList|'+pid]['@reviews']
 					}
-				app.renderFunctions.translateTemplate(app.data[tagObj.datapointer],tagObj.parentID);
+				$(app.u.jqSelector('#',tagObj.parentID)).anycontent({'datapointer':tagObj.datapointer});
+//				app.renderFunctions.translateTemplate(app.data[tagObj.datapointer],tagObj.parentID);
 				},
 //error needs to clear parent or we end up with orphans (especially in UI finder).
 			onError : function(responseData,uuid)	{
@@ -205,7 +206,7 @@ A special translate template for product so that reviews can be merged into the 
 				app.u.throwMessage(responseData,uuid);
 //for UI prod finder. if admin session, adds a 'remove' button so merchant can easily take missing items from list.
 // ### !!! NOTE - upgrade this to proper admin verify (function)
-				if(app.sessionId && app.sessionId.indexOf('**') === 0)	{
+				if(app.vars.cartID && app.vars.cartID.indexOf('**') === 0)	{
 					$('.ui-state-error',$parent).append("<button class='ui-state-default ui-corner-all'  onClick='app.ext.admin.u.removePidFromFinder($(this).closest(\"[data-pid]\"));'>Remove "+responseData.pid+"<\/button>");
 					}
 				}
@@ -243,20 +244,19 @@ A special translate template for product so that reviews can be merged into the 
 //data.bindData will get passed into getProdlistVar and used for defaults on the list itself. That means any var supported in prodlistVars can be set in bindData.
 
 			productList : function($tag,data)	{
-			//	app.u.dump("BEGIN store_prodlist.renderFormats.productList");
-			//	app.u.dump(" -> data.bindData: "); app.u.dump(data.bindData);
-			if(app.u.isSet(data.value))	{
-			data.bindData.csv = data.value;
-			app.ext.store_prodlist.u.buildProductList(data.bindData,$tag);
-			}
-			},//prodlist	
-		
+//				app.u.dump("BEGIN store_prodlist.renderFormats.productList");
+//				app.u.dump(" -> data.bindData: "); app.u.dump(data.bindData);
+				if(app.u.isSet(data.value))	{
+					data.bindData.csv = data.value;
+					app.ext.store_prodlist.u.buildProductList(data.bindData,$tag);
+					}
+				},//prodlist		
 			
 			mpPagesAsListItems : function($tag,data)	{
 //				app.u.dump('BEGIN app.ext.store_prodlist.renderFormats.mpPagesAsListItems');
 				var o = '';
 				for(var i = 1; i <= data.value; i += 1)	{
-					o += "<li class='mpControlJumpToPage' data-page='"+i+"'><span>&nbsp;&nbsp;&nbsp;  "+i+"<\/span><\/li>"; //data-page is used for MP 'jumping'. don't use index or .text because order and text could get changed.
+					o += "<li class='mpControlJumpToPage' data-page='"+i+"'><span>page: "+i+"<\/span><\/li>"; //data-page is used for MP 'jumping'. don't use index or .text because order and text could get changed.
 					}
 				$tag.append(o);		
 				},
@@ -269,9 +269,6 @@ will remove the add to cart button if the item is not purchaseable.
 # - SANITY -> remember that the 'parent' container on the button should NOT have an onclick event or both events will trigger.
 
 */
-
-
-
 
 			addToCartButton : function($tag,data)	{
 //				app.u.dump("BEGIN store_product.renderFunctions.addToCartButton");
@@ -361,12 +358,12 @@ the object created here is passed as 'data' into the mulitpage template. that's 
 				var hideMultipageControls = false; //if set to true, will hide just the dropdown/page controls.
 				
 //can't build a prodlist without product.				
-				if(obj.csv && typeof obj.csv == 'object' && obj.csv.length > 0 && obj.loadsTemplate)	{
+				if(obj && obj.csv && typeof obj.csv == 'object' && obj.csv.length > 0 && obj.loadsTemplate)	{
 
 					var L = obj.csv.length;
 
 //okay, now lets set up some defaults if none were passed and normalize the data.
-					obj.items_per_page = (Number(obj.items_per_page)) ? Number(obj.items_per_page) : 8; //the number of items per page before going to multipage (if enabled)
+					obj.items_per_page = (Number(obj.items_per_page)) ? Number(obj.items_per_page) : 25; //the number of items per page before going to multipage (if enabled)
 					obj.page_in_focus = (Number(obj.page_in_focus)) ? Number(obj.page_in_focus) : 1; //in a multipage format, which page is in focus.
 					obj.hide_summary = (obj.hide_summary) ? true : false;
 					obj.hide_pagination = this.mpControlsShouldBeHidden(obj);
@@ -500,64 +497,62 @@ if no parentID is set, then this function gets the data into memory for later us
 This is the function that gets executed to build a product list.
 obj is most likely the databind object. It can be any params set in setProdlistVars.
 params that are missing will be auto-generated.
-
-
 */
-			 buildProductList : function(obj,$tag)	{
-//	app.u.dump("BEGIN store_prodlist.u.buildProductList()");
-//	app.u.dump(" -> obj: "); app.u.dump(obj);
+			buildProductList : function(obj,$tag)	{
+//				app.u.dump("BEGIN store_prodlist.u.buildProductList()");
+//				app.u.dump(" -> obj: "); app.u.dump(obj);
 
 //Need either the tag itself ($tag) or the parent id to build a list. recommend $tag to ensure unique parent id is created
 //also need a list of product (csv)
-if(($tag || (obj && obj.parentID)) && obj.csv)	{
-//	app.u.dump(" -> required parameters exist. Proceed...");
-obj.csv = app.ext.store_prodlist.u.cleanUpProductList(obj.csv); //strip blanks and make sure this is an array. prod attributes are not, by default.
-var plObj = this.setProdlistVars(obj); //full prodlist object now.
+				if(($tag || (obj && obj.parentID)) && obj.csv)	{
+//					app.u.dump(" -> required parameters exist. Proceed...");
+					obj.csv = app.ext.store_prodlist.u.cleanUpProductList(obj.csv); //strip blanks and make sure this is an array. prod attributes are not, by default.
+					
+					var plObj = this.setProdlistVars(obj); //full prodlist object now.
 
-//	app.u.dump(" -> plObj: "); app.u.dump(plObj);
+//					app.u.dump(" -> plObj: "); app.u.dump(plObj);
 
 //need a jquery obj. to work with.
-if($tag)	{$tag.attr('id',plObj.parentID);}
-else	{$tag = $('#'+plObj.parentID);}
+					if($tag)	{$tag.attr('id',plObj.parentID);}
+					else	{$tag = $('#'+plObj.parentID);}
 //a wrapper around all the prodlist content is created just one. Used in multipage to clear old multipage content. This allows for multiple multi-page prodlists on one page. Hey. it could happen.
-if($('#'+plObj.parentID+'_container').length == 0)	{
-if($tag.is('tbody'))	{
-$tag.closest('table').wrap("<div id='"+plObj.parentID+"_container' />");
-}
-else	{
-$tag.wrap("<div id='"+plObj.parentID+"_container' />");
-}
-}
+					if($('#'+plObj.parentID+'_container').length == 0)	{
+						if($tag.is('tbody'))	{
+							$tag.closest('table').wrap("<div id='"+plObj.parentID+"_container' />");
+							}
+						else	{
+							$tag.wrap("<div id='"+plObj.parentID+"_container' />");
+							}
+						}
 //adds all the placeholders. must happen before getProductDataForList so individual product translation can occur.
 //can't just transmogrify beccause sequence is important and if some data is local and some isn't, order will get messed up.
-$tag.append(this.getProdlistPlaceholders(plObj)).removeClass('loadingBG');
-$tag.data('prodlist',plObj); //sets data object on parent
+					$tag.append(this.getProdlistPlaceholders(plObj)).removeClass('loadingBG');
+					$tag.data('prodlist',plObj); //sets data object on parent
 
-if(!obj.hide_summary)	{
-if($tag.is('tbody'))	{
-$tag.closest('table').before(this.showProdlistSummary(plObj,'header')); //multipage Header
-$tag.closest('table').after(this.showProdlistSummary(plObj,'footer')); //multipage Footer
-}
-else	{
-$tag.before(this.showProdlistSummary(plObj,'header')); //multipage Header
-$tag.after(this.showProdlistSummary(plObj,'footer')); //multipage Footer
-}
-}
+					if(!obj.hide_summary)	{
+						if($tag.is('tbody'))	{
+							$tag.closest('table').before(this.showProdlistSummary(plObj,'header')); //multipage Header
+							$tag.closest('table').after(this.showProdlistSummary(plObj,'footer')); //multipage Footer
+							}
+						else	{
+							$tag.before(this.showProdlistSummary(plObj,'header')); //multipage Header
+							$tag.after(this.showProdlistSummary(plObj,'footer')); //multipage Footer
+							}
+						}
 //The timeout was here because of an issue where the placeholders were getting nuked. That issue was caused by translateTemplate doing a replace.
 //that code was changed in 201239 (as was this function) so the timeout was commented out. This comment is here in case the change to translateFunction is changed back.
-//	setTimeout(function(){
-app.ext.store_prodlist.u.getProductDataForList(plObj,$tag,'mutable');
-//	},1000);
-//will render individual product, if data already present or fetch data and render as part of response.
+//					setTimeout(function(){
+						app.ext.store_prodlist.u.getProductDataForList(plObj,$tag,'mutable');
+//						},1000);
+					 //will render individual product, if data already present or fetch data and render as part of response.
 
-}
-else	{
-app.u.throwGMessage("WARNING: store_prodlist.u.buildProductList is missing some required fields. Obj follows: ");
-app.u.dump(obj);
-}
-//	app.u.dump(" -> r = "+r);
-}, //buildProductList
-
+					}
+				else	{
+					app.u.throwGMessage("WARNING: store_prodlist.u.buildProductList is missing some required fields. Obj follows: ");
+					app.u.dump(obj);
+					}
+//				app.u.dump(" -> r = "+r);
+				}, //buildProductList
 
 /*
 This is executed when the page is changed in a prodlist.
@@ -614,30 +609,30 @@ $pageTag is the jquery object of whatever was clicked. the data to be used is st
 				this.buildProductList(plObj);
 				},
 			
-			
-showProdlistSummary : function(plObj,location){
-location = location ? location : 'header';
-var $output = app.renderFunctions.transmogrify({'id':'mpControl_'+plObj.parentID+'_'+location,'targetList':plObj.parentID},'mpControlSpec',plObj);
-if(plObj.hide_pagination === true)	{
-$output.find('.mpControlsPagination').addClass('displayNone');
-}
-else	{
-$output.find('.mpControlJumpToPage, .paging').click(function(){
-app.ext.store_prodlist.u.mpJumpToPage($(this))
-app.u.jumpToAnchor('mpControl_'+plObj.parentID+'_header');
-})
-$output.find('.paging').each(function(){
-var $this = $(this)
-if($this.attr('data-role') == 'next')	{
-if(plObj.page_in_focus == plObj.total_page_count)	{$this.attr('disabled','disabled').addClass('ui-state-disabled')}
-}
-else if($this.attr('data-role') == 'previous')	{
-if(plObj.page_in_focus == 1)	{$this.attr('disabled','disabled').addClass('ui-state-disabled')}
-}
-});
-}
-return $output;
-},
+			showProdlistSummary : function(plObj,location){
+				
+				location = location ? location : 'header';
+				var $output = app.renderFunctions.transmogrify({'id':'mpControl_'+plObj.parentID+'_'+location,'targetList':plObj.parentID},'mpControlSpec',plObj);
+				if(plObj.hide_pagination === true)	{
+					$output.find('.mpControlsPagination').addClass('displayNone');
+					}
+				else	{
+					$output.find('.mpControlJumpToPage, .paging').click(function(){
+						app.ext.store_prodlist.u.mpJumpToPage($(this))
+						app.u.jumpToAnchor('mpControl_'+plObj.parentID+'_header');
+						})
+					$output.find('.paging').each(function(){
+						var $this = $(this)
+						if($this.attr('data-role') == 'next')	{
+							if(plObj.page_in_focus == plObj.total_page_count)	{$this.attr('disabled','disabled').addClass('ui-state-disabled')}
+							}
+						else if($this.attr('data-role') == 'previous')	{
+							if(plObj.page_in_focus == 1)	{$this.attr('disabled','disabled').addClass('ui-state-disabled')}
+							}
+						});
+					}
+				return $output;
+				},
 
 
 //will generate some useful review info (total number of reviews, average review, etc ) and put it into appProductGet|PID	
