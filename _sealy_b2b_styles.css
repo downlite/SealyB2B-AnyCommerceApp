@@ -27,6 +27,9 @@ strong {
 	width:130px;
 }
 
+.catSideBar {
+	margin-left:20px;
+}
 
 .catSideBar ul, .catSideBar li{
 	padding: 0px;
