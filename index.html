@@ -29,6 +29,7 @@ var app = {vars:{
 	"release":"20130424114400",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"", //used in non-local mode.
+	"checkoutAuthMode" : "required",//can be passive, active or required
 	"testURL":"http://www.d4fc09f3a.crackle.zoovy.net/" //used ONLY if protocol is file: (for testing)
 	},u:{},rq:[]};
 
@@ -67,9 +68,6 @@ app.u.loadScript(app.vars.baseURL+"app-quickstart-init.js");
 </head>
 
 <body>
-
-
-
 <!-- DELETE THIS WHEN YOU GET STARTED -->
 <!--<h1>WELCOME TO QUICKSTART</h1>
 This file is intended to go along with the 10-step tutorial at:
@@ -95,7 +93,7 @@ This file is intended to go along with the 10-step tutorial at:
 	</script>
 	
 	<div class='alignCenter'>
-	<progress id="appPreViewProgressBar" max="100" value="0" /><br />
+	<progress id="appPreViewProgressBar" max="100" value="0" ></progress><br />
 	</div>
 	<div id='appPreViewProgressText'>0% Complete</div>
 	
@@ -104,33 +102,9 @@ This file is intended to go along with the 10-step tutorial at:
 </tr>
 </table>
 </div>
-<div id="wrapper">
 
 
-<!--<div id='appView' class='displayNone'>
 
-<!-- VIEW CONTENT -->
-<!-- leave the appView div, put your your html here ...  -->
-
-	<!--
-	** REMINDER : DO NOT PUT ANY GRAPHICS/CONTENT THAT SHOULD NOT APPEAR ON EVERY PAGE IN THE VIEW (HERE)
-	**				  INSTEAD PUT THEM INTO <div id="homepageTemplate"></div>
-	
-	
-<div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
-
-<!-- These add specific functionality for the app. In most cases, you want to leave them alone.
-<div id='appNav'>
-	<button class='displayNone prodDetailNextItemButton' data-app-role='prodDetailNextItemButton'>Next</button>
-	<button class='displayNone prodDetailPrevItemButton' data-app-role='prodDetailPrevItemButton'>Previous</button>
-</div>
-
-<div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go 
-
-
-<!-- ... your html ends
-<!-- /VIEW CONTENT 
-</div>-->
 
 <div id='appView' class='displayNone'>
 <div class="topbar">
@@ -150,7 +124,7 @@ Welcome,
     <div class="Searchbg"><div class="searchBox">
 					<form id='headerSearchFrm' name='headerSearchFrm' action='#' class='productSearchForm' method="get">
 						<input type='search' name='KEYWORDS' id='headerKeywords' class="productSearchKeyword handleDefault box" value="Looking for something specific?" />
-						<input id='headerSearchSubmit' type="image" src="images/search.gif" value="" style="width:70px; height:30px; padding:0px;"/>
+						<input id='headerSearchSubmit' type="image" src="images/search.gif" style="width:70px; height:30px; padding:0px;"/>
 					</form>
 				</div>
               </div>
@@ -181,11 +155,12 @@ Welcome,
 
 <div class="cb"></div>
     <div class='mainColumn1'>
-<!-- .textContentArea is used as a selector because IE8 doesn't play well  with tag type article as a selector -->
+<!-- .textContentArea is used as a selector because IE8 doesn't play well  with tag type article as a selector
 		<div id='newsletterArticle' class='displayNone textContentArea'>
 			<h1>Subscribe to our Newsletter and Save!</h1>
 			<div id='newsletterFormContainer'></div>
 		</div>
+ -->
 
 
 		
@@ -273,12 +248,11 @@ Welcome,
     <div class="deals"><b>SIGN UP FOR OUR NEWSLETTER</b><br>
     Stay updated on important product information</div>
     <div class="name"><input required='required' type='email' value='email address' class='newsSubscribeInput textbox email'  maxlength='50' size='25' name='login' id='subscribeLoginFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
-    <div class="email"><input required='required' type='text'  value='full name' class='newsSubscribeInput textbox fullname' maxlength='50' size='25' name='fullname' id='subscribeFullnameFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" />
-      <input type="image" class="submit" value="" src="images/signup.gif" alt="Sign Up" title="Sign Up" style="width:70px; height:30px;padding:0;"/>
+    <div class="email"><input required='required' type='text'  value='full name' class='newsSubscribeInput textbox fullname' maxlength='50' size='25' name='fullname' id='subscribeFullnameFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
+      <input type="image" class="submit" src="images/signup.gif" alt="Sign Up" title="Sign Up" style="width:70px; height:30px;padding:0;"/>
       </form></div>
 
     <div class="cb"></div>
-    </div>
 </section>
 <footer>
 <div class="footerM">
@@ -443,6 +417,8 @@ Sealy Corporation, 8153 Duke Blvd, Mason Oh 45040.<br>
 	</div>
 
 
+</div>
+</div>
 </div> <!-- AppView end -->
 
 </div>
@@ -548,13 +524,13 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 						</div>
 					</fieldset>
 				</form>
-				<span class="hideIfLoggedIn">
+				<div class="hideIfLoggedIn">
 					<div class="first">
 						<p>First Time Here? Sign Up!</p>
 						<p class="start"><a href="#customer?show=createaccount" class='bindByAnchor'>START A BUSINESS ACCOUNT</a></p>
 						<span>For Furniture & Mattress Businesses... <a href="#">LEARN MORE</a></span>
 					</div>
-				</span>
+				</div>
 			</div>
 			<div class="loginShow">
 				<p>
@@ -1376,6 +1352,7 @@ It's done this way because ID's hard coded into template are bad mojo (templates
 MOST OFTEN YOU WANT TO LEAVE THESE TEMPLATES ALONE
 if modified, be careful about changing id's or classes.
 adding classes is not likely to have any bad effects.
+if you change these, you should move them above this comment so that when you (or the next person) does an upgrade, you know what isn't default
 
 ############################
 
@@ -1388,7 +1365,7 @@ adding classes is not likely to have any bad effects.
 <!--  used in breadcrumb -->
 <ul>
 	<li id='breadcrumbTemplate'>
-	<a href='#' onClick="return showContent('category',{'navcat':$(this).parent().attr('data-catsafeid')});" data-bind='var: category(pretty); format:text;'></a>
+	<a href='#' onClick="return showContent('category',{'navcat':$(this).parent().attr('data-catsafeid')});" data-bind='var: category(pretty); format:catText; extension: myRIA;'></a>
 	</li>
 </ul>
 
@@ -1608,59 +1585,61 @@ For general product questions and order inquiries you can also email us at <a hr
 			<h1>Subscribe to our Newsletter and Save!</h1>
 			<div id='newsletterFormContainer'></div>
 		</div>
+		
 	<div id='createaccountArticle' style="position: relative; z-index: 9999;" class='displayNone textContentArea'>
 			<div class="CreatAccount">
             
 <div class="WelcomeB">
-<h1>Welcome Back!</h1>
-<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:115px;">
-<input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
-	<fieldset style="border:none; margin:0px; padding:0px;">
-	
-	<div>
-	<!--<label for='modalLoginlogin'>Login/Email</label>-->
-	<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' id='modalLoginlogin' size='25' />
-	</div>
-	
-	<div>
-	<!--<label for='modalLoginpassword'>Password</label>-->
-	<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' id='modalLoginpassword' size='25' />
-	</div>
-	
-	<div>
-	<!--<input type='image' src='images/signin.gif' value='Sign In' class='' />-->
-    <input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
-	</div>
-	</fieldset>
-</form>
-<p align="center"><a href="#recoverpassword">Forgot your username or password?</a></p>
+	<h1>Welcome Back!</h1>
+	<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm' style="min-height:115px;">
+		<input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
+			<fieldset style="border:none; margin:0px; padding:0px;">
+			
+			<div>
+			<!--<label for='modalLoginlogin'>Login/Email</label>-->
+			<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' id='modalLoginlogin' size='25' />
+			</div>
+			
+			<div>
+			<!--<label for='modalLoginpassword'>Password</label>-->
+			<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' id='modalLoginpassword' size='25' />
+			</div>
+			
+			<div>
+			<!--<input type='image' src='images/signin.gif' value='Sign In' class='' />-->
+			<input name="" type="submit" value="Sign In" class="signin" id="login" /><br clear="all">
+			</div>
+			</fieldset>
+	</form>
+	<p align="center"><a href="#recoverpassword">Forgot your username or password?</a></p>
 </div>
 <div class="Account" >
-<form action='#' class='inputsAsBreaks' onSubmit="app.ext.myRIA.u.handleAppBuyerCreate($(this)); return true;">
-<h1>Don't have an account?</h1><input type='hidden' name='form' value='Business' />
-<div class="fieldM"><span class="field">First Name</span> <input name='firstname' type='text' size='30' class='textfname' placeholder='First Name' required='required' />
- <b>Middle Initial</b> <input name="" type="text" class="textfmiddle"> <b>Last Name</b> <input name='lastname' type='text' size='30' placeholder='Last Name' required='required' class='textflast'/></div>
-<div class="fieldM"><span class="field">Address</span> <input name='address1' type='text' size='30' placeholder='Address' class='textfadd' required='required' /> 
-<input name='address2' type='text' size='30' placeholder='Address (Line 2)' class='textfadd1'/></div>
-<div class="fieldM"><span class="field">City</span> <input name='city' type='text' size='30' placeholder='City' required='required' class='textcity'/> 	<b>State</b> <input name='region' type='text' size='5' placeholder='State' class='textfstate' /> <b>Zip</b> <input name='postal' type='text' size='10' placeholder='00000-0000' class='textfzip'/></div>
+	<form action='#' class='inputsAsBreaks' onSubmit="app.ext.myRIA.u.handleAppBuyerCreate($(this)); return true;">
+	<h1>Don't have an account?</h1><input type='hidden' name='form' value='Business' />
+	<div class="fieldM"><span class="field">First Name</span> <input name='firstname' type='text' size='30' class='textfname' placeholder='First Name' required='required' />
+	 <b>Middle Initial</b> <input name="" type="text" class="textfmiddle"> <b>Last Name</b> <input name='lastname' type='text' size='30' placeholder='Last Name' required='required' class='textflast'/></div>
+	<div class="fieldM"><span class="field">Address</span> <input name='address1' type='text' size='30' placeholder='Address' class='textfadd' required='required' /> 
+	<input name='address2' type='text' size='30' placeholder='Address (Line 2)' class='textfadd1'/></div>
+	<div class="fieldM"><span class="field">City</span> <input name='city' type='text' size='30' placeholder='City' required='required' class='textcity'/> 	<b>State</b> <input name='region' type='text' size='5' placeholder='State' class='textfstate' /> <b>Zip</b> <input name='postal' type='text' size='10' placeholder='00000-0000' class='textfzip'/></div>
 
-<div class="fieldM"><span class="field">Country</span> <select name="Country" class="textfcountry"><option>United States of America</option></select></div>
+	<div class="fieldM"><span class="field">Country</span> <select name="Country" class="textfcountry"><option>United States of America</option></select></div>
 
-<div class="fieldM"><span class="field">E-mail</span> <input name='email' type='email' size='30' class='textfmail' placeholder='E-mail Address' required='required' /> <b>Phone Number</b> <input name='ar_phone' type='text' size='12' placeholder='Phone Number' class='textfphone'/> </div>
-<div class="fieldM"><span class="field">Password</span> <input name='pass' type='password' size='30' class='textfpass' placeholder='7-18 Characters' required='required' /> <b>Confirm Password</b> <input name='confirm_email' type='password' size='12' placeholder='Must be a match' class='textfphone' required='required'/> </div>
-<!--<fieldset class='marginBottom'>
-	<legend>About Your Business</legend>
-	
-	<div class="fieldM"><input name='order_volume' type='text' size='30' placeholder='Anticipated Order Volume' />
-	<input name='resaleid' type='text' size='30' placeholder='State Resale Permit' /></div>
-	<div class="fieldM"><input name='ein' type='text' size='30' placeholder='Company EIN/Tax ID' />
-	<input name='credit_limit' type='number' step='0.01' min='0' placeholder='Requested Credit Limit' /></div>
-	
-</fieldset>-->
+	<div class="fieldM"><span class="field">E-mail</span> <input name='email' type='email' size='30' class='textfmail' placeholder='E-mail Address' required='required' /> <b>Phone Number</b> <input name='ar_phone' type='text' size='12' placeholder='Phone Number' class='textfphone'/> </div>
+	<div class="fieldM"><span class="field">Password</span> <input name='pass' type='password' size='30' class='textfpass' placeholder='7-18 Characters' required='required' /> <b>Confirm Password</b> <input name='confirm_email' type='password' size='12' placeholder='Must be a match' class='textfphone' required='required'/> </div>
+	<!--<fieldset class='marginBottom'>
+		<legend>About Your Business</legend>
+		
+		<div class="fieldM"><input name='order_volume' type='text' size='30' placeholder='Anticipated Order Volume' />
+		<input name='resaleid' type='text' size='30' placeholder='State Resale Permit' /></div>
+		<div class="fieldM"><input name='ein' type='text' size='30' placeholder='Company EIN/Tax ID' />
+		<input name='credit_limit' type='number' step='0.01' min='0' placeholder='Requested Credit Limit' /></div>
+		
+	</fieldset>-->
 
-<button class="createButton"><img src="images/create_account.gif" width="300" height="54"></button>
+	<button class="createButton"><img src="images/create_account.gif" width="300" height="54"></button>
 
-</form>
+	</form>
+</div>
 
             </div>
 		</div>
@@ -1698,6 +1677,11 @@ For general product questions and order inquiries you can also email us at <a hr
 		</div>
 
 
+		<div id='invoiceArticle' class='displayNone textContentArea'>
+			<div data-bind="format:loadsTemplate; loadsTemplate: invoiceTemplate; useParentData:true;"></div>
+		</div>
+
+
 
 		<div id='changepasswordArticle' class='displayNone textContentArea'>
 			<h1>Change Password</h1>
@@ -1712,7 +1696,6 @@ For general product questions and order inquiries you can also email us at <a hr
 
 </fieldset>
 </form>
-
 			</div>
 		</div>
 
@@ -1731,77 +1714,12 @@ For general product questions and order inquiries you can also email us at <a hr
 			</ul>
 		</div>
 
-	</div>
-		<div id='myaccountArticle' class='displayNone textContentArea'>
-			<h1>My Account</h1>
-			<div id='logMessaging'></div>
-			<div><a href="#" onClick="app.u.logBuyerOut(); showContent('homepage',{}); return false;">Log Out</a></div>
-			
-			<section id='buyerAddresses' class='clearfix'>
-
-<div class='billAddressContainer'>
-	<h2>Billing Address(es)</h2>
-<!--	<button class='floatRight ui-state-default ui-corner-all'><span class='ui-icon ui-icon-plusthick floatLeft'></span> Add </button> coming soon -->
-	<div class='billAddresses'></div><!-- billing addresses are loaded into here using billAddressTemplate -->
-</div>
-
-<div class='shipAddressContainer'>
-	<h2>Shipping Address(es)</h2>
-	<div class='shipAddresses'></div><!-- shipping addresses are loaded into here using shipAddressTemplate -->
-</div>
-			
-			
-			</section>
-
-			
-		</div>
-	
-	
-		<div id='ordersArticle' class='displayNone textContentArea'>
-			<h1>Order History</h1>
-			<div id='orderHistoryContainer' class='ui-accordion ui-widget ui-helper-reset ui-accordion-icons '></div>
-		</div>
-	
-	
-	
-		<div id='changepasswordArticle' class='displayNone textContentArea'>
-			<h1>Change Password</h1>
-			<div id='changepasswordContainer'>
-
-<form action='#' id='changePasswordForm' name='changePasswordForm' onSubmit="app.ext.store_crm.u.handleChangePassword('changePasswordForm',{'callback':'showMessaging','message':'Thank you, your password has been changed','targetID':'changepasswordContainer'}); return false">
-<fieldset class='borderNone'>
-
-<div class='marginBottom'><label for='changePassword'>Password</label><input type='password' name='password' id='changePassword' size='35' /></div>
-<div class='marginBottom'><label for='changePassword2'>Confirm Password</label><input type='password' name='password2' id='changePassword2' size='35' /></div>
-<div class='marginBottom'><input type='submit' value='Change Password' class='loadingButton ui-button-text ui-button ui-state-default ui-corner-all'></div>
-
-</fieldset>
-</form>
-			</div>
-		</div>
-	
-		<div id='listsArticle' class='displayNone textContentArea'>
-			<h1>List Manager</h1>
-			<div id='listsContainer' class='prodlist loadingBG'></div>
-			
-			<div id='listEditorContainer' class='displayNone loadingBG'></div><!-- editor for a given list gets added here -->
-			
-		</div>
-	
-		<div id='forgetmeArticle' class='displayNone textContentArea'>
-			<h1>Your 'Forget Me' list</h1>
-			<p>Items on this list will not show up anywhere on the site. Use it for items you never want to see again. If you add an item to the list by mistake, use this page to remove it from the list and it will start re-appearing during your shopping experience.</p>
-			<ul id='forgetmeContainer' class='prodlist loadingBG'>
-			</ul>
-		</div>
-
 
 
 
 	</div>
 
 </div>
-
 
 
 
@@ -2142,15 +2060,15 @@ used for store_crm.js
 
 <!-- used in the /customer section for order view -->
 
-<section id='orderLineItemTemplate' class='appAccordianesque'>
-	
-	<div onClick="app.ext.myRIA.u.showOrderDetails($(this).attr('data-orderid'));" class='ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom' data-bind='var:order(ORDERID);format:assignAttribute; attribute:data-orderid;'>
-	<span class="ui-icon ui-icon-triangle-1-e"></span>
+<section id='orderLineItemTemplate' class='appAccordianesque' data-bind='var:order(ORDERID);format:assignAttribute; attribute:data-orderid;'>
+
+	<div data-app-role='orderHeader' onClick="app.ext.myRIA.u.showOrderDetails($(this).parent());" class='ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom' >
+	<span class="ui-icon ui-icon-triangle-1-e floatLeft marginRight"></span>
 	<span data-bind='var:order(ORDERID);format:text;pretext:Order ID: ;'></span>
 	<span data-bind='var:order(MODIFIED_GMT);format:unix2mdy; pretext: Placed on ;'></span>
 	</div>
-	
-	<div data-bind='var:order(ORDERID);format:assignAttribute; attribute:id; valuePretext:orderContents_;' class='ui-accordion-content ui-helper-reset ui-widget-content '></div>
+
+	<div data-app-role='orderContents' class='ui-accordion-content ui-helper-reset displayNone ui-widget-content '></div>
 
 </section>
 
@@ -2162,19 +2080,14 @@ used for store_crm.js
 
 
 
-
-
-
-
-
 <section  id='faqTopicTemplate'>
-	
+
 	<div class='ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom' data-bind='var:faq(TOPIC_ID);format:assignAttribute; attribute:data-topicid;' onClick="app.ext.myRIA.a.showFAQbyTopic($(this).attr('data-topicid'));">
-	<span class="ui-icon ui-icon-triangle-1-e"></span>
+	<span class="ui-icon ui-icon-triangle-1-e floatLeft marginRight"></span>
 	<span data-bind='var:faq(TOPIC_TITLE);format:text;'></span>
 	</div>
-	
-	<div data-bind='var:faq(TOPIC_ID);format:assignAttribute; attribute:id; valuePretext:faqDetails4Topic_;' class='ui-accordion-content ui-helper-reset ui-widget-content '></div>
+
+	<div data-bind='var:faq(TOPIC_ID);format:assignAttribute; attribute:id; valuePretext:faqDetails4Topic_;' class='ui-accordion-content ui-helper-reset ui-widget-content displayNone'></div>
 
 </section>
 
@@ -2193,26 +2106,20 @@ The 'data-action' attribute is used to assign an onclick.
 
 -->
 
-<address id='billAddressTemplate' class='ui-widget ui-widget-content ui-corner-all buyerAddressContainer buyerBillAddressContainer '>
-	<menu class='buttonMenu alignRight floatRight'>
-		<div class='offMenu'><button data-action="displayOnMenu" class='ui-button-text ui-button ui-state-default ui-corner-all'>edit</button></div>
-		<div class='onMenu'>
-			<button data-action="cancelAddressChanges" class='ui-button-text ui-button ui-state-default ui-corner-all'>cancel changes</button>
-			<button data-action="saveAddressChanges" class='ui-button-text ui-button ui-state-default ui-corner-all'>Save</button>
-		</div>
-		<div class='changeLog'></div>
-	</menu>
+<address id='billAddressTemplate' class='ui-widget ui-widget-content ui-corner-all marginBottom '>
+	<button data-app-event="myRIA|showBuyerAddressUpdate" class='floatRight'>edit</button>
 	<div class='addressFullname'>
-		<span data-bind="var: address(bill_firstname);format:text;" class='editable' title='first name'></span> <span data-bind="var: address(bill_lastname);format:text;" class='editable' title='last name'></span>
+		<span data-bind="var: address(bill/firstname);format:text;"  title='first name'></span>
+		<span data-bind="var: address(bill/lastname);format:text;"  title='last name'></span>
 	</div>
 	<div class='address'>
-		<div data-bind="var: address(bill_address1);format:text;" class='editable' title='address'></div>
-		<div data-bind="var: address(bill_address2);format:text;" class='editable' title='address 2'></div>
-		
-		<span data-bind="var: address(bill_city);format:text;" class='editable' title='city'></span>, 
-		<span data-bind="var: address(bill_region);format:text;" class='editable' title='state'></span>. 
-		<span data-bind="var: address(bill_postal);format:text;" class='editable' title='zip'></span>
-		<div data-bind="var: address(bill_countrycode);format:text;" title='country'></div>
+		<div data-bind="var: address(bill/address1);format:text;"  title='address'></div>
+		<div data-bind="var: address(bill/address2);format:text;"  title='address 2'></div>
+
+		<span data-bind="var: address(bill/city);format:text;"  title='city'></span>,
+		<span data-bind="var: address(bill/region);format:text;"  title='state'></span>.
+		<span data-bind="var: address(bill/postal);format:text;"  title='zip'></span>
+		<div data-bind="var: address(bill/countrycode);format:text;" title='country'></div>
 
 	</div>
 
@@ -2220,29 +2127,105 @@ The 'data-action' attribute is used to assign an onclick.
 
 
 <!-- used in the my account area -->
-<address id='shipAddressTemplate' class='ui-widget ui-widget-content ui-corner-all buyerAddressContainer buyerShipAddressContainer'>
-	<menu class='buttonMenu alignRight floatRight'>
-		<div class='offMenu'><button data-action="displayOnMenu" class='ui-button-text ui-button ui-state-default ui-corner-all'>edit</button></div>
-		<div class='onMenu'>
-			<button data-action="cancelAddressChanges" class='ui-button-text ui-button ui-state-default ui-corner-all'>cancel changes</button>
-			<button data-action="saveAddressChanges" class='ui-button-text ui-button ui-state-default  ui-corner-all'>Save</button>
-		</div>
-		<div class='changeLog'></div>
-	</menu>
+<address id='shipAddressTemplate' class='ui-widget ui-widget-content ui-corner-all marginBottom '>
+	<button data-app-event="myRIA|showBuyerAddressUpdate" class='floatRight'>edit</button>
 	<div class='addressFullname'>
-		<span data-bind="var: address(ship_firstname);format:text;" class='editable' title='first name'></span> <span data-bind="var: address(ship_lastname);format:text;" class='editable' title='last name'></span>
+		<span data-bind="var: address(ship/firstname);format:text;"  title='first name'></span>
+		<span data-bind="var: address(ship/lastname);format:text;"  title='last name'></span>
 	</div>
 	<div class='address'>
-		<div data-bind="var: address(ship_address1);format:text;" class='editable' title='address'></div>
-		<div data-bind="var: address(ship_address2);format:text;" class='editable' title='address 2'></div>
-		
-		<span data-bind="var: address(ship_city);format:text;" class='editable' title='city'></span>, 
-		<span data-bind="var: address(ship_region);format:text;" class='editable' title='state'></span>. 
-		<span data-bind="var: address(ship_postal);format:text;" class='editable' title='zip'></span>
-		<div data-bind="var: address(ship_countrycode);format:text;" title='country'></div>
+		<div data-bind="var: address(ship/address1);format:text;"  title='address'></div>
+		<div data-bind="var: address(ship/address2);format:text;"  title='address 2'></div>
+
+		<span data-bind="var: address(ship/city);format:text;"  title='city'></span>,
+		<span data-bind="var: address(ship/region);format:text;"  title='state'></span>.
+		<span data-bind="var: address(ship/postal);format:text;"  title='zip'></span>
+		<div data-bind="var: address(ship/countrycode);format:text;" title='country'></div>
 
 	</div>
+
 </address>
+
+
+
+
+<table class='orderContentsTable' data-app-role='invoiceContainer' id='invoiceTemplate'>
+<tr>
+	<td colspan='2'>
+<div class='floatRight'>
+<button data-app-event="myRIA|execOrder2Cart">Re-order</button>
+<button data-app-event="orderCreate|execInvoicePrint">Print Invoice</button>
+</div>
+
+<h3 data-bind='var:order(order/flow/pool);format:text; pretext:Order Status: ;'></h3>
+
+	</td>
+</tr>
+<tr>
+	<td>
+<hgroup class='marginBottom'>
+<!-- print icon -->
+
+
+<!-- <h2 data-bind='var:order(bill/firstname);format:text; pretext:Shipping Status: ;'></h2> -->
+
+<h5 class='orderTotal' data-bind='var:order(order/sum/order_total);format:money; currencySign: $;  hideZero:false; pretext:Order Total: ;'></h5>
+<h5 class='balanceDue' data-bind='var:order(order/sum/balance_due_total);format:money; currencySign: $;  hideZero:false; pretext:Balance Due: ;'></h5>
+</hgroup>
+
+<address class='marginBottom'>
+<b>
+	<span data-bind='var:order(order/bill/firstname);format:text; pretext:Bill To: ;'></span>
+	<span data-bind='var:order(order/bill/lastname);format:text;'></span>
+</b>
+<div data-bind='var:order(order/bill/address1);format:text;'></div>
+<div data-bind='var:order(order/bill/address2);format:text;'></div>
+<div>
+	<span data-bind='var:order(order/bill/city);format:text;posttext:, ;'></span>
+	<span data-bind='var:order(order/bill/region);format:text;posttext:. ;'></span>
+	<span data-bind='var:order(order/bill/postal);format:text; defaultVar:order(order/data.bill_int_zip);'></span>
+</div>
+<div data-bind='var:order(order/bill/countrycode);format:text;'></div>
+</address>
+
+<address class='marginBottom'>
+<b>
+	<span data-bind='var:order(order/ship/firstname);format:text; pretext:Ship To: ;'></span>
+	<span data-bind='var:order(order/ship/lastname);format:text;'></span>
+</b>
+<div data-bind='var:order(order/ship/address1);format:text;'></div>
+<div data-bind='var:order(order/ship/address2);format:text;'></div>
+<div>
+	<span data-bind='var:order(order/ship/city);format:text;posttext:, ;'></span>
+	<span data-bind='var:order(order/ship/region);format:text;posttext:. ;'></span>
+	<span data-bind='var:order(order/ship/postal);format:text;'></span>
+</div>
+<div data-bind='var:order(order/ship/countrycode);format:text;'></div>
+</address>
+
+
+	</td>
+	<td class='orderContentsProdlistContainer'>
+	<ul data-bind='var:order(order/tracking); format:orderTrackingLinks; extension:store_crm;before:<h4>Shipping:</h4>;' class='displayNone noListStyle marginBottom'></ul>
+	<table  class='listStyleNone lineItemProdlist'>
+		<tbody data-bind="var: order(order/@ITEMS); format:stuffList; loadsTemplate:chkoutInvoiceItemTemplate;"></tbody>
+	</table>
+	</td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div><!-- /templates -->
 
 
@@ -2263,9 +2246,9 @@ The 'data-action' attribute is used to assign an onclick.
 
 <div id='loginFormContainer'>
 <form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm'>
-<input type='hidden' name='loginCallback' id='loginCallback' value=''><!-- used to save a callback action in -->
+<input type='hidden' name='loginCallback' id='loginCallback' value='' /><!-- used to save a callback action in -->
 	<fieldset>
-	
+
 	<div>
 	<!--<label for='modalLoginlogin'>Login/Email</label>-->
 	<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' id='modalLoginlogin' size='25' />
@@ -2287,11 +2270,11 @@ The 'data-action' attribute is used to assign an onclick.
 
 <h3 class='marginBottom'>Recover Password</h3>
 <div id='recoverPasswordMessaging'></div>
-<form action='#' onSubmit="app.ext.store_crm.calls.appBuyerPasswordRecover.init($('#passwordRecoveryLogin').val(),{'callback':'showMessaging','message':'Thank you, will receive an email shortly','targetID':'recoverPasswordMessaging'}); app.model.dispatchThis('immutable'); return false;">
+<form action='#' onSubmit="app.calls.appBuyerPasswordRecover.init($('#passwordRecoveryLogin').val(),{'callback':'showMessaging','message':'Thank you, will receive an email shortly','targetID':'recoverPasswordMessaging'}); app.model.dispatchThis('immutable'); return false;">
 <fieldset>
 <div class='marginBottom'><!--<label for='passwordRecoveryLogin'>Login/Email</label> --><input type='text' name='login' required='required' id='passwordRecoveryLogin' size='25' class="textf"/></div>
 
-<div><input type='submit'  class='ui-button-text ui-button ui-state-default ui-corner-all ' value='Email Password to Me' /></div>
+<div><input type='submit' class='ui-button-text ui-button ui-state-default ui-corner-all ' value='Email Password to Me' /></div>
 
 </fieldset>
 </form>
@@ -2316,30 +2299,39 @@ The 'data-action' attribute is used to assign an onclick.
 
 
 <div class='debug displayNone'>
-
-<menu>
-	<li><a href='#' onClick="return showContent('homepage',{});">Homepage</a></li>
-	<li><a href='#' onClick="return showContent('customer',{'show':'orders'});">Orders</a></li>
-	<li><a href='#' onClick="return showContent('cart',{'show':'cart'});">Cart</a></li>
-	<li><a href='#' onClick="app.ext.store_cart.u.showCartInModal({'templateID':'cartTemplate'});">CartInModal</a></li>
-	<li><a href='#' onClick="return showContent('company',{'show':'return'});">Returns</a></li>
-	<li><a href='#' onClick="return showContent('company',{'show':'privacy'});">Privacy</a></li>
-	<li><a href='#' onClick="return quickView('category',{'navcat':'.air_fresheners','templateID':'categoryTemplate'});">Cat in Modal</a></li>
-	
-</menu>
-	<button class='ui-button-text ui-button ui-state-default ui-corner-all' onClick="localStorage.clear(); return false;">Clear Local Storage</button>
-	<button class='ui-button-text ui-button ui-state-default ui-corner-all' onClick="app.u.dump(app); return false;">Control to Console</button>
-	<button class='ui-button-text ui-button ui-state-default ui-corner-all' onClick="app.u.loadCSSFile('examples/red.css','bg');">load red css</button>
-	<button class='ui-button-text ui-button ui-state-default ui-corner-all' onClick="alert(app.ext.store_checkout.u.thisSessionIsPayPal());">Alert isPaypal</button>
-	<button class='ui-button-text ui-button ui-state-default ui-corner-all' onClick="alert(app.ext.store_checkout.u.aValidPaypalTenderIsPresent());">Alert aValidPaypalTenderIsPresent</button>
-	
-<form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
-	<fieldset>
-	<legend>Search</legend>
-	<input type='search' name='KEYWORDS' value='Enter Search Term' class="productSearchKeyword handleDefault" />
-	</fieldset>
-	<input class="search" type="submit" value="Search" />
+<table>
+<tr>
+	<td>
+<ul class='debugQuickLinks'>
+	<li>Store Links
+	<ul>
+		<li><a href='#' onClick="return showContent('homepage',{});">Homepage</a></li>
+		<li><a href='#' onClick="return showContent('customer',{'show':'orders'});">Orders</a></li>
+		<li><a href='#' onClick="return showContent('cart',{'show':'cart'});">Cart</a></li>
+		<li><a href='#' onClick="app.ext.store_cart.u.showCartInModal({'templateID':'cartTemplate'});">CartInModal</a></li>
+		<li><a href='#' onClick="return showContent('company',{'show':'return'});">Returns</a></li>
+		<li><a href='#' onClick="return showContent('company',{'show':'privacy'});">Privacy</a></li>
+		<li><a href='#' onClick="return quickView('category',{'navcat':'.air_fresheners','templateID':'categoryTemplate'});">Cat in Modal</a></li>
+	</ul>
+	</li>
+	<li>Some JS test links
+	<ul>
+		<li><a href='#' onClick="localStorage.clear();">Clear Local Storage</a></li>
+		<li><a href='#' onClick="app.ext.orderCreate.a.startCheckout($('#mainContentArea'));">mobile checkout</a></li>
+		<li><a href='#' onClick="app.u.throwGMessage('All your base are belong to us','mainContentArea');">throwGmessage</a></li>
+	</ul>
+	</li>
+</ul>
+	</td>
+	<td>
+<form name='headerSearchFrm' action='#' class='productSearchForm marginLeft' method="get">
+	<input type='search' name='KEYWORDS' placeholder='product search' class="productSearchKeyword handleDefault" />
+	<button>Search</button>
 </form>
+	</td>
+</tr>
+</table>
+
 </div>
 
 
