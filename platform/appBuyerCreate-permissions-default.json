@@ -1,0 +1,27 @@
+{
+	"email":"",
+	"auto_lock":1,
+	"initial_schedule":"",
+	"make_todo":"",
+	"make_ticket":"",
+	"fields":[
+	   { "type":"hint","content":"Please fill out the fields below to create a customer account. Fields with a * next to them are required." },
+	   { "ignore":0,"required":1,"id":"email","type":"text","label":"Email","customer":"INFO.EMAIL" },
+	   { "ignore":0,"required":1,"id":"firstname","type":"text","label":"Purchasing Contact Firstname","customer":"INFO.FIRSTNAME" },
+	   { "ignore":0,"required":1,"id":"lastname","type":"text","label":"Purchasing Contact Lastname","customer":"INFO.LASTNAME" },
+	   { "ignore":0,"required":1,"id":"password","type":"text","label":"Password","customer":"INFO.PASSWORD"},
+	   
+	   { "ignore":0,"required":1,"id":"address1","type":"text","label":"Address","customer":"WS.address1"},
+	   { "ignore":0,"required":1,"id":"address2","type":"text","label":"Address (line 2)","customer":"WS.address2"},
+	   { "ignore":0,"required":1,"id":"city","type":"text","label":"City","customer":"WS.city"},
+	   { "ignore":0,"required":1,"id":"province","type":"text","label":"State","customer":"WS.province"},
+	   { "ignore":0,"required":1,"id":"postal","type":"text","label":"Zip","customer":"WS.postal"},
+	   { "ignore":0,"required":1,"id":"countrycode","type":"text","label":"Country","customer":"WS.countrycode"},
+	   { "ignore":0,"required":1,"id":"phone","type":"text","label":"Phone","customer":"WS.phone"},
+	   
+	   { "ignore":0,"required":1,"id":"salesrep","type":"text","label":"Sales Rep","customer":"WS.ACCOUNT_MANAGER"},
+	   { "ignore":0,"required":1,"id":"storetype","type":"text","label":"Store Type","customer":"WS.STORE_TYPE"},
+	   
+	   { "type":"submit","label":"Create Account" }
+	]
+}
