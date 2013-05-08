@@ -814,14 +814,15 @@ SYNDICATION PAGE TEMPLATE
 	</div>
 		
 
+<!--
 	<div class='marginBottom'>	
 	<a onClick="navigateTo('/biz/syndication/buysafeshopping/index.cgi'); return false;" href="#/biz/syndication/buysafeshopping/index.cgi">
 	<img data-bind=" format:imageURL; lib:proshop; b:FFFFFF; defaultValue:zoovy/logos/buysafe; format:imageURL; lib:proshop; b:FFFFFF;" height="40" width="150"  src="blank.gif" /></a><br />
 	<a onClick="navigateTo('/biz/syndication/buysafeshopping/index.cgi'); return false;" href="#/biz/syndication/buysafeshopping/index.cgi">Settings</a> | 
 	<a href="http://webdoc.zoovy.com/doc-50732" target="webdoc">More Info</a>		
 	</div>
+-->
 		
-
 	<div class='marginBottom'>	
 	<a onClick="navigateTo('/biz/syndication/shareasale/index.cgi'); return false;" href="#/biz/syndication/shareasale/index.cgi">
 	<img data-bind=" format:imageURL; lib:proshop; b:FFFFFF; defaultValue:zoovy/logos/shareasale.png; format:imageURL; lib:proshop; b:FFFFFF;" height="40" width="150"  src="blank.gif" /></a><br />
@@ -918,9 +919,12 @@ UTILITIES PAGE TEMPLATE
 		</div>
 		
 		<div class='stdPadding ui-widget-content ui-corner-bottom'>
-		<a href="#" onClick="navigateTo('#!customerManager'); return false;">Customer Manager (beta)</a><br />
-		<a href="#" onClick="navigateTo('/biz/manage/customer/index.cgi'); return false;">Customer Manager</a>
+		
+		<a href="#" onClick="navigateTo('#!customerManager'); return false;">Customer Manager</a><br />
+<!-- 		<a href="#" onClick="navigateTo('/biz/manage/customer/index.cgi'); return false;">Customer Manager</a> -->
 		<div class="helper">Find or create a customer record for your website.</div>
+
+		
 		
 		<a href="#" onClick="navigateTo('/biz/manage/giftcard/index.cgi'); return false;">GiftCard Manager</a>
 		<div class="helper">Create / Manage GiftCards.</div>
@@ -944,8 +948,12 @@ UTILITIES PAGE TEMPLATE
 		<div class='ui-widget-header ui-widget-header-padding ui-corner-top'>
 		<h3>Wholesale &amp; Warehouse</h3>
 		</div>
-		
+
 		<div class='stdPadding ui-widget-content ui-corner-bottom'>
+		
+		<a href="#" onClick="navigateTo('#!organizationManager'); return false;">Organization Manager</a>
+		<div class="helper">Create / Manage Organizations for wholesale/b2b/resale.</div>
+
 		<a href="#" onClick="navigateTo('/biz/manage/suppliers/index.cgi'); return false;">Supply Chain Management</a>
 		<div class="helper">Track inventory, pricing and orders with your suppliers.</div>
 		

@@ -1002,7 +1002,9 @@ app.u.throwMessage(responseData); is the default error handler.
 					var $target = _rtag.jqObj; //shortcut
 					
 //anycontent will disable hideLoading and loadingBG classes.
-					$target.anycontent({data: app.data[_rtag.datapointer],'templateID':_rtag.templateID});
+/*					$target.anycontent({data: app.data[.datapointer],'templateID':_rtag.templateID}); */
+// * 201318 -> anycontent should have more flexibility. templateID isn't always required, template placeholder may have been added already.
+					$target.anycontent(_rtag);
 					app.u.handleAppEvents($target);
 
 					}
@@ -1277,6 +1279,14 @@ css : type, pass, path, id (id should be unique per css - allows for not loading
 			return o;
 
 			}, //getObjValFromString
+
+		getDomainFromURL : function(URL)	{
+			var r ; //what is returned. takes http://www.domain.com/something.html and converts to domain.com
+			r = URL.replace(/([^:]*:\/\/)?([^\/]+\.[^\/]+)/g, '$2');
+			if(r.indexOf('www.') == 0)	{r = r.replace('www.','')}
+			if(r.indexOf('/'))	{r = r.split('/')[0]}
+			return r;
+			},
 
 		isThisBitOn : function(bit,int)	{
 			var B = Number(int).toString(2); //binary
@@ -2643,8 +2653,8 @@ return $r;
 				stid = data.value[i].stid;
 //				app.u.dump(" -> STID: "+stid);
 				$o = app.renderFunctions.transmogrify({'id':parentID+'_'+stid,'stid':stid},templateID,data.value[i])
-//make any inputs for coupons disabled.
-				if(stid[0] == '%')	{$o.find(':input').attr({'disabled':'disabled'}).addClass('disabled')}
+//make any inputs for coupons disabled. it is possible for stid to not be set, such as a fake product in admin_ordercreate unstructured add.
+				if(stid && stid[0] == '%')	{$o.find(':input').attr({'disabled':'disabled'}).addClass('disabled')}
 				$tag.append($o);
 				}
 			}, //stuffList
@@ -2652,6 +2662,7 @@ return $r;
 //handy for enabling tabs and whatnot based on whether or not a field is populated.
 //doesn't actually do anything with the value.
 		showIfSet : function($tag,data)	{
+			app.u.dump("showIfSet: "+data.value);
 			if(data.value)	{
 				$tag.show().css('display','block'); //IE isn't responding to the 'show', so the display:block is added as well.
 				}
@@ -2833,6 +2844,11 @@ $tmp.empty().remove();
 		popVal : function($tag,data){
 			$tag.val(data.value);
 			}, //text
+
+// * 201318 -> allows for data-bind on a radio input.
+		popRadio : function($tag,data)	{
+			if($tag.val() == data.value)	{$tag.attr('checked','checked')}
+			},
 
 //only use this on fields where the value is boolean
 //if setting checked=checked by default, be sure to pass hideZero as false.

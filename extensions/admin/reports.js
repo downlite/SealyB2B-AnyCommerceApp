@@ -54,12 +54,19 @@ var admin_reports = function() {
 
 				window.googleIntervalAttempts = 0;
 				window.googleInterval = setInterval(function(){
-					app.u.dump(" -> google interval attempt: "+googleIntervalAttempts);
+//					app.u.dump(" -> google interval attempt: "+googleIntervalAttempts);
 					if(window.google && window.google.loader)	{
 						google.load('visualization', '1.0', {'packages':['table']});
 						clearInterval(window.googleInterval);
 						delete window.googleInterval;
 						delete window.googleIntervalAttempts;
+						}
+					else if(window.googleIntervalAttempt > 50)	{
+						app.u.dump("Unable to load google visualization. ",'error');
+						$(".appMessaging").anymessage({'message':'The Google Visualization libraries did not successfully load. This means that some features in the reporting section may not be available. Refreshing the browser may help solve this error.','persistant':true});
+						delete window.googleInterval;
+						delete window.googleIntervalAttempts;
+
 						}
 					else	{
 						window.googleIntervalAttempts += 1;
@@ -95,7 +102,6 @@ var admin_reports = function() {
 				app.ext.admin.u.handleAppEvents($content);
 				},
 
-
 			showKPIInterface : function()	{
 				
 				var $KPI = $('#kpiContent').empty();
@@ -109,6 +115,7 @@ var admin_reports = function() {
 					else	{
 						$("[data-app-role='slimLeftNav']",$KPI).anycontent({'datapointer':rd.datapointer});
 						app.u.handleAppEvents($KPI);
+						$("[data-app-role='slimLeftNav'] ul li:first",$KPI).trigger('click');
 						}
 					}},'mutable');
 				app.model.dispatchThis();
@@ -117,6 +124,8 @@ var admin_reports = function() {
 
 //currently supported modes are:  add or edit
 			showKPIAddUpdateInModal : function(mode,vars)	{
+//				app.u.dump("BEGIN admin_reports.a.showKPIAddUpdateInModal");
+//				app.u.dump(' -> vars: '); app.u.dump(vars);
 				vars = vars || {};
 //error checking...
 				if(mode)	{
@@ -133,10 +142,10 @@ var admin_reports = function() {
 								$(this).dialog('destroy').remove();
 								}
 							});
-//							app.u.dump(" -> extended: ");
-//							app.u.dump($.extend(true,vars,app.data['adminKPIDBCollectionList'],app.data['adminKPIDBUserDataSetsList']));
-						$D.anycontent({'templateID':'KPIGraphAddUpdateTemplate','data':$.extend(true,vars,app.data['adminKPIDBCollectionList'],app.data['adminKPIDBUserDataSetsList']),'dataAttribs':{'app-mode':mode}});
+// the blank {} in the first object list is so that the rest of the data is copied into a new, blank object. otherwise, the data gets copied into the first object... which would be bad.  Dogs and cats living together bad. all the data would get copied into the collectionDetail datapointer.
+						$D.anycontent({'templateID':'KPIGraphAddUpdateTemplate','data':$.extend(true,{},vars,app.data['adminKPIDBCollectionList'],app.data['adminKPIDBUserDataSetsList']),'dataAttribs':{'app-mode':mode}});
 						$D.dialog('open');
+						
 
 						$( "ul.kpiSortable",$D).sortable({
 							connectWith: "ul.kpiSortable",
@@ -154,11 +163,37 @@ var admin_reports = function() {
 							});
 
 						$('.toolTip',$D).tooltip();
-//once a graph is in a collection, it stays there.
-						if(mode == 'update')	{
-							$("[name='collection']").attr('disabled','disabled');
+//collection could be passed in an 'add' mode if adding from a collection.
+//will also be set in update mode. graphs can not be moved between collections.
+						if(vars.collection)	{
+							$("[name='collection']",$D).val(vars.collection).parent().hide(); //can't use data-bind because options are added after the select
 							}
+
 						app.ext.admin.u.handleAppEvents($D);
+						
+						if(mode == 'update')	{
+							app.u.dump(" -> in graph update mode.");
+							$("[name='period']",$D).trigger('change');
+							$(":radio[value='"+vars.dataColumns+"']",$D).trigger('click');
+							
+							if(vars.dataColumns == 'fixed')	{
+//								app.u.dump(" -> Data columns are fixed.");
+								$("[name='datasetGrp']",$D).trigger('change');
+								var $selectedUL	 = $("[data-app-role='dataSetAxisListSelected']",$D);
+								
+								$("[data-app-role='dataSetAxisListAll'] li",$D).each(function(){
+									var $li = $(this);
+									if(vars['@datasets'].indexOf($li.data('dataset')) >= 0)	{
+										app.u.dump("match!");
+										$li.appendTo($selectedUL);
+										}
+									})
+								}
+							else if(vars.dataColumns == 'dynamic')	{} //currently, no action occurs on select change.
+							else	{}  //unsupported dataColumns type.
+							
+							}
+						
 						}
 					else	{
 						$('#globalMessaging').anymessage({'message':'In admin_reports.a.showKPIAddUpdateInModal, either mode is invalid ['+mode+'] (must be update or add) or mode is update and no uuid passed.','gMessage':true});
@@ -167,7 +202,7 @@ var admin_reports = function() {
 				else	{
 					$('#globalMessaging').anymessage({'message':'In admin_reports.a.showKPIAddUpdateInModal, mode not specified.','gMessage':true});
 					}
-			
+		
 				}, //showKPIAddInModal
 
 			showKPICollectionEditor : function($target,collection)	{
@@ -183,7 +218,24 @@ var admin_reports = function() {
 						else	{
 							
 							$target.anycontent({'templateID':'KPICollectionEditorTemplate','datapointer':rd.datapointer,'dataAttribs':{'collection':collection}});
-							$('.gridTable',$target).anytable(); //.sortable({'items':'tr'});
+							var $table = $('.gridTable',$target);
+							$table.anytable().sortable({
+								'items':'tr',
+								stop: function( event, ui ) {
+									var graphs = new Array();
+									var result = $(this).sortable('toArray', {attribute: 'data-uuid'});
+									for(var index in result)	{
+//toArray is returning a blank in the zero spot sometimes, so only push it on if index has a value.
+										if(result[index])	{graphs.push(app.ext.admin_reports.u.getGraphByUUID(app.data[rd.datapointer]['@GRAPHS'],result[index]));}
+										}
+									app.u.dump(result);
+									app.u.dump(graphs);
+									app.ext.admin.calls.adminKPIDBCollectionUpdate.init({'uuid':collection,'@GRAPHS':graphs},{},'passive');
+									app.model.destroy(rd.datapointer); //this is the collection detail.
+									app.ext.admin.calls.adminKPIDBCollectionDetail.init(collection,{},'passive');
+									app.model.dispatchThis('passive');
+									}
+								});
 							app.u.handleAppEvents($target);
 							}
 						}
@@ -197,7 +249,7 @@ var admin_reports = function() {
 					}
 				},
 
-			showKPICollectionTitleChange : function(collection)	{
+			showKPICollectionTitleChange : function(collection,$context)	{
 				if(collection)	{
 					var $D = $("<div \/>").attr('title',"Rename Collection");
 					$D.addClass('displayNone').appendTo('body');
@@ -216,30 +268,29 @@ var admin_reports = function() {
 					
 					
 					$D.dialog('open');
-					$D.showLoading({'message':'Fetching collection details'});
+					$D.parent().showLoading({'message':'Fetching collection details'}); //parent used to buttons are encompased.
 					
 					app.ext.admin.calls.adminKPIDBCollectionDetail.init(collection,{'callback':function(rd){
-						$D.hideLoading();
+						$D.parent().hideLoading();
 						if(app.model.responseHasErrors(rd)){
 							$('#globalMessaging').anymessage({'message':rd,'gMessage':true});
 							}
 						else	{
 							var buttons = $D.dialog( "option", "buttons" );
 							buttons.push({text: "Save Changes", click: function() {
-								app.u.dump("GOT HERE!!!!!!!!!!!!!!!!!!!!!!");
 								var CD = {}; //Collection Detail
 								CD['@GRAPHS'] = app.data[rd.datapointer]['@GRAPHS'] || [];
 								CD.title = $('#collectionTitle',$D).val();
 								CD.uuid = collection;
-								
+								$D.parent().showLoading({'message':'Updating collection'});
 								app.ext.admin.calls.adminKPIDBCollectionUpdate.init(CD,{},'immutable');
 								app.model.destroy('adminKPIDBCollectionDetail|'+collection);
 								app.model.destroy('adminKPIDBCollectionList');
 								app.ext.admin.calls.adminKPIDBCollectionList.init({callback : function(rd){
-									$D.hideLoading();
+									$D.parent().hideLoading();
 									if(app.model.responseHasErrors(rd)){app.u.throwMessage(rd);}
 									else	{
-										app.ext.admin_reports.a.showKPIInterface();
+										app.ext.admin_reports.u.updateKPICollections($context);
 										$D.dialog('close');
 										}
 									}},'immutable');
@@ -260,7 +311,7 @@ var admin_reports = function() {
 					}
 				},
 
-			showKPIGraphRemove : function(collection,graphUUID,$context)	{
+			showKPIGraphRemove : function(collection,graphUUID,$slimLeftContainer)	{
 				if(collection && graphUUID)	{
 					
 					var $D = $("<div \/>").attr('title',"Remove Graph ");
@@ -268,16 +319,14 @@ var admin_reports = function() {
 					$D.appendTo('body');
 					$D.dialog({
 						modal: true,
-						width: ($(window).width() < 300) ? '95%' : 300,
 						autoOpen: false,
-						height : ($(window).height() < 300) ? ($(window).height() - 50) : 300, //accomodate small browsers/mobile devices.
 						close: function(event, ui)	{
 							$(this).dialog('destroy').remove();
 							},
 						buttons: [ 
 							{text: 'Cancel', click: function(){$D.dialog('close')}},
 							{text: "Delete Graph", click: function() {
-	$D.showLoading({'message':'Removing graph...'});
+	$D.parent().showLoading({'message':'Removing graph...'});
 	
 	var graphs = app.data['adminKPIDBCollectionDetail|'+collection]['@GRAPHS'];
 
@@ -293,12 +342,11 @@ var admin_reports = function() {
 
 	app.ext.admin.calls.adminKPIDBCollectionUpdate.init({'uuid':collection,'@GRAPHS' : graphs},{},'immutable');
 	app.model.destroy('adminKPIDBCollectionDetail|'+collection);
-	app.model.destroy('adminKPIDBCollectionList');
-	app.ext.admin.calls.adminKPIDBCollectionList.init({callback : function(rd){
-		$D.hideLoading();
+	app.ext.admin.calls.adminKPIDBCollectionDetail.init(collection,{callback : function(rd){
+		$D.parent().hideLoading();
 		if(app.model.responseHasErrors(rd)){app.u.throwMessage(rd);}
 		else	{
-			$("[data-uuid='"+graphUUID+"']",$context).empty().remove(); //remove any elements (like the left side list) w/ this collection id on them.
+			app.ext.admin_reports.a.showKPICollectionEditor($("[data-app-role='slimLeftContent']",$slimLeftContainer).first(), collection);
 			$D.dialog('close');
 			$('#globalMessaging').anymessage(app.u.successMsgObject('Your chart has been removed.'));
 			}
@@ -319,10 +367,10 @@ var admin_reports = function() {
 					
 					}
 				else	{
-					$('#globalMessaging').anymessage({"message":"In admin_reports.a.showKPICollectionRemove, collection ["+collection+"] and/or graph uuid ["+graphUUID+"] not passed.","gMessage":true});
+					$('#globalMessaging').anymessage({"message":"In admin_reports.a.showKPIGraphRemove, collection ["+collection+"] and/or graph uuid ["+graphUUID+"] not passed.","gMessage":true});
 					}
 
-				}, //showKPICollectionRemove
+				}, //showKPIGraphRemove
 
 			showKPICollectionRemove : function(collection,$context)	{
 				if(collection)	{
@@ -339,24 +387,22 @@ var admin_reports = function() {
 					$D.appendTo('body');
 					$D.dialog({
 						modal: true,
-						width: ($(window).width() < 300) ? '95%' : 300,
 						autoOpen: false,
-						height : ($(window).height() < 300) ? ($(window).height() - 50) : 300, //accomodate small browsers/mobile devices.
 						close: function(event, ui)	{
 							$(this).dialog('destroy').remove();
 							},
 						buttons: [ 
 							{text: 'Cancel', click: function(){$D.dialog('close')}},
 							{text: "Delete Collection", click: function() {
-	$D.showLoading({'message':'Removing collection...'});
+	$D.parent().showLoading({'message':'Removing collection...'});
 	app.ext.admin.calls.adminKPIDBCollectionRemove.init(collection,{},'immutable');
 	app.model.destroy('adminKPIDBCollectionDetail|'+collection);
 	app.model.destroy('adminKPIDBCollectionList');
 	app.ext.admin.calls.adminKPIDBCollectionList.init({callback : function(rd){
-		$D.hideLoading();
+		$D.parent().hideLoading();
 		if(app.model.responseHasErrors(rd)){app.u.throwMessage(rd);}
 		else	{
-			$("[data-id='"+collection+"']",$context).empty().remove(); //remove any elements (like the left side list) w/ this collection id on them.
+			app.ext.admin_reports.u.updateKPICollections($context);
 			$D.dialog('close');
 			}
 		}},'immutable');
@@ -450,21 +496,18 @@ var admin_reports = function() {
 //at this point, graphVars IS an object and is not empty.
 //app.u.dump(" -> graphVars: "); app.u.dump(graphVars);
 					if(!app.ext.admin_reports.u.graphVarsIsMissingData(graphVars))	{
+						$target.showLoading({'message':'Fetching graph data'});
 //everything we need is accounted for. Move along... move along...
 						app.ext.admin.calls.adminKPIDBDataQuery.init(graphVars,{callback:function(rd){
-//							app.u.dump('HEY! did you turn off the sample charts that are set to display when response has error?','warn');
+							$target.hideLoading();
 							if(app.model.responseHasErrors(rd)){
 								$('#globalMessaging').anymessage({'message':rd});
-								
-//								app.ext.admin_reports.u.addGraph($target,graphVars,{})
 								}
 							else	{
-								$target.append('woot!');
-								//verify there is data then add the chart.
 								app.ext.admin_reports.u.addGraph($target,graphVars,app.data[rd.datapointer])
 								}
 							}},'mutable');
-						app.model.dispatchThis();
+						app.model.dispatchThis('mutable');
 						}
 					else	{
 						$('.appMessaging').anymessage({'message':'In admin_reports.u.getKPIChart, graphVars is missing data: <br>'+app.ext.admin_reports.u.graphVarsIsMissingData(graphVars),'gMessage':true});
@@ -477,7 +520,26 @@ var admin_reports = function() {
 				return $chartObj;
 				},
 			
-			getDatasetByGraphID : function(graphs,graphUUID)	{
+			getTextGraph : function(graphVars,highChartObj)	{
+				var
+					$C = $("<div \/>"),
+					L = highChartObj.series.length,
+					$T = $("<table \/>");
+				
+				$C.append("<h3>"+highChartObj.title.text+"<\/h3>");
+				$C.append("<h5>"+highChartObj.subtitle.text+"<\/h5>");
+				
+				for(var i = 0; i < L; i += 1)	{
+//skip data with zero value.
+					if(highChartObj.series[i].data[0])	{
+						$T.append("<tr \/><td>"+highChartObj.series[i].name+"<\/td><td>"+(graphVars.column == 'gms' ? '$' : '#')+highChartObj.series[i].data[0]+"<\/td><\/tr>");
+						}
+					}
+				$T.appendTo($C);
+				return $C;
+				},
+			
+			getGraphByUUID : function(graphs,graphUUID)	{
 				var r = false;
 				if(graphs && graphs.length && graphUUID)	{
 					for(var index in graphs)	{
@@ -489,90 +551,158 @@ var admin_reports = function() {
 					}
 				else	{
 					r = undefined;
-					$('#globalMessaging').anymessage({'message':'In admin_reports.u.getDatasetByGraphID, graphs not set/has no children of graphUUID ['+graphUUID+'] not passed.','gMessage':true});
+					$('#globalMessaging').anymessage({'message':'In admin_reports.u.getGraphByUUID, graphs not set/has no children of graphUUID ['+graphUUID+'] not passed.','gMessage':true});
 					}
 				return r;
 				},
-			
+
+//This will display the actual graph. requires that data be passed in. executed by getChartData.			
 			addGraph : function($target,graphVars,data)	{
 				
-				if($target && graphVars)	{
+				if($target && graphVars && data)	{
 
 
-$target.highcharts({
-	chart: {
-		type: graphVars.graph
-	},
-	title: {
-		text: graphVars.title
-	},
-	subtitle: {
-		text: ''
-	},
-	xAxis: {
-		labels: {
-			formatter: function() {
-				return this.value; // clean, unformatted number for year
-			}
+var
+//the data for the graph.
+	myDataSet = new Array(),
+//what is passed into highcharts(); varies based on graph type.
+	highChartObj = {
+		chart: {type: graphVars.graph},
+		title: {text: graphVars.title},
+		subtitle: {text: data.startyyyymmdd + " to " + data.stopyyyymmdd},
+		tooltip: {pointFormat: '{series.name} <b>{point.y:,.0f}</b> on {point.x}'}
+		}; 
+
+if(graphVars.graph == 'pie' && graphVars.dataColumns == 'dynamic')	{
+	var L = data['@YAxis'].length;
+	app.u.dump(" -> L: "+L);
+	for(var i = 0; i < L; i += 1)	{
+//		app.u.dump(" -> "+data['@YAxis'][i][1]+" ("+key+") : "+data[key][0]);
+		myDataSet.push([data['@YAxis'][i][1],data[data['@YAxis'][i][0]][0]])
 		}
-	},
-	yAxis: {
-		title: {
-			text: 'Nuclear weapon states'
-		},
-		labels: {
-			formatter: function() {
-				return this.value / 1000 +'k';
-			}
+	}
+else if(graphVars.graph == 'pie' && graphVars.dataColumns == 'fixed')	{
+	var L = graphVars['@datasets'].length
+	app.u.dump(" -> L: "+L);
+	for(var i = 0; i < L; i += 1)	{
+//		app.u.dump(" -> "+graphVars['@datasets'][i]+" : "+data[graphVars['@datasets'][i]][0]);
+		myDataSet.push([graphVars['@datasets'][i],data[graphVars['@datasets'][i]][0]])
 		}
-	},
-	tooltip: {
-		pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
-	},
-	plotOptions: {
-		area: {
-			pointStart: 1940,
-			marker: {
-				enabled: false,
-				symbol: 'circle',
-				radius: 2,
-				states: {
-					hover: {
-						enabled: true
-					}
+	}
+else if(graphVars.dataColumns == 'fixed')	{
+	var L = graphVars['@datasets'].length
+	for(var i = 0; i < L; i += 1)	{
+		myDataSet.push({'name':graphVars['@datasets'][i],'data':data[graphVars['@datasets'][i]]})
+		}
+	}
+else if(graphVars.dataColumns == 'dynamic')	{
+	var L = data['@YAxis'].length;
+	for(var i = 0; i < L; i += 1)	{
+		myDataSet.push({'name':data['@YAxis'][i][1],'data':data[data['@YAxis'][i][0]]})
+		}
+	}
+else	{
+	
+	} //catch. really, by now, we should never get here.
+
+if(graphVars.graph == 'pie')	{
+	highChartObj.plotOptions = {
+		pie: {
+			allowPointSelect: true,
+			cursor: 'pointer',
+			dataLabels: {
+				enabled: true,
+				color: '#000000',
+				connectorColor: '#000000',
+				formatter: function() {return (this.percentage == 0) ? null : '<b>'+ this.point.name +'</b>: '+ (Math.round(this.percentage*100)/100 ) +' %';}
 				}
 			}
 		}
-	},
-	series: [{
-		name: 'USA',
-		data: [null, null, null, null, null, 6 , 11, 32, 110, 235, 369, 640,
-			1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126,
-			27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662,
-			26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605,
-			24304, 23464, 23708, 24099, 24357, 24237, 24401, 24344, 23586,
-			22380, 21004, 17287, 14747, 13076, 12555, 12144, 11009, 10950,
-			10871, 10824, 10577, 10527, 10475, 10421, 10358, 10295, 10104 ]
-	}, {
-		name: 'USSR/Russia',
-		data: [null, null, null, null, null, null, null , null , null ,null,
-		5, 25, 50, 120, 150, 200, 426, 660, 869, 1060, 1605, 2471, 3322,
-		4238, 5221, 6129, 7089, 8339, 9399, 10538, 11643, 13092, 14478,
-		15915, 17385, 19055, 21205, 23044, 25393, 27935, 30062, 32049,
-		33952, 35804, 37431, 39197, 45000, 43000, 41000, 39000, 37000,
-		35000, 33000, 31000, 29000, 27000, 25000, 24000, 23000, 22000,
-		21000, 20000, 19000, 18000, 18000, 17000, 16000]
-	}]
-        });
+	
+	highChartObj.series = [{
+		type: 'pie',
+		name: '',
+		data: myDataSet
+		}]
+
+	}
+//the line charts all expect the data about the same.
+else	{
+	highChartObj.xAxis = {
+		categories : data['@xAxis'],
+		tickInterval : (data['@xAxis'].length > 35) ? 15 : 1 , //will skip ticks in graphs w/ lots of x-axis values.
+		labels: {
+			formatter: function() {return this.value;} // clean, unformatted value
+			}
+		}
+
+	highChartObj.yAxis = {
+			title: {
+				text: '' //runs up left side of chart.
+			},
+			labels: {
+				formatter: function() {
+					return this.value / 1000 +'k';
+				}
+			}
+		}
+	highChartObj.series = myDataSet
+
+	}
+
+if(myDataSet.length)	{
+	if(graphVars.graph == 'text')	{
+		$target.append(app.ext.admin_reports.u.getTextGraph(graphVars,highChartObj));
+		}
+	else	{
+		$target.highcharts(highChartObj);
+		}
+	}
+else	{
+	$target.anymessage({'message':'No data available'});
+	}
 
 
+
+
+
+
+					}
+				else if($target)	{
+					$target.anymessage({'message':'In admin_reports.u.addGraph, graphsvars ['+typeof graphVars+'] and data['+typeof data+'] are both required.','gMessage':true});
+					}
+				else	{
 					
+					$("#globalMessaging").anymessage({'message':'In admin_reports.u.addGraph, $target ['+typeof $target+'] andgraphsvars ['+typeof graphVars+'] and data['+typeof data+'] are both required.','gMessage':true});
 					
 					}
-				else	{}
 				
 				},
+//currently, we want each chart to get it's own ajax request so that the content loads asynchronously.
+//means faster loading for smaller charts.
+			getDatasetsArray : function($form,sfo)	{
+				var r = new Array();
+				if($form && sfo)	{
+					if(sfo.dataColumns == 'fixed')	{
+						$("[data-app-role='dataSetAxisListSelected']",$form).children().each(function(){
+							r.push($(this).data('dataset'));
+							});
+						}
+					else if(sfo.dataColumns == 'dynamic')	{
+						r.push(sfo.ddataset);
+						}
+					else	{
+						r = false;
+						} //should never get here. validation makes sure dataColumns is fixed or dynamic.
+					
+					}
+				else	{
+					r = false;
+					}
+				return r;
+				},
 
+//This is what displays a collection.  It'll show it in target.
 			addKPICollectionTo : function($target,collection)	{
 				app.u.dump("BEGIN admin_reports.u.addKPICollectionTo $target");
 				if($target && collection)	{
@@ -590,10 +720,9 @@ if(app.data[rd.datapointer]['@GRAPHS'])	{
 	var graphs = app.data[rd.datapointer]['@GRAPHS']; //shortcut
 	for(var index in graphs)	{
 //		app.u.dump(index+"). adding graph."); app.u.dump(graphs[index]);
-		var $div = $("<div\/>").attr('data-graph-uuid',graphs[index].uuid).appendTo($target);
-		app.ext.admin_reports.u.getChartData($div,graphs[index]);
+		var $div = $("<div\/>").attr('data-graph-uuid',graphs[index].uuid).addClass('graph').appendTo($target);
+		app.ext.admin_reports.u.getChartData($div,graphs[index]); //getChartData handles dispatch so that each chart gets it's own ajax req. (faster loading for smaller charts)
 		}
-	
 	}
 else	{
 	$target.append("<P>There are no graphs in this collection.<\/P>");
@@ -631,11 +760,23 @@ else	{
 				return ($ul.children().length) ? $ul.children() : false;
 				},
 			
-			validateAddUpdateCollectionForm : function($form,sfo)	{
+			validateAddUpdateCollectionForm : function($form,sfo,mode)	{
 
 				var r = true; //what is returned. boolean.
-				
-				if($form && sfo)	{
+				//mode can be 'preview' or 'save'.  
+				if($form && sfo && mode)	{
+					
+					//In preview mode, collection and name are not required.
+					if(mode == 'preview')	{
+						$("[name='title']",$form).attr('required','').removeAttr('required');
+						$("[name='collection']",$form).attr('required','').removeAttr('required');
+						}
+					else if(mode == 'save')	{
+						$("[name='title']",$form).attr('required','required');
+						$("[name='collection']",$form).attr('required','required');
+						}
+					else	{} //unknown mode.
+					
 					
 					//handle the basic validation.
 					if(app.u.validateForm($form))	{}
@@ -702,17 +843,45 @@ else	{
 
 			addTriggerKPICollectionList : function($ele)	{
 				$ele.off('click.addTriggerKPICollectionList').on('click.addTriggerKPICollectionList',function(){
-					app.ext.admin_reports.u.addKPICollectionTo($ele.closest("[data-app-role='slimLeftContainer']").find("[data-app-role='slimLeftContent']").first(),$ele.closest('li').data('uuid'));
+					app.ext.admin_reports.u.addKPICollectionTo($ele.closest("[data-app-role='slimLeftContainer']").find("[data-app-role='slimLeftContent']").first(),$ele.data('uuid'));
 					app.model.dispatchThis('mutable');
 					});
 				},
 			
 			showChartAdd : function($btn)	{
-				$btn.button({icons: {primary: "ui-icon-circle-plus"},text: true});
+				$btn.button({icons: {primary: "ui-icon-key"},text: true});
 				$btn.off('click.showChartAdd').on('click.showChartAdd',function(){
 					app.ext.admin_reports.a.showKPIAddUpdateInModal('add',{});
 					});
 				}, //showChartAdd
+
+
+			
+			showKPIGraphPreview : function($btn)	{
+				$btn.button({icons: {primary: "ui-icon-image"},text: true});
+				
+				$btn.off('click.showKPIGraphPreview').on('click.showKPIGraphPreview',function(){
+					//data-app-role='KPIDataGraph'
+					var
+						$form = $btn.closest('form'),
+						sfo = $form.serializeJSON(),
+						$preview = $("[data-app-role='KPIDataGraph']",$form);
+
+					if(app.ext.admin_reports.u.validateAddUpdateCollectionForm($form,sfo,'preview'))	{
+						sfo['@datasets'] = app.ext.admin_reports.u.getDatasetsArray($form,sfo);
+						sfo.title = sfo.period + " " + sfo.column;
+						$preview.show().addClass("graphType_"+sfo.graph)
+						app.ext.admin_reports.u.getChartData($preview,sfo);
+						app.model.dispatchThis('mutable');
+						}
+					else	{
+						//validation handles error display.
+						}
+
+					});
+				}, //showChartAdd
+
+
 			showChartUpdate : function($btn)	{
 				$btn.button({icons: {primary: "ui-icon-pencil"},text: true});
 				$btn.off('click.showChartUpdate').on('click.showChartUpdate',function(){
@@ -723,7 +892,8 @@ else	{
 						graph 
 						
 						if(collection && graphUUID && app.data['adminKPIDBCollectionDetail|'+collection])	{
-							graph = app.ext.admin_reports.u.getDatasetByGraphID(app.data['adminKPIDBCollectionDetail|'+collection]['@GRAPHS'],graphUUID);
+							graph = app.ext.admin_reports.u.getGraphByUUID(app.data['adminKPIDBCollectionDetail|'+collection]['@GRAPHS'],graphUUID);
+							graph.collection = collection;  //collection is not stored IN the graph. a graph is part of a collection. but this is needed for the UI.
 							app.ext.admin_reports.a.showKPIAddUpdateInModal('update',graph);
 							}
 						else	{
@@ -735,13 +905,12 @@ else	{
 			showChartRemove : function($btn)	{
 				$btn.button({icons: {primary: "ui-icon-circle-close"},text: true});
 				$btn.off('click.showChartRemove').on('click.showChartRemove',function(){
-					app.ext.admin_reports.a.showKPIGraphRemove($btn.closest("[data-app-role='collectionEditor']").data('collection'),$btn.closest("tr").data('uuid'),$btn.closest('table'));
+					app.ext.admin_reports.a.showKPIGraphRemove($btn.closest("[data-app-role='collectionEditor']").data('collection'),$btn.closest("tr").data('uuid'),$btn.closest("[data-app-role='slimLeftContainer']"));
 					});
 				}, //showChartRemove
 
-			//NOT DONE.
 			showAdminKPIDBCollectionCreate : function($btn)	{
-				$btn.button();
+				$btn.button({icons: {primary: "ui-icon-circle-plus"},text: true});
 				$btn.off('click.showAdminKPIDBCollectionCreate').on('click.showAdminKPIDBCollectionCreate',function(){
 
 //by now, we know we have a valid mode and if that mode is edit, uuid is set.
@@ -750,9 +919,7 @@ else	{
 					$D.addClass('displayNone').appendTo('body'); 
 					$D.dialog({
 						modal: true,
-						width: ($(window).width() > 300) ? 300 : ($(window).width() - 50),
 						autoOpen: false,
-						height : ($(window).height() > 250) ? 250 : ($(window).height() - 50), //accomodate small browsers/mobile devices.
 						close: function(event, ui)	{
 							$(this).dialog('destroy').remove();
 							},
@@ -760,10 +927,10 @@ else	{
 							{ text: "Add Collection", click: function() {
 								var val = $('#newCollectionName').val();
 								if(val)	{
-									$D.showLoading({'message':'Adding collection...'});
+									$D.parent().showLoading({'message':'Adding collection...'});
 									app.model.destroy('adminKPIDBCollectionList');
 									app.ext.admin.calls.adminKPIDBCollectionCreate.init({'uuid':app.u.guidGenerator(),'title':val},{callback : function(rd){
-										$D.hideLoading();
+										$D.parent().hideLoading();
 										if(app.model.responseHasErrors(rd)){
 											$('.appMessaging').anymessage({'message':rd,'gMessage':true});
 											}
@@ -800,7 +967,7 @@ else	{
 						$("[data-app-role='axisChooser']",$form).hide();
 						}
 					});
-				}, //addTriggerKPIDataColumnsChange
+				}, //addTriggerKPIDatasetChange
 			addTriggerKPIDataColumnsChange : function($radio)	{
 				var $form = $radio.closest('form');
 				$radio.off('click.addTriggerKPIDataColumnsChange').on('click.addTriggerKPIDataColumnsChange',function(){
@@ -830,55 +997,75 @@ else	{
 					$("[data-app-role='graphTypePreview']",$form).show();
 					$("[data-app-role='graphTypePreview'] img",$form).attr('src','images/kpi/'+$select.val()+'-300x104.png');
 					$("[data-app-role='graphTypePreview'] .graphType",$form).text($select.val().replace('.',' '));
+					
+/*
+//move this into the period change so all the grouping code is in one  spot.
+Then, when graph type changes, trigger the change code on the period select.
+					$groupby = $("[name='grpby']",$form);
+					if($select.val() == 'pie')	{
+						$("option",$groupby).attr('disabled','disabled'); //disable all groupings.
+						$groupby.val('NONE');
+						$("[value='NONE']",$groupby).attr('disabled','').removeAttr('disabled'); //only merge datasets is available.
+						}
+					else	{
+						
+						}
+*/
 					});
 				}, //addTriggerKPIGraphTypeChange
 			addTriggerKPIPeriodChange : function($select)	{
 				var $form = $select.closest('form');
 				$select.off('change.addTriggerKPIPeriodChange').on('change.addTriggerKPIPeriodChange',function(){
 
-					var val = $select.val(),
+					var period = $select.val(),
 					$groupby = $("[name='grpby']",$form);
 					
 				//grouping is disabled till a period is chosen.
 					$groupby.attr('disabled','').removeAttr('disabled');
-					$groupby.val(''); //unselect the grouping
+					
 				//in case period is changed from day to week, clear all disables so previously locked options are available.
 					$("option",$groupby).attr('disabled','').removeAttr('disabled');
 				
 				//some general rules for option disabling.
-					if(val.indexOf('day') >= 0)	{
+					if(period.indexOf('day') >= 0)	{
 						$("[value='week'], [value='month'], [value='quarter']",$groupby).attr('disabled','disabled');
 						}
-					else if(val.indexOf('week') >= 0)	{
+					else if(period.indexOf('week') >= 0)	{
 						$("[value='month'], [value='quarter']",$groupby).attr('disabled','disabled');
 						}
-					else if(val.indexOf('month') >= 0)	{
+					else if(period.indexOf('month') >= 0)	{
 						$("[value='quarter']",$groupby).attr('disabled','disabled');
 						}
 					else	{
 
 						}
 				
-				//more specific rules
-				//need more than one days data to group by day of week.
-					if(val == 'day.today' || val == 'day.yesterday')	{
+//more specific rules
+//need more than one days data to group by day of week.
+					if(period == 'day.today' || period == 'day.yesterday')	{
 						$("[value='dow']",$groupby).attr('disabled','disabled');
 						}
-				//need more than one weeks data to group by week.
-					if(val == 'week.this' || val == 'week.tly' || val == 'week.last')	{
+//need more than one weeks data to group by week.
+					if(period == 'week.this' || period == 'week.tly' || period == 'week.last')	{
 						$("[value='week']",$groupby).attr('disabled','disabled');
 						}	
-				//need more than one months data to group by month.
-					if(val == 'month.this' || val == 'month.tly' || val == 'month.last')	{
+//need more than one months data to group by month.
+					if(period == 'month.this' || period == 'month.tly' || period == 'month.last')	{
 						$("[value='month']",$groupby).attr('disabled','disabled');
 						}
+
+//if the grpby is selected and the choice is no longer available (they changed period from month to week, for instance) then unselect the grpby.
+var $selectedGrpby = $groupby.find(":selected")
+if($selectedGrpby.length && $selectedGrpby.attr('disabled') == 'disabled')	{
+	$groupby.val('');
+	}
 
 					});
 				}, //addTriggerKPIPeriodChange
 
 //executed as part of the save/update interface 'save' button.
 			execAdminKPIDBCollectionUpdate : function($btn)	{
-				$btn.button();
+				$btn.button({icons: {primary: "ui-icon-circle-plus"},text: true});
 //A new graph save or even an existing graph update does NOT save individually. The entire collection must be updated.
 var $context = $btn.closest("[data-app-role='KPIGraphAddUpdate']"),
 mode = $context.data('app-mode'),
@@ -891,75 +1078,86 @@ $btn.off('click.execAdminKPIDBCollectionUpdate').on('click.execAdminKPIDBCollect
 	if(mode)	{
 		if(mode == 'add' || mode == 'update')	{
 			var sfo = $form.serializeJSON(); //needs to be in 'click' or serialization occurs before form is populated.
-			if(app.ext.admin_reports.u.validateAddUpdateCollectionForm($form,sfo))	{
-//				app.u.dump("woot! we have everything we need. now do something");
-//By this point, all the data required to add or update a chart is present.
-
-//now get all the data formatted properly. Once that's done, mode will determine the next course of action.
-				sfo['@datasets'] = new Array();
-
-				if(sfo.dataColumns == 'fixed')	{
-					$("[data-app-role='dataSetAxisListSelected']",$form).children().each(function(){
-						sfo['@datasets'].push($(this).data('dataset'));
-						});
-					}
-				else if(sfo.dataColumns == 'dynamic')	{
-					sfo['@datasets'].push(sfo.ddataset);
-					}
-				else	{} //should never get here. validation makes sure dataColumns is fixed or dynamic.
-
-
-				var collection = sfo.collection;
-//sanitize sfo here, if necessary.
-				delete sfo.collection; //redundant to have this in the graph data which is saved as part of a collection.
-				delete sfo.ddataset; //already saved into datasets.
-
-// need to fetch the collection list detail to make sure it's present. The callback for that will include appending this new chart to the collection.
-// Then, update the collection and fetch a clean copy. If the KPI page is visible AND the collection in question is open, update the view.
+//when in 'add' mode, make sure a title and collection are set. collection may stay invisible depending on which 'add graph' link/button was pushed (may be hard coded to a collection.
+			if(mode == 'add' && !$("[data-app-role='saveInputsFieldset']",$context).is(':visible'))	{
+				$("[data-app-role='saveInputsFieldset']",$context).show().prepend("Please give the graph and name and location before saving.");
+				}
+			else	{
 				
-				app.u.dump(" -> All data for creating a new graph is present.  proceed....");
-				$context.showLoading({'message':'Creating new graph.'})
-//make sure we have a copy of the collection. most likely, what's in memory (if already here) is up to date, so no need to destroy.
-				app.ext.admin.calls.adminKPIDBCollectionDetail.init(collection,{
-					callback : function(rd)	{
-						
-						app.u.dump("BEGIN inline callback on adminKPIDBCollectionDetail _cmd for adding a new chart.");
-						if(app.model.responseHasErrors(rd)){
-							$context.hideLoading();
-							$('.appMessaging').anymessage({'message':rd,'gMessage':true});
-							}
-						else	{
-							var graphs = [];
-							if(mode == 'add')	{
-							//if there are already graphs in this collection, add then to graphs array as the update is destructive and ALL graphs need to be present.
+				if(app.ext.admin_reports.u.validateAddUpdateCollectionForm($form,sfo,'save'))	{
+	
+	//By this point, all the data required to add or update a chart is present.
+	
+	//now get all the data formatted properly. Once that's done, mode will determine the next course of action.
+					sfo['@datasets'] = app.ext.admin_reports.u.getDatasetsArray($form,sfo);
+
+	
+					var collection = sfo.collection;
+	//sanitize sfo here, if necessary.
+					delete sfo.collection; //redundant to have this in the graph data which is saved as part of a collection.
+					delete sfo.ddataset; //already saved into datasets.
+	
+	// need to fetch the collection list detail to make sure it's present. The callback for that will include appending this new chart to the collection.
+	// Then, update the collection and fetch a clean copy. If the KPI page is visible AND the collection in question is open, update the view.
+					
+					app.u.dump(" -> All data for creating a new graph is present.  proceed....");
+					$context.showLoading({'message':'Creating new graph.'})
+	//make sure we have a copy of the collection. most likely, what's in memory (if already here) is up to date, so no need to destroy.
+					app.ext.admin.calls.adminKPIDBCollectionDetail.init(collection,{
+						callback : function(rd)	{
+
+							app.u.dump("BEGIN inline callback on adminKPIDBCollectionDetail _cmd for adding a new chart.");
+/*
+								if(app.model.responseHasErrors(rd)){
+								$context.hideLoading();
+								$('.appMessaging').anymessage({'message':rd,'gMessage':true});
+								}
+							else	{
+								var graphs = new Array();
+								app.u.dump(rd.datapointer);
+//if there are already graphs in this collection, add then to graphs array as the update is destructive and ALL graphs need to be present.
 								if(app.data[rd.datapointer]['@GRAPHS'])	{
 									graphs = app.data[rd.datapointer]['@GRAPHS'];
 									}
-								sfo.uuid = app.u.guidGenerator();
-								graphs.push(sfo);
+								
+								
+								app.u.dump(graphs);
+								die();
+								if(mode == 'add')	{
+									sfo.uuid = app.u.guidGenerator();
+									graphs.push(sfo);
+									}
+								else if(mode == 'update')	{
+									var L = graphs.length;
+									for(var i = 0; i < L; i += 1)	{
+										if(graphs[i].uuid == sfo.uuid)	{
+											graphs[i] = sfo;
+											break;
+											}
+										}
+									}
+								app.u.dump(graphs);
+								die();
+								app.model.destroy(rd.datapointer);
+								app.ext.admin.calls.adminKPIDBCollectionUpdate.init({'uuid':collection,'@GRAPHS':graphs},{'callback':function(rd){
+									$context.hideLoading();
+									if(app.model.responseHasErrors(rd)){
+										$('.appMessaging').anymessage({'message':rd,'gMessage':true});
+										}
+									else	{
+										$('.appMessaging').anymessage(app.u.successMsgObject('Your chart has been added.'));
+										}
+									}},'immutable');
+								app.ext.admin.calls.adminKPIDBCollectionDetail.init(collection,{},'immutable');//make sure collection is udpated in localstorage and memory
+								app.model.dispatchThis('immutable');
+								
 								}
-							
-							app.model.destroy(rd.datapointer);
-							app.ext.admin.calls.adminKPIDBCollectionUpdate.init({'uuid':collection,'@GRAPHS':graphs},{'callback':function(rd){
-								$context.hideLoading();
-								if(app.model.responseHasErrors(rd)){
-									$('.appMessaging').anymessage({'message':rd,'gMessage':true});
-									}
-								else	{
-									$('.appMessaging').anymessage(app.u.successMsgObject('Your chart has been added.'));
-									}
-								}},'immutable');
-							app.ext.admin.calls.adminKPIDBCollectionDetail.init(collection,{},'immutable');//make sure collection is udpated in localstorage and memory
-							app.model.dispatchThis('immutable');
-							
-							}
-						}
-					},'immutable');
-				app.model.dispatchThis('immutable');
-				
-				
+						*/	}
+						},'immutable');
+					app.model.dispatchThis('immutable');
+					}
+				else	{} //validateAddUpdateCollectionForm handles error display.
 				}
-			else	{} //validateAddUpdateCollectionForm handles error display.
 			}
 		else	{
 			$('.appMessaging').anymessage({'message':'In admin_reports.e.execAdminKPIDBCollectionUpdate, unsupported mode ['+mode+'] set.','gMessage':true});
@@ -1012,29 +1210,45 @@ $btn.off('click.execAdminKPIDBCollectionUpdate').on('click.execAdminKPIDBCollect
 			handleCollectionMenu : function($btn)	{
 				$btn.button({text: false,icons: {primary: "ui-icon-wrench"}}).addClass('floatRight');
 
-				
 				var 
 					$parentLI = $btn.closest('li'),
 					$ul = $("<ul \/>"),
-					collection = $parentLI.data('uuid');
+					collection = $parentLI.data('uuid'),
+					$slimLeftContainer = $btn.closest("[data-app-role='slimLeftContainer']");
 
 				$parentLI.css('position','relative');
 
-				$("<li \/>").text('Add new graph').on('click',function(){
+				$("<li \/>").append($("<a \/>",{'href':'#'}).text('Add new graph').on('click',function(event){
+					event.preventDefault();
+					event.stopPropagation(); //keeps this click from firing the click event on the li
 					app.ext.admin_reports.a.showKPIAddUpdateInModal('add',{'collection' : $parentLI.data('uuid')});
-					}).appendTo($ul);
+					$ul.hide()
+					return false;
+					})).appendTo($ul);
 
-				$("<li \/>").text('Edit Collection').on('click',function(){
+				$("<li \/>").append($("<a \/>",{'href':'#'}).text('Edit Collection').on('click',function(event){
+					event.preventDefault();
+					event.stopPropagation();
 					app.ext.admin_reports.a.showKPICollectionEditor($btn.closest("[data-app-role='slimLeftContainer']").find("[data-app-role='slimLeftContent']").first(), collection);
-					}).appendTo($ul);
+					$ul.hide()
+					return false;
+					})).appendTo($ul);
 
-				$("<li \/>").text('Rename collection').on('click',function(){
-					app.ext.admin_reports.a.showKPICollectionTitleChange(collection);
-					}).appendTo($ul);
+				$("<li \/>").append($("<a \/>",{'href':'#'}).text('Rename collection').on('click',function(event){
+					event.preventDefault();
+					event.stopPropagation();
+					app.ext.admin_reports.a.showKPICollectionTitleChange(collection,$slimLeftContainer);
+					$ul.hide()
+					return false;
+					})).appendTo($ul);
 
-				$("<li \/>").text('Delete collection').on('click',function(){
-					app.ext.admin_reports.a.showKPICollectionRemove(collection,$btn.closest('ul'));
-					}).appendTo($ul);
+				$("<li \/>").append($("<a \/>",{'href':'#'}).text('Delete collection').on('click',function(event){
+					event.preventDefault();
+					event.stopPropagation();
+					app.ext.admin_reports.a.showKPICollectionRemove(collection,$slimLeftContainer);
+					$ul.hide()
+					return false;
+					})).appendTo($ul);
 
 				$ul.insertAfter($btn);
 				$ul.menu().css({'position':'absolute','width':'200','z-index':'100'}).hide();

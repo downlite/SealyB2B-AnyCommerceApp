@@ -66,8 +66,8 @@ if(typeof typeof jQuery.browser == 'undefined')	{
 			var self = this,
 			o = self.options, //shortcut
 			$t = self.element; //this is the targeted element (ex: $('#bob').anymessage() then $t is bob)
-
-			o.messageElementID = 'msg_'+app.u.guidGenerator(); //a unique ID applied to the container of the message. used for animating.
+//a unique ID applied to the container of the message. used for animating and for checking if element is still on the DOM during close.
+			o.messageElementID = 'msg_'+app.u.guidGenerator();
 			
 //the content is in an array because otherwise adding multiple messages to one selector causes them to share properties, which is not a desired behavior.
 			if(typeof self.outputArr == 'object')	{}
@@ -82,7 +82,11 @@ if(typeof typeof jQuery.browser == 'undefined')	{
 			$t.prepend(self.outputArr[i]); //
 
 			if(o.persistant)	{} //message is persistant. do nothing.
-			else	{this.ts = setTimeout(function(){$t.anymessage('close');},10000);} //auto close message after a short duration.
+//message should auto-close. However, it is possible for a message to already have been removed by an 'empty', so verify it is still on the DOM or an error could result.
+// ** 201318 -> bug fix. jquery error if close method run on element that wasn't already instantiated as anymessage, such as an element already removed from DOM.
+			else	{this.ts = setTimeout(function(){
+				if($('#'+o.messageElementID).length)	{$t.anymessage('close');} 
+				},10000);} //auto close message after a short duration.
 			
 			}, //_init
 
@@ -632,33 +636,39 @@ run $('#someTable').anytable() to have the headers become clickable for sorting 
 		_init : function(){
 			this._styleHeader();
 			var $table = this.element;
+			
+	
 			$('th',$table).each(function(){
 
 var th = $(this),
 thIndex = th.index(),
 inverse = false;
-
-th.click(function(){
-	$table.find('td').filter(function(){
-		return $(this).index() === thIndex;
-		}).sortElements(function(a, b){
-			var r;
-			var numA = Number($.text([a]).replace(/[^\w\s]/gi, ''));
-			var numB = Number($.text([b]).replace(/[^\w\s]/gi, ''));
-			if(numA && numB)	{
-//				console.log('is a number');
-				r = numA > numB ? inverse ? -1 : 1 : inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
-				}
-			else	{
-				r = $.text([a]).toLowerCase() > $.text([b]).toLowerCase() ? inverse ? -1 : 1 : inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
-				}
-			return r
-			},function(){
-		// parentNode is the element we want to move
-		return this.parentNode; 
+// * 201318 -> support for data-anytable-nosort='true' which will disable sorting on the th.
+if(th.data('anytable-nosort'))	{} //sorting is disabled on this column. good for columns that only have buttons.
+else	{
+	th.on('click.anytablesort',function(){
+		$table.find('td').filter(function(){
+			return $(this).index() === thIndex;
+			}).sortElements(function(a, b){
+				var r;
+				var numA = Number($.text([a]).replace(/[^\w\s]/gi, ''));
+				var numB = Number($.text([b]).replace(/[^\w\s]/gi, ''));
+				if(numA && numB)	{
+	//				console.log('is a number');
+					r = numA > numB ? inverse ? -1 : 1 : inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
+					}
+				else	{
+					r = $.text([a]).toLowerCase() > $.text([b]).toLowerCase() ? inverse ? -1 : 1 : inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
+					}
+				return r
+				},function(){
+			// parentNode is the element we want to move
+			return this.parentNode; 
+			});
+		inverse = !inverse;
 		});
-	inverse = !inverse;
-});
+	}
+
 				}); //ends 'each'
 			}, //_init
 
@@ -684,16 +694,25 @@ th.click(function(){
 
 		_styleHeader : function()	{
 			var $table = this.element;
-			$('th',$table)
-//				.attr("title",'click here to sort this column')
-				.css({'borderLeft':'none','borderTop':'none','borderBottom':'none'})
-				.addClass('ui-state-default').css('cursor','pointer')
-				.click(function(){
-					$('th',$table).removeClass('ui-state-active');
-					$(this).addClass('ui-state-active')
-					})
-				.mouseover(function(){$(this).addClass('ui-state-hover')})
-				.mouseout(function(){$(this).removeClass('ui-state-hover')}); // 
+			$('th',$table).each(function(){
+				var $th = $(this);
+
+// * 201318 -> support for data-anytable-nosort='true' which will disable sorting on the th.
+				$th.css({'borderLeft':'none','borderTop':'none','borderBottom':'none'})
+				.addClass('ui-state-default')
+				if($th.data('anytable-nosort'))	{} //sorting is disabled on this column. style accordingly.
+				else	{
+					$th
+					.css('cursor','pointer')
+					.on('click.anytablestyle',function(){
+						$('th',$table).removeClass('ui-state-active');
+						$th.addClass('ui-state-active')
+						})
+					.mouseover(function(){$th.addClass('ui-state-hover')})
+					.mouseout(function(){$th.removeClass('ui-state-hover')}); // 
+					}
+				})
+
 			},
 
 		destroy : function(){
@@ -725,36 +744,43 @@ and it'll turn the cb into an ios-esque on/off switch.
 (function($) {
 	$.widget("ui.anycb",{
 		options : {
+			text : {
+				on : 'on',
+				off : 'off'
+				}
 			},
 		_init : function(){
 			var self = this,
 			$label;
 			
 			if(self.element.is('label'))	{$label = self.element}
-			else if(self.element.is(':checkbox'))	{$label = self.element.closest('label')}
+			else if(self.element.is(':checkbox'))	{$label = self.element.closest('label');}
 			else	{}
 			
 		
 			if($label.data('anycb') === true)	{app.u.dump(" -> already anycb-ified");} //do nothing, already anycb-ified
 			else if($.browser && $.browser.msie && Number($.browser.version.substring(0, 1)) <= 8)	{} //ie 8 not supported. didn't link binding.
 			else if($label.length)	{
+//				app.u.dump(" -> anycbifying. is label: "+$label.is('label'));
 				var $input = $("input",$label).first(),
-				$container = $("<span \/>").addClass('ui-widget ui-widget-content ui-corner-all ui-widget-header').css({'position':'relative','display':'block','width':'55px','margin-right':'6px','height':'20px','z-index':1,'padding':0,'float':'left','cursor':'pointer','float':'left'}),
-				$span = $("<span \/>").css({'padding':'0px','width':'30px','text-align':'center','height':'20px','line-height':'20px','position':'absolute','top':-1,'z-index':2,'font-size':'.75em','cursor':'pointer'});
+				$container = $("<span \/>").addClass('ui-widget ui-widget-content ui-corner-all ui-widget-header').css({'position':'relative','display':'block','width':'55px','margin-right':'6px','height':'20px','z-index':1,'padding':0,'float':'left','float':'left'}),
+				$span = $("<span \/>").css({'padding':'0px','width':'30px','text-align':'center','height':'20px','line-height':'20px','position':'absolute','top':-1,'z-index':2,'font-size':'.75em'});
 	
-				$label.data('anycb',true); // allows for plugin to check if it's already been run on this element.
+				$label.data('anycb',true).css({'min-height':'20px','cursor':'pointer'}); // allows for plugin to check if it's already been run on this element.
 				self.span = $span; //global (within instance) for easy reference.
+//				self.input = $input;//global (within instance) for easy reference.
 
 				$label.contents().filter(function() {
 					return this.nodeType === 3 && $.trim(this.nodeValue) !== '';
 					}).wrap("<span class='label anycb-label' style='display:block; height:24px; line-height:24px; float:left;'></span>"); //wrap around just the text. text().wrap() didn't work. don't use inline-block or ie8 doesn't work.
+
 				$input.hide();
 				$container.append($span);
 				$label.prepend($container);
 				$input.is(':checked') ? self._turnOn() : self._turnOff(); //set default
-				
+//				app.u.dump('got here');
 				$input.on('click.anycb',function(){
-					app.u.dump(" -> anycb is toggled");
+//					app.u.dump(" -> anycb is toggled. checked: "+$input.is(':checked'));
 					if($input.is(':checked')){self._turnOn();}
 					else	{self._turnOff();}
 					});
@@ -765,14 +791,18 @@ and it'll turn the cb into an ios-esque on/off switch.
 
 			}, //_init
 		_turnOn : function()	{
-			this.span.text('on');
+//			app.u.dump(' -> anycb set to on');
+			this.span.text(this.options.text.on);
 			this.span.addClass('ui-state-highlight ui-corner-left').removeClass('ui-state-default ui-corner-right');
 			this.span.animate({'left':-1},'fast');
+//			this.input.prop('checked',true);
 			},
 		_turnOff : function()	{
-			this.span.text('off');
+//			app.u.dump(' -> anycb set to off');
+			this.span.text(this.options.text.off);
 			this.span.addClass('ui-state-default ui-corner-right').removeClass('ui-state-highlight ui-corner-left');
 			this.span.animate({'left': 24},'fast');
+//			this.input.prop('checked',false);
 			},
 		_setOption : function(option,value)	{
 			$.Widget.prototype._setOption.apply( this, arguments ); //method already exists in widget factory, so call original.
@@ -1106,3 +1136,18 @@ jQuery.fn.toCSV = function() {
 
 
 
+$.fn.intervaledEmpty = function(interval, remove){
+	interval = interval || 1000;
+	if($(this).children().length > 0){
+		var i = 0;
+		$(this).children().each(function(){
+			$(this).detach();
+			setTimeout(function(){$(this).intervaledEmpty(interval, true);},interval*i);
+			i++;
+			});
+		}
+	if(remove){
+		$(this).remove();
+		}
+	return this;
+	}
