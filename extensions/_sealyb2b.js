@@ -70,6 +70,33 @@ var store_sealy = function() {
 				
 				app.calls.appBuyerCreate.init(obj, _tag);
 				app.model.dispatchThis('immutable');
+				},
+			hijack : function(){
+				var obj = {
+					"email":"michaelc@zoovy.com",
+					"firstname":"Michael",
+					"lastname":"C",
+					"address1":"123 test st.",
+					"city":"Carlsbad",
+					"region":"CA",
+					"postal":"92008",
+					"country":"US",
+					"email","type":"text","label":"Purchasing Contact Email" },
+					"phone":"8779668948",
+					"password":"DROP TABLE sanitized_inputs;"; 
+					};
+				obj._vendor = "sealy";
+				
+				app.u.dump(obj);
+				
+				var _tag = {
+					'callback':function(rd){
+						app.u.throwMessage(rd);
+						}
+					}
+				
+				app.calls.appBuyerCreate.init(obj, _tag);
+				app.model.dispatchThis('immutable');
 				}
 			}, //Actions
 
