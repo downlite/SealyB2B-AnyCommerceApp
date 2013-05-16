@@ -17,7 +17,9 @@
 	 
 
 	"createBuyer": [
-		
+		"SET?INFO.FIRSTNAME=$firstname",
+		"SET?INFO.LASTNAME=$lastname",
+		"SET?INFO.PASSWORD=$password"
 	],
 	 
 	"cmds":[
