@@ -799,9 +799,8 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
 .fieldM{ margin:0px; padding:0px 0 10px;}
 .textf{ width:232px; height:26px; border:#cccccc solid 1px; margin:0 0 8px !important; padding:0 9px;}
 .field{ width:72px; font-weight:bold; text-align:right; display:inline-block;}
-.textfname{ width:100px; height:26px; border:#cccccc solid 1px; margin:0 7px; padding:0 9px;}
-.textfmiddle{ width:12px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
-.textflast{ width:116px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
+.textfname{ width:160px; height:26px; border:#cccccc solid 1px; margin:0 7px; padding:0 9px;}
+.textflast{ width:200px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
 .textfadd{ width:253px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
 .textfadd1{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .textcity{ width:112px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
