@@ -1525,9 +1525,8 @@ For general product questions and order inquiries you can also email us at <a hr
 			If you would like to request an account during our downtime please contact <a target="_blank" href="mailto:shunter@downlite.com">shunter@downlite.com</a>
 		</p>
 		-->
-			<form action='#' class='inputsAsBreaks' onSubmit="app.ext.myRIA.u.handleAppBuyerCreate($(this)); return true;">
+			<form action='#' class='inputsAsBreaks' onSubmit="app.ext.store_sealy.a.submitCreateAccountForm($(this)); return false;">
 				<h1>Don't have an account?</h1>
-				<input type='hidden' name='form' value='Business' />
 				
 				<div class="fieldM">
 					<span class="field">First Name</span>
@@ -1571,15 +1570,17 @@ For general product questions and order inquiries you can also email us at <a hr
 				
 				<div class="fieldM">
 					<span class="field">Password</span>
-					<input name='pass' type='password' size='30' class='textfpass' placeholder='7-18 Characters' required='required' />
+					<input name='password' type='password' size='30' class='textfpass' placeholder='7-18 Characters' required='required' />
 					
 					<b>Confirm Password</b>
-					<input name='confirm_email' type='password' size='12' placeholder='Must be a match' class='textfphone' required='required'/>
+					<input name='confirm_password' type='password' size='12' placeholder='Must be a match' class='textfphone' required='required'/>
 				</div>
 			
 
-				<button class="createButton"><img src="images/create_account.gif" width="300" height="54"></button>
-
+				<input type="submit" class="createButton" value=""/>
+				<!--
+				<img src="images/create_account.gif" width="300" height="54"></button>
+				-->
 			</form>
 		</div>
 	</div>

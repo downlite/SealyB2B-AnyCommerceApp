@@ -812,7 +812,14 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
 .textfpass{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .textfcpass{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .stayup{ padding:0 0 0 70px;}
-.createButton{ margin:44px 0 40px 157px; border:0px; background:non}
+#createaccountArticle input.createButton{
+	margin:44px 0 40px 157px;
+	display: block;
+	border:0px; 
+	width:300px;
+	height:54px;
+	background:url(images/create_account.gif) no-repeat;
+}
 .marginBottom {
     margin-bottom: 12px;
     padding: 0;
