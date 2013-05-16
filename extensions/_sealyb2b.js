@@ -69,6 +69,7 @@ var store_sealy = function() {
 					}
 				
 				app.calls.appBuyerCreate.init(obj, _tag);
+				app.model.dispatchThis('immutable');
 				}
 			}, //Actions
 

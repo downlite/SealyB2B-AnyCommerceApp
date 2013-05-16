@@ -13,7 +13,7 @@
 		{ "required":1,"id":"country","type":"text","label":"Purchasing Contact Country" },
 		{ "required":1,"id":"email","type":"text","label":"Purchasing Contact Email" },
 		{ "required":1,"id":"phone","type":"text","label":"Purchasing Contact Phone" },
-		{ "required":1,"id":"password","type":"text","label":"Password" },
+		{ "required":1,"id":"password","type":"text","label":"Password" }
 	],
 	 
 
