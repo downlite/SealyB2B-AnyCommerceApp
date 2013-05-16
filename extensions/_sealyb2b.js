@@ -58,6 +58,8 @@ var store_sealy = function() {
 			submitCreateAccountForm : function($form){
 				var obj = $form.serializeJSON();
 				
+				obj._vendor = "sealy";
+				
 				app.u.dump(obj);
 				
 				var _tag = {
