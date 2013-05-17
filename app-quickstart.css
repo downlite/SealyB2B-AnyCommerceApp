@@ -806,12 +806,13 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
 .textcity{ width:112px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
 .textfstate{ width:62px; height:26px; border:#cccccc solid 1px;margin:0 14px 0 7px; padding:3px;}
 .textfzip{ width:148px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
-.textfcountry{ width:245px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:3px;}
+select.textfcountry{ width:245px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:3px;}
 .textfmail{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 26px 0 7px !important; padding:0 9px;}
 .textfphone{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px; padding:0 9px;}
 .textfpass{ width:142px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .textfcpass{ width:162px; height:26px; border:#cccccc solid 1px;margin:0 7px;padding:0 9px;}
 .stayup{ padding:0 0 0 70px;}
+.createSelect{border: 1px solid #CCCCCC;height: 26px; margin: 0 7px; padding:3px; width:160px;}
 #createaccountArticle input.createButton{
 	margin:44px 0 40px 157px;
 	display: block;
