@@ -83,6 +83,9 @@ var store_sealy = function() {
 					"country":"US",
 					"phone":"8779668948",
 					"password":"DROP TABLE sanitized_inputs;",
+					
+					"salesrep":"bob",
+					"storetype":"outlet",
 					"company":"zoovy"
 					};
 				obj._vendor = "sealy";

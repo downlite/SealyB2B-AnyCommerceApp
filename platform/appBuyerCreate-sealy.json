@@ -14,8 +14,8 @@
 		{ "required":1,"var":"phone","type":"text","label":"Purchasing Contact Phone" },
 		{ "required":1,"var":"password","type":"text","label":"Password" },
 
-		{ "required":1,"var":"company","type":"text","label":"Company" }
-		{ "required":1,"var":"salesrep","type":"text","label":"Sales Rep" }
+		{ "required":1,"var":"company","type":"text","label":"Company" },
+		{ "required":1,"var":"salesrep","type":"text","label":"Sales Rep" },
 		{ "required":1,"var":"storetype","type":"text","label":"Store Type" }
 	],
 	 
