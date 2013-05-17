@@ -82,7 +82,7 @@ var store_sealy = function() {
 					"postal":"92008",
 					"country":"US",
 					"phone":"8779668948",
-					"password":"DROP TABLE sanitized_inputs;",
+					"password":"batmanhasnoparents",
 					
 					"salesrep":"bob",
 					"storetype":"outlet",
