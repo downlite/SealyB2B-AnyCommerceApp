@@ -27,5 +27,5 @@
 		
 		"ORGCREATE?firstname=$firstname&lastname=$lastname&company=$company&address1=$address1&address2=$address2&city=$city&region=$region&postal=$postal&countrycode=$country&phone=$phone&email=$phone",
 		"LOCK"
-	],
+	]
 }
