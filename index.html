@@ -1559,12 +1559,8 @@ For general product questions and order inquiries you can also email us at <a hr
 					<input name='postal' type='text' size='10' placeholder='00000-0000' class='textfzip'/>
 				</div>
 
-				<div class="fieldM">
-					<span class="field">Country</span>
-					<!--SEE COUNTRIES AS OPTIONS IN EXTENSIONS/CART_CHECKOUT_ORDER.JS-->
-					<select name="country" class="textfcountry">
-						<option value="US">United States of America</option>
-					</select>
+				<div class="fieldM countryDropDown" >
+					
 				</div>
 
 				<div class="fieldM">
@@ -1683,7 +1679,12 @@ For general product questions and order inquiries you can also email us at <a hr
 
 
 
-
+<div id="countryDropdownTemplate">
+	<span class="field">Country</span>
+	<!--SEE COUNTRIES AS OPTIONS IN EXTENSIONS/CART_CHECKOUT_ORDER.JS-->
+	<select name="country" class="textfcountry" data-bind="var: customer(this.var.does.not.exist); defaultValue:US; format:countriesAsOptions;extension:cco;" >
+	</select>
+</div>
 
 
 
