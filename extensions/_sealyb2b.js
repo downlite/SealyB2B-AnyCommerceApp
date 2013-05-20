@@ -37,7 +37,6 @@ var store_sealy = function() {
 				app.rq.push(['templateFunction','customerTemplate','onCompletes',function(P) {
 					var $context = $(app.u.jqSelector('#'+P.parentID));
 					app.ext.cco.calls.appCheckoutDestinations.init({'callback':function(rd){
-						alert('hi');
 						$('.countryDropDown', $context).anycontent({'templateID':'countryDropdownTemplate','datapointer':rd.datapointer})
 						}});
 					app.model.dispatchThis('immutable');
@@ -79,6 +78,7 @@ var store_sealy = function() {
 				app.calls.appBuyerCreate.init(obj, _tag);
 				app.model.dispatchThis('immutable');
 				},
+			/*
 			hijack : function(){
 				var obj = {
 					"email":"michaelc@zoovy.com",
@@ -109,6 +109,7 @@ var store_sealy = function() {
 				app.calls.appBuyerCreate.init(obj, _tag);
 				app.model.dispatchThis('immutable');
 				}
+			*/
 			}, //Actions
 
 ////////////////////////////////////   RENDERFORMATS    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

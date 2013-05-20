@@ -1518,8 +1518,8 @@ For general product questions and order inquiries you can also email us at <a hr
 			<p align="center"><a href="#recoverpassword">Forgot your username or password?</a></p>
 		</div>
 		<div class="Account" >
-		<h1 onClick="app.ext.store_sealy.a.hijack();">HIJACK</h1>
 		<!--
+		<h1 onClick="app.ext.store_sealy.a.hijack();">HIJACK</h1>
 		<h1>Under Construction</h1>
 		<p>
 			We are currently upgrading our customer system so that we can offer a wholesale purchasing experience as easy as a good night's sleep on a Sealy Mattress!
@@ -1581,13 +1581,15 @@ For general product questions and order inquiries you can also email us at <a hr
 				
 				<div class="fieldM">
 					<span class="field">Sales Rep</span>
-					<select class="createSelect" name="salesrep" required="required">
-						<option></option>
-					</select>
+					<input class="createSelect" name="salesrep" placeholder="Sales Rep" required="required">
 					
 					<span class="field">Store Type</span>
 					<select class="createSelect" name="salesrep" required="required">
-						<option></option>
+						<option value="Furniture Store">Furniture Store</option>
+						<option value="Mattress Store">Mattress Store</option>
+						<option value="Online Only Store">Online Only Store</option>
+						<option value="Hospitality Use">Hospitality Use</option>
+						<option value="Gift/Incentive Use">Gift/Incentive Use</option>
 					</select>
 				</div>
 
