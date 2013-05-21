@@ -36,10 +36,13 @@ var store_sealy = function() {
 				var r = false; //return false if extension won't load for some reason (account config, dependencies, etc).
 				app.rq.push(['templateFunction','customerTemplate','onCompletes',function(P) {
 					var $context = $(app.u.jqSelector('#'+P.parentID));
-					app.ext.cco.calls.appCheckoutDestinations.init({'callback':function(rd){
-						$('.countryDropDown', $context).anycontent({'templateID':'countryDropdownTemplate','datapointer':rd.datapointer})
-						}});
-					app.model.dispatchThis('immutable');
+					var $countryinput = $('.countryDropDown', $context);
+					if(!$countryinput.hasClass('rendered')){
+						app.ext.cco.calls.appCheckoutDestinations.init({'callback':function(rd){
+							$countryinput.addClass('rendered').anycontent({'templateID':'countryDropdownTemplate','datapointer':rd.datapointer})
+							}});
+						app.model.dispatchThis('immutable');
+						}
 					
 					}]);
 				//if there is any functionality required for this extension to load, put it here. such as a check for async google, the FB object, etc. return false if dependencies are not present. don't check for other extensions.
@@ -65,13 +68,24 @@ var store_sealy = function() {
 			submitCreateAccountForm : function($form){
 				var obj = $form.serializeJSON();
 				
+				if(obj.password !== obj.confirm_password){
+					app.u.throwMessage('Sorry your passwords do not match!');
+					return;
+					}
+				
 				obj._vendor = "sealy";
 				
 				app.u.dump(obj);
 				
 				var _tag = {
 					'callback':function(rd){
-						app.u.throwMessage(rd);
+						if(app.model.responseHasErrors(rd)){
+							app.u.throwMessage(rd);
+							}
+						else {
+							showContent('customer',{'show':'accountCreateConfirmation'});
+							app.u.throwMessage(app.u.successMsgObject("Your account has been created and is pending approval!"));
+							}
 						}
 					}
 				
