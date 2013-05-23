@@ -25,10 +25,10 @@
 	"createBuyer": [
 		"SET?firstname=$firstname&lastname=$lastname",
 		"PASSWORDRESET?password=$password",
-		"LOCK"
+		"LOCK",
 		"ADDRCREATE?SHORTCUT=DEFAULT&TYPE=BILL&firstname=$firstname&lastname=$lastname&phone=$phone&address1=$address1&address2=$address2&email=$email&city=$city&region=$region&postal=$postal&countrycode=$country",
 		"ADDRCREATE?SHORTCUT=DEFAULT&TYPE=SHIP&firstname=$firstname&lastname=$lastname&phone=$phone&address1=$address1&address2=$address2&email=$email&city=$city&region=$region&postal=$postal&countrycode=$country",
 		"ORGCREATE?firstname=$firstname&lastname=$lastname&company=$company&address1=$address1&address2=$address2&city=$city&region=$region&postal=$postal&countrycode=$country&phone=$phone&email=$phone&ACCOUNT_TYPE=$storetype&ACCOUNT_MANAGER=$salesrep",
-		"ADDTODO?title=New%20SealyBeddingWholesale%20Account%20Request%20To%20Review&note=$todonote",
+		"ADDTODO?title=New%20SealyBeddingWholesale%20Account%20Request%20To%20Review&note=$todonote"
 	]
 }
