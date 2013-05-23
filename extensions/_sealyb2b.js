@@ -75,7 +75,16 @@ var store_sealy = function() {
 				
 				obj._vendor = "sealy";
 				
-				app.u.dump(obj);
+				
+				obj.todonote  = obj.firstname+" "+obj.lastname+"\n";
+				obj.todonote += obj.address1+"\n";
+				if(obj.address2 && obj.address2 !== ""){
+					obj.todonote += obj.address2+"\n";
+					}
+				obj.todonote += obj.city+","+obj.region+" "+obj.postal+"\n";
+				obj.todonote += "Sales Rep: "+obj.salesrep+"\n";
+				obj.todonote += "Store Type: "+obj.storetype+"\n";
+				obj.todonote += "Date Created: "+(new Date()).toDateString();
 				
 				var _tag = {
 					'callback':function(rd){
@@ -89,6 +98,7 @@ var store_sealy = function() {
 						}
 					}
 				
+				//app.u.dump(obj);
 				app.calls.appBuyerCreate.init(obj, _tag);
 				app.model.dispatchThis('immutable');
 				},

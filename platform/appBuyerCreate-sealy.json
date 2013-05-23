@@ -16,16 +16,19 @@
 
 		{ "required":1,"var":"company","type":"text","label":"Company" },
 		{ "required":1,"var":"salesrep","type":"text","label":"Sales Rep" },
-		{ "required":1,"var":"storetype","type":"text","label":"Store Type" }
+		{ "required":1,"var":"storetype","type":"text","label":"Store Type" },
+		
+		{ "required":1,"var":"todonote","type":"text","label":"Note for Admin Todo Task" }
 	],
 	 
 
 	"createBuyer": [
 		"SET?firstname=$firstname&lastname=$lastname",
 		"PASSWORDRESET?password=$password",
+		"LOCK"
 		"ADDRCREATE?SHORTCUT=DEFAULT&TYPE=BILL&firstname=$firstname&lastname=$lastname&phone=$phone&address1=$address1&address2=$address2&email=$email&city=$city&region=$region&postal=$postal&countrycode=$country",
 		"ADDRCREATE?SHORTCUT=DEFAULT&TYPE=SHIP&firstname=$firstname&lastname=$lastname&phone=$phone&address1=$address1&address2=$address2&email=$email&city=$city&region=$region&postal=$postal&countrycode=$country",
 		"ORGCREATE?firstname=$firstname&lastname=$lastname&company=$company&address1=$address1&address2=$address2&city=$city&region=$region&postal=$postal&countrycode=$country&phone=$phone&email=$phone&ACCOUNT_TYPE=$storetype&ACCOUNT_MANAGER=$salesrep",
-		"LOCK"
+		"ADDTODO?title=New%20SealyBeddingWholesale%20Account%20Request%20To%20Review&note=$todonote",
 	]
 }
