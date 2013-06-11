@@ -706,7 +706,7 @@ container ul should have lineItemProdlist class on it instead of productList
 		
 		<span data-bind='var: reviews(reviews.average); format:addClass; className:review_;' class='reviewSprite'></span>
 
-		<form data-bind='var: product(pid); format:atcForm; extension:store_product;' class='prodListAddToCartForm marginBottom clearfix' id='accessoriesAddToCartFrm' action='#' onSubmit="app.ext.myRIA.u.handleAddToCart(this.id,{'action':'modal'}); return false;">
+		<form data-bind='var: product(pid); format:atcForm; extension:store_product;' class='prodListAddToCartForm marginBottom clearfix' id='accessoriesAddToCartFrm' action='#' onSubmit="app.ext.myRIA.u.addItemToCart(this.id,{'action':'modal'}); return false;">
 		
 			<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone'></fieldset>
 			
@@ -868,7 +868,7 @@ this will likely become more flexible in the future. ###
 		</div>	</td>
 
 	<td class='prodSummaryContainer marginBottom no_underline'>
-    <form data-bind='var: product(pid); format:atcForm; extension:store_product;' class='prodViewerAddToCartForm clearfix' action='#' onSubmit="app.ext.myRIA.u.handleAddToCart($(this),{'action':'modal'}); return false;">
+    <form data-bind='var: product(pid); format:atcForm; extension:store_product;' class='prodViewerAddToCartForm clearfix' action='#' onSubmit="app.ext.myRIA.u.addItemToCart($(this),{'action':'modal'}); return false;">
     <div class="LeftS">
 		<h1 data-bind='var: product(zoovy:prod_name); format:text;'></h1>
 		<h5 class='stid' data-bind='var: product(pid); format:text; pretext: Item #: ;'></h5>
