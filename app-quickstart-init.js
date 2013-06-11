@@ -15,9 +15,8 @@ app.rq.push(['extension',0,'store_cart','extensions/store_cart.js']);
 app.rq.push(['extension',0,'store_crm','extensions/store_crm.js']);
 app.rq.push(['extension',0,'myRIA','app-quickstart.js','startMyProgram']);
 
-app.rq.push(['extension',0,'store_sealy','extensions/_sealyb2b.js']);
-
 //app.rq.push(['extension',1,'google_analytics','extensions/partner_google_analytics.js','startExtension']);
+app.rq.push(['extension',1,'tools_ABtesting','extensions/tools_ABtesting.js']);
 //app.rq.push(['extension',0,'partner_addthis','extensions/partner_addthis.js','startExtension']);
 //app.rq.push(['extension',1,'resellerratings_survey','extensions/partner_buysafe_guarantee.js','startExtension']); /// !!! needs testing.
 //app.rq.push(['extension',1,'buysafe_guarantee','extensions/partner_buysafe_guarantee.js','startExtension']);
@@ -145,21 +144,8 @@ app.u.appInitComplete = function(P)	{
 	app.u.dump("Executing myAppIsLoaded code...");
 	}
 
-app.rq.push(['script',0,app.vars.baseURL+'cycle-2.9998.js']);
 
-//add slideshow to homepage.
-/*app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
-																			  
-		var $target=$('#wideSlideshow');
-		$target.cycle({prev: '#prev',next: '#next',fx:'fade',speed:'slow',timeout:5000,pager:'#slideshowNav',text: true,pagerAnchorBuilder:function(index,el){return '';},slideExpr:'li'});	
-		//$target.cycle({fx:'swing',speed:3,timeout:5000,pager:'#slideshowNav',pagerAnchorBuilder:function(index,el){return' ';},slideExpr:'li'});
-		}]);
-*/
-app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
-		var $target=$('#wideSlideshow');
-		$target.cycle({fx:'fade',speed:'slow',timeout:5000});	
-		//$target.cycle({fx:'swing',speed:3,timeout:5000,pager:'#slideshowNav',pagerAnchorBuilder:function(index,el){return' ';},slideExpr:'li'});
-		}]);
+
 
 //don't execute script till both jquery AND the dom are ready.
 $(document).ready(function(){

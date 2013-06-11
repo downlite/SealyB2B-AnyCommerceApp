@@ -47,8 +47,8 @@ all css includes need to be after the js that changes the base url.
 css files should be included before any .js file to ensure they are downloaded in parallel
 -->
 <link rel="stylesheet" type="text/css" href="app-quickstart.css" />
-<link rel="stylesheet" type="text/css" href="_sealy_b2b_styles.css" />
 <link rel="stylesheet" type="text/css" href="qs_style.css"/>
+<link rel="stylesheet" type="text/css" href="_sealy_b2b_styles.css" />
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/ui-lightness/jquery-ui.css" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -875,9 +875,11 @@ this will likely become more flexible in the future. ###
 		<div id='prodDescTopContainer'>
 			<span id="prodDescTop" data-bind='var: product(zoovy:prod_desc); format:wiki; wikiFormats:myRIA;' class='clearfix'></span>
 		</div>
-		<div class="loginShow">
-			<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone' style='float:left;'></fieldset>
-			<fieldset data-bind='var: product(pid); format:atcQuantityInput; extension:store_product;' class='borderNone prodQty' style='float:left;'></fieldset>
+		<div class="clear"></div>
+		<div class="loginShow blueBorder">
+			<fieldset data-bind='var: product(pid); format:atcVariations; extension:store_product;' class='borderNone'></fieldset>
+			<fieldset data-bind='useParentData:true; format:atcQuantityInput; extension:store_product; pretext:Quantity: ; defaultValue:1;' class='borderNone'></fieldset>
+			<div class="clear"></div>
 		</div>	
 		<h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
     </div>

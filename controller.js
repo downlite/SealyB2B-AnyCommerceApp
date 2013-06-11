@@ -518,7 +518,7 @@ see jquery/api webdoc for required/optional param
 				obj.authid = Crypto.MD5(obj.password+obj.ts);
 				obj._tag = _tag || {};
 				obj.device_notes = "";
-				if(obj.persitentAuth)	{obj._tag.datapointer = "authAdminLogin"} //this is only saved locally IF 'keep me logged in' is true.
+				if(obj.persistentAuth)	{obj._tag.datapointer = "authAdminLogin"} //this is only saved locally IF 'keep me logged in' is true.
 				delete obj.password;
 				app.model.addDispatchToQ(obj,'immutable');
 				}
@@ -1218,7 +1218,7 @@ css : type, pass, path, id (id should be unique per css - allows for not loading
 						var $ele = $(this),
 						extension = $ele.data('app-event').split("|")[0],
 						action = $ele.data('app-event').split("|")[1];
-						if(action && extension && typeof app.ext[extension].e[action] == 'function'){
+						if(action && extension && app.ext[extension] && app.ext[extension].e && typeof app.ext[extension].e[action] == 'function'){
 //if an action is declared, every button gets the jquery UI button classes assigned. That'll keep it consistent.
 //if the button doesn't need it (there better be a good reason), remove the classes in that button action.
 							app.ext[extension].e[action]($ele,obj);
@@ -1321,10 +1321,10 @@ if an object, could be: {errid,errmsg,errtype}   OR   {msg_X_txt,msg_X_type,msg_
 $target - a jquery object of the target/destination for the message itself. Will check err for parentID, targetID and if not present, check to see if globalMessaging is present AND visible.  If not visible, will open modal.
 returns the id of the message, so that an action can be easily added if needed (onclick or timeout w/ a hide, etc)
 
-persistant - this can be passed in as part of the msg object or a separate param. This was done because repeatedly, error messaging in the control
+persistent - this can be passed in as part of the msg object or a separate param. This was done because repeatedly, error messaging in the control
 and model that needed to be permanently displayed had to be converted into an object just for that and one line of code was turning into three.
 */
-		throwMessage : function(msg,persistant){
+		throwMessage : function(msg,persistent){
 //			app.u.dump("BEGIN app.u.throwMessage");
 //			app.u.dump(" -> msg follows: "); app.u.dump(msg);
 
@@ -1334,16 +1334,10 @@ and model that needed to be permanently displayed had to be converted into an ob
 			r = true; //what is returned. true if a message was output
 
 			if(typeof msg === 'string')	{
-				if($('.appMessaging:visible').length > 0)	{
-					$target = $('.appMessaging');
-					}
-				else	{
-					$target = $('#globalMessaging');
-					}
 				msg = this.youErrObject(msg,"#"); //put message into format anymessage can understand.
-				$target.anymessage(msg);
 				}
-			else if(typeof msg === 'object')	{
+
+			if(typeof msg === 'object')	{
 //				app.u.dump(" -> msg: "); app.u.dump(msg);
 				if(msg.parentID){$target = $(app.u.jqSelector('#',msg.parentID));}
 				else if(msg._rtag && (msg._rtag.parentID || msg._rtag.targetID || msg._rtag.selector))	{
@@ -1353,11 +1347,20 @@ and model that needed to be permanently displayed had to be converted into an ob
 						$target = $(app.u.jqSelector(msg['_rtag'].selector.charAt(0),msg['_rtag'].selector));
 						}
 					}
-				else if($('.appMessaging:visible').length > 0)	{$target = $('.appMessaging');}
+				else if($('.appMessaging:visible').length > 0)	{$target = $('.appMessaging:visible');}
+// ** 201318 moved globalMessaging targeting above mainContentArea, as it is a much preferable alternative.
+//	target of last resort is now the body element
+				else if($('#globalMessaging').length)	{$target = $('#globalMessaging')}
 				else if($('#mainContentArea').length)	{$target = $('#mainContentArea')}
 				else	{
-					//tried and tried and tried. unable to find a good location.
-					$target = $('#globalMessaging');
+					$target = $("<div \/>").attr('title',"Error!");
+					$target.addClass('displayNone').appendTo('body'); 
+					$target.dialog({
+						modal: true,
+						close: function(event, ui)	{
+							$(this).dialog('destroy').remove();
+							}
+						});
 					}
 				$target.anymessage(msg);
 				}
@@ -1706,6 +1709,9 @@ VALIDATION
 					if($input.is(':hidden') && $input.data('validation-rules') && $input.data('validation-rules').indexOf('skipIfHidden') >= 0)	{
 						//allows for a form to allow hidden fields that are only validated if they're displayed. ex: support fieldset for topic based questions.
 						}
+//					else if($input.is("[type='radio']")){
+///						app.u.dump("IS A RADIO BUTTON");
+//						}
 					else if ($input.attr('type') == 'email' && !app.u.isValidEmail($input.val()))	{
 						r = false;
 						$input.addClass('ui-state-error');
@@ -1838,10 +1844,11 @@ tag = boolean. Set to true to output the <img tag. set to false or blank to just
 
 app.u.makeImage({"name":"","w":150,"h":150,"b":"FFFFFF","class":"prodThumb","tag":1});
 */
+
 		makeImage : function(a)	{
 //			app.u.dump(a);
-
-			a.lib = app.u.isSet(a.lib) ? a.lib : app.vars.username;  //determine protocol
+// ** 201318 -> other libs are no longer supported. forced to username
+//			a.lib = app.u.isSet(a.lib) ? a.lib : app.vars.username;  //determine protocol
 			a.m = a.m ? 'M' : '';  //default to minimal mode off. If anything true value (not 0, false etc) is passed in as m, minimal is turned on.
 //			app.u.dump(' -> library: '+a.lib+' and name: '+a.name);
 			if(a.name == null) { a.name = 'i/imagenotfound'; }
@@ -1854,9 +1861,18 @@ app.u.makeImage({"name":"","w":150,"h":150,"b":"FFFFFF","class":"prodThumb","tag
 				a.h = '';
 			if(a.w == null || a.w == 'undefined' || a.w == 0)
 				a.w = '';
-			
-			url = location.protocol === 'https:' ? 'https:' : 'http:';  //determine protocol
-			url += '\/\/static.zoovy.com\/img\/'+a.lib+'\/';
+// *** 201318 -> new url for media library.			
+//			url = location.protocol === 'https:' ? 'https:' : 'http:';  //determine protocol
+//			url += '\/\/static.zoovy.com\/img\/'+a.lib+'\/';
+//In an admin session, the config.js isn't loaded. The secure domain is set as a global var when a domain is selected or can be retrieved from adminDomainList
+			if(app.vars.thisSessionIsAdmin)	{
+				url = 'https:\/\/'+(app.vars.https_domain || app.ext.admin.a.getDataForDomain(app.vars.domain,'https'))+"\/"
+				}
+			else	{
+				url = location.protocol === 'https:' ? zGlobals.appSettings.https_app_url : zGlobals.appSettings.http_app_url;
+				}
+
+			url += "media\/img\/"+app.vars.username+"\/";
 		
 			if((a.w == '') && (a.h == ''))
 				url += '-';
@@ -1877,13 +1893,23 @@ app.u.makeImage({"name":"","w":150,"h":150,"b":"FFFFFF","class":"prodThumb","tag
 				}
 			url += '\/'+a.name;
 		
-//			app.u.dump(url);
+//			app.u.dump(" -> URL: "+url);
 			
 			if(a.tag == true)	{
 				a['class'] = typeof a['class'] == 'string' ? a['class'] : ''; //default class to blank
 				a['id'] = typeof a['id'] == 'string' ? a['id'] : 'img_'+a.name; // default id to filename (more or less)
 				a['alt'] = typeof a['alt'] == 'string' ? a['alt'] : a.name; //default alt text to filename
-				var tag = "<img src='"+url+"' alt='"+a.alt+"' id='"+a['id']+"' class='"+a['class']+"' \/>";
+// ** 201318 if width and height are present, they are added to the tag.  This solves an issue that occurs in loading
+//	pic sliders where the width of the images, and thus the scroll amount, is not calculated correctly the first time
+//	the slider loads
+				var tag = "<img src='"+url+"' alt='"+a.alt+"' id='"+a['id']+"' class='"+a['class']+"'"
+				if(a.w){
+					tag+=" width='"+a.w+"'";
+				}
+				if(a.h){
+					tag+=" height='"+a.h+"'";
+				}
+				tag += " \/>";
 				return tag;
 				}
 			else	{
@@ -2202,7 +2228,7 @@ later, it will handle other third party plugins as well.
 					break;
 
 				case 'PO':
-					tmp += "<li><label for='payment-po'>PO #<\/label><input type='text' size='10' name='payment/PO' id='payment-po' class=' purchaseOrder' onChange='app.calls.cartSet.init({\"payment/PO\":this.value});' value='";
+					tmp += "<li><label for='payment-po'>PO #<\/label><input type='text' size='10' name='payment/PO' id='payment-po' class=' purchaseOrder' value='";
 					if(data['payment/PO'])
 							tmp += data['payment/PO'];
 					tmp += "' /><\/li>";
@@ -2930,7 +2956,7 @@ $tmp.empty().remove();
 							$tag.append($o);
 							}
 						else	{
-							$tag.anymessage({'message':'Issue creating template using '+data.bindData.loadsTemplate,'persistant':true});
+							$tag.anymessage({'message':'Issue creating template using '+data.bindData.loadsTemplate,'persistent':true});
 							}
 						}
 					int += 1;				
@@ -2938,7 +2964,7 @@ $tmp.empty().remove();
 				
 				}
 			else	{
-				$tag.anymessage({'message':'Unable to render list item - no loadsTemplate specified.','persistant':true});
+				$tag.anymessage({'message':'Unable to render list item - no loadsTemplate specified.','persistent':true});
 				}
 			}
 			

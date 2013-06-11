@@ -130,7 +130,7 @@ else if ("onhashchange" in window)	{ // does the browser support the hashchange 
 		}
 	}
 else	{
-	$('#globalMessaging').anyMessage({'message':"You appear to be running a very old browser. Our app will run, but may not be an optimal experience.",'persistant':true});
+	$('#globalMessaging').anyMessage({'message':"You appear to be running a very old browser. Our app will run, but may not be an optimal experience.",'persistent':true});
 	// wow. upgrade your browser. should only get here if older than:
 	// Google Chrome 5, Safari 5, Opera 10.60, Firefox 3.6 and Internet Explorer 8
 	//NOTE: does not trigger in IE9 running IE7 or IE8 standards mode
@@ -465,7 +465,7 @@ else	{
 			onSuccess : function(tagObj)	{
 				app.vars.cid = app.data[tagObj.datapointer].cid; //save to a quickly referencable location.
 				$('#loginSuccessContainer').show(); //contains 'continue' button.
-				$('#loginMessaging').empty().show().append("<div style='font-weight:bold;font-size:15px;'>Thank you, you are now logged in.</div>"); //used for success and fail messaging.
+				$('#loginMessaging').empty().show().append("Thank you, you are now logged in."); //used for success and fail messaging.
 				$('#loginFormContainer').hide(); //contains actual form.
 				$('#recoverPasswordContainer').hide(); //contains password recovery form.
 				app.ext.myRIA.u.handleLoginActions();
@@ -1711,7 +1711,7 @@ if(ps.indexOf('?') >= 1)	{
 					}
 				else if(url.indexOf('app-quickstart.html') > -1)	{
 					var msg = app.u.errMsgObject('Rename this file as index.html to decrease the likelyhood of accidentally saving over it.',"MVC-INIT-MYRIA_1000")
-					msg.persistant = true;
+					msg.persistent = true;
 					app.u.throwMessage(msg);
 					r.pageType = 'homepage';
 					}

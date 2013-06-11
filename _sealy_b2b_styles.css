@@ -44,3 +44,7 @@ strong {
 .catSideBar{
 	margin-left: 20px;
 }
+
+.blueBorder { border: 1px solid #1690C8; padding: 10px;}
+.prodViewerAddToCartForm  fieldset {margin: 5px;}
+.prodViewerAddToCartForm  input[name=qty] {padding: 5px;}

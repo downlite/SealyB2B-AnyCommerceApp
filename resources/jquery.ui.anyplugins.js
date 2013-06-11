@@ -17,6 +17,18 @@ http://net.tutsplus.com/tutorials/javascript-ajax/coding-your-first-jquery-ui-pl
 */
 
 
+// ** 201318 -> replacement for obsolete .browser() function.
+//.browser() is deprecated as of jquery 1.3 and removed in 1.9+ however a lot of plugins use it.
+// Figure out what browser is being used
+if(typeof typeof jQuery.browser == 'undefined')	{
+	jQuery.browser = {
+		version: (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [0,'0'])[1],
+		safari: /webkit/.test( userAgent ),
+		opera: /opera/.test( userAgent ),
+		msie: /msie/.test( userAgent ) && !/opera/.test( userAgent ),
+		mozilla: /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent )
+		}
+	}
 
 
 /*
@@ -38,18 +50,9 @@ For the list of available params, see the 'options' object below.
 
 */
 
-//.browser() is deprecated as of jquery 1.3 and removed in 1.9+ however a lot of plugins use it.
 
-// Figure out what browser is being used
-if(typeof typeof jQuery.browser == 'undefined')	{
-	jQuery.browser = {
-		version: (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [0,'0'])[1],
-		safari: /webkit/.test( userAgent ),
-		opera: /opera/.test( userAgent ),
-		msie: /msie/.test( userAgent ) && !/opera/.test( userAgent ),
-		mozilla: /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent )
-		}
-	}
+
+
 
 (function($) {
 	$.widget("ui.anymessage",{
@@ -58,7 +61,7 @@ if(typeof typeof jQuery.browser == 'undefined')	{
 			gMessage : false, //set to true to throw a generic message. Will include extra error details and a default message before the value of message.
 			containerClass : 'ui-state-highlight', //will be added to container, if set. will add no ui-state class if this is set.
 			iconClass : null, //for icon display. ex: ui-state-info. if set, no attempt to auto-generate icon will be made.
-			persistant : false //if true, message will not close automatically. WILL still generate a close button. iseerr's are persistant by default
+			persistent : false //if true, message will not close automatically. WILL still generate a close button. iseerr's are persistent by default
 			},
 
 		_init : function(){
@@ -81,13 +84,23 @@ if(typeof typeof jQuery.browser == 'undefined')	{
 			self.outputArr[i].append(self._getFormattedMessage(i));
 			$t.prepend(self.outputArr[i]); //
 
-			if(o.persistant)	{} //message is persistant. do nothing.
+			if(o.persistent)	{} //message is persistent. do nothing.
 //message should auto-close. However, it is possible for a message to already have been removed by an 'empty', so verify it is still on the DOM or an error could result.
 // ** 201318 -> bug fix. jquery error if close method run on element that wasn't already instantiated as anymessage, such as an element already removed from DOM.
+// ** ++ auto close bugfix.  The appropriate message is passed to the close function so that when the timeout executes it does not close all the messages in the container
 			else	{this.ts = setTimeout(function(){
-				if($('#'+o.messageElementID).length)	{$t.anymessage('close');} 
+				if($('#'+o.messageElementID).length)	{$t.anymessage('close',$('#'+o.messageElementID));} 
 				},10000);} //auto close message after a short duration.
-			
+// ** 201318 side effects bug- reset options after displaying the message to provide defaults for the next message --mc
+//EXAMPLE: 2 messages are sent to the same container.  Message 1 calls persistent true, message 2 does not set persistent.  
+//Message 2 is set to persistent because the defaults have been overwritten on the container
+			this.options = {
+				message : null, //a string for output. if set, will ignore any _msgs or _err orr @issues in the 'options' object (passed by a request response)
+				gMessage : false, //set to true to throw a generic message. Will include extra error details and a default message before the value of message.
+				containerClass : 'ui-state-highlight', //will be added to container, if set. will add no ui-state class if this is set.
+				iconClass : null, //for icon display. ex: ui-state-info. if set, no attempt to auto-generate icon will be made.
+				persistent : false //if true, message will not close automatically. WILL still generate a close button. iseerr's are persistent by default
+				}
 			}, //_init
 
 		_setOption : function(option,value)	{
@@ -163,7 +176,7 @@ if(typeof typeof jQuery.browser == 'undefined')	{
 					if(msg.errtype == 'iseerr')	{
 //					app.u.dump(" -> msg IS iseerr.");
 
-					o.persistant = true; //iseErr should be persistant
+					o.persistent = true; //iseErr should be persistent
 					this.outputArr[instance].addClass('ui-state-error');
 //					$('button',this.outputArr[instance]).button('disable'); //I don't think we want to disable the ability to close this, we just don't want it to auto-close.
 
@@ -320,6 +333,8 @@ or this: $('#bob').find('.ui-tabs-nav li:nth-child(2)').trigger('click');
 
 		_addEvent2Tabs : function()	{
 			var self = this;
+// * 201318 -> more efficient selector and only 1 loop
+/*
 			this.tabs.find('li').each(function(){
 				$(this).off('click.anytab').on('click.anytab',function(){
 					self.reveal($(this));
@@ -330,6 +345,15 @@ or this: $('#bob').find('.ui-tabs-nav li:nth-child(2)').trigger('click');
 					event.preventDefault();
 					});
 				});
+*/
+			$('a',this.tabs).each(function(){
+				$(this).on('click.anytabs',function(event){
+					self.reveal($(this).parent());
+					event.preventDefault();
+					return false;
+					});
+				});
+
 			},
 
 		_addClasses2Tabs : function()	{
@@ -362,7 +386,8 @@ or this: $('#bob').find('.ui-tabs-nav li:nth-child(2)').trigger('click');
 				else	{$tab = '#'+$tab}
 				$('a',this.element).each(function(){
 					if($(this).attr('href') == $tab)	{
-						$(this).trigger('click'); //will re-execute this function with $tab as object.
+// * 201218 -> more targeted click name to reduce likelyhood of unintentional nuking of event
+						$(this).trigger('click.anytabs'); //will re-execute this function with $tab as object.
 						return false; //breaks out of each loop.
 						}
 					});
@@ -444,7 +469,7 @@ either templateID or (data or datapointer) are required.
 				}
 			else	{
 				$t.anymessage({
-					persistant : true,
+					persistent : true,
 					gMessage : true,
 					message:"Unable to translate. Either: <br \/>Template ["+o.templateID+"] not specified and/or does not exist ["+typeof app.templates[o.templateID]+"].<br \/> OR does not specified ["+typeof o.data+"] OR no datapointer ["+o.datapointer+"] does not exist in app.data "});
 				}
@@ -939,7 +964,7 @@ Additional a settings button can be added which will contain a dropdown of selec
 					break;
 				}
 			},
-
+// !!! update this to use anycontent.
 		_anyContent : function()	{
 			var $content = false, //what is returned. will either be a jquery object of content or false
 			o = this.options;
@@ -1059,7 +1084,7 @@ Additional a settings button can be added which will contain a dropdown of selec
 					r = true;
 					}
 				else	{
-					app.u.dump("anypanel has persist enabled, but either name ["+this.name+"] or extension ["+this.extension+"] not declared. This is a non-critical error, but it means panel will not be persistant.",'warn');
+					app.u.dump("anypanel has persist enabled, but either name ["+this.name+"] or extension ["+this.extension+"] not declared. This is a non-critical error, but it means panel will not be persistent.",'warn');
 					}
 				}
 			return r;
@@ -1097,41 +1122,167 @@ Additional a settings button can be added which will contain a dropdown of selec
 
 
 
-/* will convert a tbody into a csv */
 
-jQuery.fn.toCSV = function() {
-	var data = $(this).first(); //Only one table
-	var csvData = [];
-	var tmpArr = [];
-	var tmpStr = '';
-	data.find("tr").each(function() {
-	if($(this).find("th").length) {
-		$(this).find("th").each(function() {
-		tmpStr = $(this).text().replace(/"/g, '""');
-		tmpArr.push('"' + tmpStr + '"');
-		});
-		csvData.push(tmpArr);
-		}
-	else {
-          tmpArr = [];
-          $(this).find("td").each(function() {
-             $(this).find("td").each(function() {
-                if($(this).text().match(/^-{0,1}\d*\.{0,1}\d+$/)) {
-                    tmpArr.push(parseFloat($(this).text()));
-                } else {
-                    tmpStr = $(this).text().replace(/"/g, '""');
-                    tmpArr.push('"' + tmpStr + '"');
-                }
-            });
-          });
-          csvData.push(tmpArr.join(','));
-      }
-  });
-  var output = csvData.join('\n');
-  var uri = 'data:application/csv;charset=UTF-8,' + encodeURIComponent(output);
-  window.open(uri);
-}
 
+
+
+/*
+// * 201318 -> new plugin: stickytabs
+run this on an element already on the DOM that has content in it, such as a table.  
+stickytabs will create a new container and, in an animated fashion, move the contents of the selector into the new container.
+The new container will have a tab on it and, shortly after the contents are moved, will 'close' by collapsing the content offscreen so only the tab remains.
+clicking the tab will toggle the tab contents into/out of view.
+tab will be 'fixed' so it retains position during scrolling (for browsers that support fixed positioning)
+
+supported methods include: open, close, toggle and destroy.
+supported options include tabID (given to the container), tabtext (what appears in the tab itself) and tabclass (the class applied to the tab)
+
+*/
+
+(function($) {
+	
+	$.widget("ui.stickytab",{
+		options : {
+			tabID : '',
+			tabtext : 'unnamed tab', //a string for output. if set, will ignore any _msgs or _err orr @issues in the 'options' object (passed by a request response)
+			tabclass : 'ui-state-default' //set to true to throw a generic message. Will include extra error details and a default message before the value of message.
+			},
+
+		_init : function(){
+//			console.log('init sticktab');
+			var self = this,
+			o = self.options, //shortcut
+			$t = self.element; //this is the targeted element (ex: $('#bob').anymessage() then $t is bob)
+			
+			if($t.data('isstickytab'))	{
+				//already in a stickytab. do nothing.
+				}
+			else	{
+				$t.data('isstickytab',true);
+//add an id if one doesn't already exist.
+				if($t.attr('id'))	{}
+				else	{
+					$t.attr({'id':(o.tabID || 'stickytab_'+app.u.guidGenerator())}); //the ID goes onto the element this is run on.  allows for methods to easily be run later.
+					}
+				
+				var 
+					$tabContainer = this._handleContainer(),
+					$sticky = this._buildSticky(),
+					$stickytabText = $('.ui-widget-stickytab-tab-text',$sticky)
+	
+				this.sticky = $sticky; //global reference to container for easy access.
+	
+				$sticky.appendTo($tabContainer);
+				this._moveAnimate();
+	//			$('.ui-widget-stickytab-content',$sticky).append(this.element);
+				
+				//elements must be added to dom prior to obtaining width().
+				//the width and height on the tab needs to be fixed based on text length so that rotation works properly.
+				//only the text is rotated, not the container.
+				$('.ui-widget-stickytab-tab',$sticky).height($stickytabText.width()).width(24).css('right',($stickytabText.parent().width() * -1));
+	//rotate the tab text.
+				$stickytabText.css({
+					'-webkit-transform': 'rotate(90deg)', //chrome and safari
+					'-moz-transform': 'rotate(90deg)', //firefox 3.5-15
+					'-ms-transform': 'rotate(90deg)', //IE9
+					'-o-transform':'rotate(90deg)', // Opera 10.50-12.00 
+					'transform': 'rotate(90deg)', // Firefox 16+, IE 10+, Opera 12.10+
+					'filter': 'progid:DXImageTransform.Microsoft.BasicImage(rotation=3)'	// IE 7 & 8
+					});
+	//shrinks tab after a moments time.  This provides a good visual indicator the tab was added but uses little real-estate.
+				setTimeout(function(){
+					self.close();
+					},1500);
+				
+				}
+
+			
+			}, //_init
+
+//if no sticktabs container exists, create one. if more control is desired over location, create a sticktabs element in your html and css to position as desired.
+		_handleContainer : function()	{
+//			console.log('building container');
+			var $container = $('#stickytabs');
+			if($container.length)	{} //container is already defined. do nothing.
+			else	{
+				$container = $("<div \/>",{'id':'stickytabs'}).css({
+					'position':'fixed',
+					'left':0,
+					'top':'120px',
+					'width':'120px',
+					'height':'300px',
+					'z-index':500
+					}).appendTo('body');
+				}
+			return $container;
+			},
+
+//moves the contents into the tab content and animates it for an added visual indicator of what just happened.
+		_moveAnimate : function(){
+				var element = this.element; 
+				var newParent= $('.ui-widget-stickytab-content',this.sticky);
+				var oldOffset = element.offset();
+				element.appendTo(newParent);
+				var newOffset = element.offset();
+		
+				var temp = element.clone().appendTo('body');
+				temp    .css('position', 'absolute')
+						.css('left', oldOffset.left)
+						.css('top', oldOffset.top)
+						.css('zIndex', 1000);
+				element.hide();
+				temp.animate( {'top': newOffset.top, 'left':newOffset.left}, 'slow', function(){
+				   element.show();
+				   temp.remove();
+				});
+			},
+//builds the tab and content container.
+		_buildSticky : function()	{
+//			console.log('building sticktab');
+			var 
+				$sticky = $("<div \/>").css({'position':'relative'}).addClass('ui-widget ui-widget-stickytab'),
+				$stickytab = $("<div \/>").addClass("ui-widget-stickytab-tab ui-corner-right "+this.options.tabclass),
+				$stickyContent = $("<div \/>").addClass("ui-widget-stickytab-content minimalMode ui-widget ui-widget-content ui-corner-right");
+
+			this._addTabEvents($stickytab);
+			$stickytab.append("<div class='ui-widget-stickytab-tab-text'>"+this.options.tabtext+"</div>");
+			$sticky.append($stickytab).append($stickyContent);
+			return $sticky;
+			},
+		_addTabEvents : function($stickytab)	{
+			var self = this;
+			$stickytab.on('click.stickytab',function(){
+				console.log(self.sticky.position().left);
+				if(self.sticky.position().left >= 0)	{
+					self.close();
+					}
+				else	{
+					self.open();
+					}
+				});
+			},
+		toggle : function()	{
+			$('.ui-widget-stickytab-tab',this.sticky).trigger('click.stickytab');
+			},
+		open : function()	{
+			console.log('open tab');
+			if(this.sticky.position().left != 0)	{
+				this.sticky.animate({left: 0}, 'slow');
+				}
+			else	{} //already open.
+			},
+		close : function()	{
+			console.log('close tab');
+			this.sticky.animate({left: -(this.sticky.outerWidth())}, 'slow');
+			},
+		destroy : function()	{
+			this.sticky.empty().remove();
+			},
+		_setOption : function(option,value)	{
+			$.Widget.prototype._setOption.apply( this, arguments ); //method already exists in widget factory, so call original.
+			}
+		}); // create the widget
+})(jQuery);
 
 
 
@@ -1151,3 +1302,48 @@ $.fn.intervaledEmpty = function(interval, remove){
 		}
 	return this;
 	}
+
+
+
+
+
+
+
+/* will convert a tbody into a csv */
+// for whatever reason, having this chuck of code not last is causing issues. leave it at bottom.
+jQuery.fn.toCSV = function() {
+	var data = $(this).first(); //Only one table
+	var csvData = [];
+	var tmpArr = [];
+	var tmpStr = '';
+	data.find("tr").each(function() {
+	if($(this).find("th").length) {
+		$(this).find("th").each(function() {
+			tmpStr = $(this).text().replace(/"/g, '""');
+			tmpArr.push('"' + tmpStr + '"');
+			});
+		csvData.push(tmpArr);
+		}
+	else {
+		tmpArr = [];
+		$(this).find("td").each(function() {
+			$(this).find("td").each(function() {
+				if($(this).text().match(/^-{0,1}\d*\.{0,1}\d+$/)) {
+					tmpArr.push(parseFloat($(this).text()));
+					}
+				else {
+					tmpStr = $(this).text().replace(/"/g, '""');
+					tmpArr.push('"' + tmpStr + '"');
+					}
+				});
+			});
+		csvData.push(tmpArr.join(','));
+		}
+	});
+	var output = csvData.join('\n');
+	var uri = 'data:application/csv;charset=UTF-8,' + encodeURIComponent(output);
+	window.open(uri);
+	}
+
+
+
