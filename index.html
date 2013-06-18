@@ -881,7 +881,12 @@ this will likely become more flexible in the future. ###
 			<fieldset data-bind='useParentData:true; format:atcQuantityInput; extension:store_product; pretext:Quantity: ; defaultValue:1;' class='borderNone'></fieldset>
 			<div class="clear"></div>
 		</div>	
-		<h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
+		<div>
+			<div class="prodDetail">
+				<h5 class="prodDetail" data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
+			</div>
+			<button class="ui-button-text ui-button ui-state-default ui-corner-all ui-button-text-only" onClick="app.ext.store_sealy.a.toggleProdDetail($(this).parent());"><span class="ui-button-text">+</span></button>
+		</div>
     </div>
     <!--<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Manufacturer: ;'></h5>-->
    

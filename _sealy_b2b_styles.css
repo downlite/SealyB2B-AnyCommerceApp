@@ -48,3 +48,5 @@ strong {
 .blueBorder { border: 1px solid #1690C8; padding: 10px;}
 .prodViewerAddToCartForm  fieldset {margin: 5px;}
 .prodViewerAddToCartForm  input[name=qty] {padding: 5px;}
+
+.prodDetail { height: 0px; overflow:hidden; }

@@ -102,38 +102,20 @@ var store_sealy = function() {
 				app.calls.appBuyerCreate.init(obj, _tag);
 				app.model.dispatchThis('immutable');
 				},
-			/*
-			hijack : function(){
-				var obj = {
-					"email":"michaelc@zoovy.com",
-					"firstname":"Michael",
-					"lastname":"C",
-					"address1":"123 test st.",
-					"city":"Carlsbad",
-					"region":"CA",
-					"postal":"92008",
-					"country":"US",
-					"phone":"8779668948",
-					"password":"batmanhasnoparents",
-					
-					"salesrep":"bob",
-					"storetype":"outlet",
-					"company":"zoovy"
-					};
-				obj._vendor = "sealy";
-				
-				app.u.dump(obj);
-				
-				var _tag = {
-					'callback':function(rd){
-						app.u.throwMessage(rd);
-						}
+			toggleProdDetail : function($container){
+				var $detail = $('.prodDetail', $container);
+				var $button = $('button', $container);
+				if($detail.hasClass('showing')){
+					$detail.stop().animate({'height':'0px'}, 1500);
 					}
-				
-				app.calls.appBuyerCreate.init(obj, _tag);
-				app.model.dispatchThis('immutable');
+				else {
+					var height = 0;
+					$detail.children().each(function(){
+						height += $(this).outerHeight();
+						});
+					$detail.stop().animate({'height':height+'px'}, 1500});
+					}
 				}
-			*/
 			}, //Actions
 
 ////////////////////////////////////   RENDERFORMATS    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
