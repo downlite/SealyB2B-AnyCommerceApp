@@ -34,6 +34,14 @@ var store_sealy = function() {
 		init : {
 			onSuccess : function()	{
 				var r = false; //return false if extension won't load for some reason (account config, dependencies, etc).
+				
+				app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
+					var $target=$('#wideSlideshow');
+					if(!$target.hasClass('slideshowrendered')){
+						$target.addClass('slideshowrendered').cycle({fx:'fade',speed:'slow',timeout:5000});  
+						}
+					}]); 
+				
 				app.rq.push(['templateFunction','customerTemplate','onCompletes',function(P) {
 					var $context = $(app.u.jqSelector('#'+P.parentID));
 					var $countryinput = $('.countryDropDown', $context);
@@ -113,7 +121,7 @@ var store_sealy = function() {
 					$detail.children().each(function(){
 						height += $(this).outerHeight();
 						});
-					$detail.stop().animate({'height':height+'px'}, 1500});
+					$detail.stop().animate({'height':height+'px'}, 1500);
 					}
 				}
 			}, //Actions
