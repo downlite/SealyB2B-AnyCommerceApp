@@ -883,9 +883,11 @@ this will likely become more flexible in the future. ###
 		</div>	
 		<div>
 			<div class="prodDetail">
-				<h5 class="prodDetail" data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
+				<h5 data-bind='var: product(zoovy:prod_detail); format:text;'></h5>
 			</div>
-			<button class="ui-button-text ui-button ui-state-default ui-corner-all ui-button-text-only" onClick="app.ext.store_sealy.a.toggleProdDetail($(this).parent());"><span class="ui-button-text">+</span></button>
+			<div class="alignCenter">
+				<button class="ui-button-text ui-button ui-state-default ui-corner-all ui-button-text-only" onClick="app.ext.store_sealy.a.toggleProdDetail($(this).parent().parent()); return false;"><span class="buttonText ui-button-text">+</span></button>
+			</div>
 		</div>
     </div>
     <!--<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Manufacturer: ;'></h5>-->

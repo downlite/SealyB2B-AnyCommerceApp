@@ -112,16 +112,19 @@ var store_sealy = function() {
 				},
 			toggleProdDetail : function($container){
 				var $detail = $('.prodDetail', $container);
-				var $button = $('button', $container);
+				var $buttonText = $('.buttonText', $container);
 				if($detail.hasClass('showing')){
-					$detail.stop().animate({'height':'0px'}, 1500);
+					$detail.stop().removeClass('showing').animate({'height':'0px'}, 750);
+					$buttonText.text('+');
 					}
 				else {
 					var height = 0;
 					$detail.children().each(function(){
 						height += $(this).outerHeight();
+						app.u.dump(height);
 						});
-					$detail.stop().animate({'height':height+'px'}, 1500);
+					$detail.stop().addClass('showing').animate({'height':height+'px'}, 750);
+					$buttonText.text('-');
 					}
 				}
 			}, //Actions
