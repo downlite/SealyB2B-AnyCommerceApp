@@ -50,3 +50,12 @@ strong {
 .prodViewerAddToCartForm  input[name=qty] {padding: 5px;}
 
 .prodDetail { height: 0px; overflow:hidden; }
+
+address[data-templateid=chkoutBuyerAddressTemplate]{
+	width: 300px;
+	margin-bottom: 15px;
+}
+address[data-templateid=chkoutBuyerAddressTemplate] .addressFullname,
+address[data-templateid=chkoutBuyerAddressTemplate] .address {
+	width: 250px;
+}

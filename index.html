@@ -1646,20 +1646,23 @@ For general product questions and order inquiries you can also email us at <a hr
 
 		<div id='myaccountArticle' class='displayNone textContentArea'>
 			<h1>My Account</h1>
-			<div id='logMessaging'></div>
-			<div><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Log Out</a></div>
 
-			<section id='buyerAddresses' class='clearfix'>
+			<section>
 
-<div class='billAddressContainer'>
-	<h2>Billing Address(es)</h2>
-<!--	<button class='floatRight ui-state-default ui-corner-all'><span class='ui-icon ui-icon-plusthick floatLeft'></span> Add </button> coming soon -->
-	<div class='billAddresses'></div><!-- billing addresses are loaded into here using billAddressTemplate -->
+<div class='billAddressContainer' data-app-role='addressContainer' data-app-addresstype='bill'>
+	<div class='marginBottom'>
+		<button class='floatRight' data-app-event='myRIA|showBuyerAddressAdd'>Add New Billing Address</button>
+		<h2>Billing Address(es)</h2>
+	</div>
+	<div class='billAddresses' data-bind="var: buyer(@bill); format:processList; loadsTemplate:billAddressTemplate;"></div>
 </div>
 
-<div class='shipAddressContainer'>
-	<h2>Shipping Address(es)</h2>
-	<div class='shipAddresses'></div><!-- shipping addresses are loaded into here using shipAddressTemplate -->
+<div class='shipAddressContainer' data-app-role='addressContainer' data-app-addresstype='ship'>
+	<div class='marginBottom'>
+		<button class='floatRight' data-app-event='myRIA|showBuyerAddressAdd'>Add New Shipping Address</button>
+		<h2>Shipping Address(es)</h2>
+	</div>
+	<div class='billAddresses' data-bind="var: buyer(@ship); format:processList; loadsTemplate:shipAddressTemplate;"></div>
 </div>
 
 

@@ -356,12 +356,25 @@ the defaultVar on prodName & image is for promotions, which have a 'description'
 
 
 <address id='chkoutBuyerAddressTemplate' class='ui-widget ui-widget-content ui-corner-all stdPadding'>
-	<div data-bind="var:address(bill/address1); defaultVar: address(ship/address1); format:text;"></div>
-	<div data-bind="var:address(bill/postal); defaultVar: address(ship/postal); format:text;"></div>
-	<div class='clearfix'>
+	<div class='floatRight'>
 		<button class='floatRight' data-app-event='orderCreate|execBuyerAddressSelect'>Use This Address</button>
 		<button class='floatRight marginRight' data-app-event="orderCreate|showBuyerAddressUpdate">Edit This Address</button>
 	</div>
+	<div class='addressFullname'>
+		<span data-bind="var: address(bill/firstname); defaultVar: address(ship/firstname);format:text;"  title='first name'></span>
+		<span data-bind="var: address(bill/lastname); defaultVar: address(ship/lastname);format:text;"  title='last name'></span>
+	</div>
+	<div class='address'>
+		<div data-bind="var: address(bill/address1); defaultVar: address(ship/address1);format:text;"  title='address'></div>
+		<div data-bind="var: address(bill/address2); defaultVar: address(ship/address2);format:text;"  title='address 2'></div>
+
+		<span data-bind="var: address(bill/city); defaultVar: address(ship/city);format:text;"  title='city'></span>,
+		<span data-bind="var: address(bill/region); defaultVar: address(ship/region);format:text;"  title='state'></span>.
+		<span data-bind="var: address(bill/postal); defaultVar: address(ship/postal);format:text;"  title='zip'></span>
+		<div data-bind="var: address(bill/countrycode); defaultVar: address(ship/countrycode);format:text;" title='country'></div>
+
+	</div>
+	
 </address>
 
 
