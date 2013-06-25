@@ -83,8 +83,8 @@ var store_sealy = function() {
 				
 				obj._vendor = "sealy";
 				
-				
 				obj.todonote  = obj.firstname+" "+obj.lastname+"\n";
+				obj.todonote += obj.email+"\n";
 				obj.todonote += obj.address1+"\n";
 				if(obj.address2 && obj.address2 !== ""){
 					obj.todonote += obj.address2+"\n";
