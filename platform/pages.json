@@ -1,12 +1,13 @@
 {
-   ".brands.400-stearns-and-foster-brand-bedding" : {},
+   ".brands.400-stearns-and-foster-brand-bedding" : {
+      "fl" : "~downlite_c_dataentry",
+      "description" : "Sealy is one of the oldest bedding brands in the world with a strong heritage for American made products.\n\n\nThe Stearns & Foster product line represents a broad range of luxury bedding , worthy of only the finest master suites.  Stearns & Foster bedding products include a full range of pillows, mattress pads and toppers, comforters, sheet sets and more.\n\n\nTo learn more simply browse the items below or if you want to shop not only Stearns & Foster but also Sealy and Sealy Posturepedic - simply shop with the various categories above.\n\n\nDue to the range of options don't feel overwhelmed by all the options and contact a bedding specialist, Monday To Friday from 10 AM to 4 PM EST."
+   },
    ".600-silk-down-bedding-buying-guide" : {
       "meta_keywords" : "silk down pillow,silk down comforter,silk down bedding",
       "banner1" : "8/800x300_landing_page_silk_down_bedding_buying_guide.jpg",
       "fl" : "c-20090113",
-      "picture1" : "4/400x400_silk_down_bedding_buying_guide",
       "description2" : "Silk down bedding is a great option for the ultimate in luxury.",
-      "prodlist_custom" : "&SORTBY=NONE&FORMAT=CUSTOM&SRC=&ALTERNATE=0&SIZE=&SHOWSKU=&",
       "description" : "== Silk Down Bedding Buying Guide ==\n\n\nIf you want the ultimate in bedding luxury then down filled silk bedding is a great option. Silk down bedding is generally higher maintenance and requires dry cleaning for the silk. Most silk bedding products are not made with machine washable grade silk fabric. Due to the fine nature of silk yarn most silk down bedding comes in higher thread count ranges from 400 and up. Most silk bed pillows feature a removable silk protector. To wash the pillow you would remove the outer protector. You could then machine wash your pillow and send the protector to a dry cleaner. This is a much cheaper option than sending the whole pillow to the dry cleaner (which can run about $20 to $30 for a cleaning)."
    },
    ".609-blanket-versus-comforter" : {
@@ -14,12 +15,34 @@
       "fl" : "c-20090113",
       "description" : "== Blanket Versus Comforters - How To Choose ==\n\n\nDOWNLITE primarily makes filled bedding so on our site we have two top of bed options: comforters and blankets.\n\n\nA comforter is usually filled with down or down alternative and has stitched boxes ranging in size from 10 inches to 16 inches. The larger the box size the higher the fill power or more filling is needed to keep the square fluffy. Comforters are generally best suited for fall/winter usage as they tend to be better in heat retention when compared to a blanket.\n\n\nA blanket is usually filled with down or down alternative and features smaller stitched boxes ranging in size from 4 to 6 inches. Blankets are typically larger than comforters as they are meant to be tucked under the mattress for a hotel look. Blankets frequently have a decorative element such as satin binding or a self flange. Blankets are a great summer weight bedding option. They can be paired with a comforter in winter for extra warmth. Most blankets are machine washable. "
    },
-   ".300-sealy-comforters" : {},
-   ".brands.100-sealy-brand-bedding" : {},
-   ".100-sealy-pillows" : {},
-   ".200-sealy-pads-and-toppers" : {},
-   ".brands.200-sealy-posturepedic-brand-bedding" : {},
-   ".dropship-sealy-bedding" : {},
+   ".300-sealy-comforters" : {
+      "fl" : "~downlite_c_dataentry",
+      "picture1" : "8/800x800_sealy_350_tc_down_alt_comf_angle2_039.jpg",
+      "description" : "Does your store or project need the perfect comforter?  We offer you a collection of different comforters that address the unique needs for each of your customers. From lightweight to extra warm, we offer a range of comforters that are hypoallergenic, machine washable and made in the USA - who can ask for more.\n\n\nWith so many comforter options it can be a bit confusing which to pick for your store or project needs. Simply give us a call and one of our bedding experts can make some suggestions.\n\n\nThis self serve b to b website offers no minimums, and drop ship service if you need it (or simply ship to your store - either way shipping is free). With no minimums - try a sampling in your stores to see which models work the best."
+   },
+   ".brands.100-sealy-brand-bedding" : {
+      "fl" : "~downlite_c_dataentry",
+      "description" : "Sealy is one of the oldest bedding brands in the world with a strong heritage for American made products.\n\n\nThe Sealy product line represents a broad range of premium bedding offering soft cotton fabrics paired with comforting fillings.  Sealy bedding products include a full range of pillows, mattress pads and toppers, comforters, sheet sets and more.\n\n\nTo learn more simply browse the items below or if you want to shop not only Sealy but also Sealy Posturepedic and Stearns & Foster - simply shop with the various categories above.\n\n\nDue to the range of options don't feel overwhelmed by all the options and contact a bedding specialist, Monday To Friday from 10 AM to 4 PM EST."
+   },
+   ".100-sealy-pillows" : {
+      "fl" : "~downlite_c_dataentry",
+      "picture1" : "8/800x800_sealypp_posturefit_tailored_pillow_009.jpg",
+      "description" : "Does your store or project need the perfect pillow?  We offer you a collection of different bed pillows that address the unique needs for each of your customers. From soft density to extra firm, we offer a range of pillows that are hypoallergenic, easy care and made in the USA - who can ask for more.\n\n\nWith so many pillow options it can be a bit confusing which to pick for your store or project needs. Simply give us a call and one of our bedding experts can make some suggestions.\n\n\nThis self serve b to b website offers no minimums, and drop ship service if you need it (or simply ship to your store - either way shipping is free). With no minimums - try a sampling in your stores to see which models work the best."
+   },
+   ".200-sealy-pads-and-toppers" : {
+      "fl" : "~downlite_c_dataentry",
+      "picture1" : "8/800x800_sealy_egyptian_cotton_pad_017.jpg",
+      "description" : "Does your store or project need the mattress pad or bed topper?  We offer you a collection of different mattress pads, mattress toppers, feather beds and fiber beds that address the unique needs for each of your customers. From low profile mattress pads to extra thick mattress toppers, we offer a range of pads and toppers that are hypoallergenic, machine washable (applies top pads and toppers only) and in some cases made in the USA - who can ask for more.\n\n\nWith so many pads and toppers it can be a bit confusing which to pick for your store or project needs. Simply give us a call and one of our bedding experts can make some suggestions.\n\n\nThis self serve b to b website offers no minimums, and drop ship service if you need it (or simply ship to your store - either way shipping is free). With no minimums - try a sampling in your stores to see which models work the best.\n\n\n\n\n\nThere is nothing as dreamy as sinking into a soft billowy bed at night and the key is to use a good bed topper. There are basically two types of options - feather beds which provide 3-5 inches of filling comfort or mattress pads & toppers which add a smaller degree of softness.\n\n\nYou can use a feather bed and a mattress pad at the same time for the ultimate in soft goodness. Many of our customers use bed toppers to help soften a hard memory foam mattress.\n\n\nThe Sealy collection has pads and toppers with waterproof options to help protect your investments as well.\n\n\nWhether you seek protection of your mattress or want to dramatically add softness we have options for you."
+   },
+   ".brands.200-sealy-posturepedic-brand-bedding" : {
+      "fl" : "~downlite_c_dataentry",
+      "description" : "Sealy is one of the oldest bedding brands in the world with a strong heritage for American made products.\n\n\nThe Sealy Posturepedic product line represents a broad range of luxurious bedding offering targeted relief to fit your comfort needs.  Sealy Posturepedic bedding products include a full range of pillows, mattress pads and toppers, comforters, sheet sets and more.\n\n\nTo learn more simply browse the items below or if you want to shop not only Sealy Posturepedic but also Sealy and Stearns & Foster - simply shop with the various categories above.\n\n\nDue to the range of options don't feel overwhelmed by all the options and contact a bedding specialist, Monday To Friday from 10 AM to 4 PM EST."
+   },
+   ".dropship-sealy-bedding" : {
+      "fl" : "~downlite_c_dataentry",
+      "picture1" : "4/480x360_sealy_wholesale_no_minimums.jpg",
+      "description" : "Who doesn't want to keep their inventory lean? Sealy has partnered with DOWNLITE to offer their stock furniture and mattress store bedding accessory collection available with no minimums. Whether you want to keep your store inventory lean or you want to dropship to a customer - DOWNLITE can help you.\n\n* Our stock collection is made year round, which means we can keep a constant supply ready for your needs.\n* As an added benefit all shipments to stores or consumers include free shipping so you know your costs basis ahead of time.\n* 100 percent of all our pillows are made in the USA!"
+   },
    ".605-comforter-or-duvet-insert" : {
       "banner1" : "8/800x300_landing_page_comforter_versus_duvet_insert.jpg",
       "fl" : "c-20090113",
@@ -30,7 +53,11 @@
       "fl" : "c-20090113",
       "description" : "== Down Alternative Options For Bedding ==\n\n\nDo you have allergies to down bedding or think that you do? We get a lot of folks who call and write to us about allergy concerns from down to dust mites. There are several important factors to consider when evaluating bedding allergies. Aside from down allergies, some consumers want the luxury of down but a lower price point. For those consumers we have a collection of luxury down alternatives to choose from.\n\n\nIf you think you have allergy issues or are buying bedding for your family or house guests we recommend PrimaLoft, which is a luxury Down Alternative filling material. Not only does PrimaLoft mimic feel of down filling but it keeps a warmth level equivalent to a 550-600 fill power white goose down. PrimaLoft also has a permanent antimicrobial treatment in the fibers that will not wash out. PrimaLoft is used in bed pillows, comforters, mattress pads, pillow forms and on occasion fiber beds (soft beds)."
    },
-   ".custom-programs-sealy-bedding" : {},
+   ".custom-programs-sealy-bedding" : {
+      "fl" : "~downlite_c_dataentry",
+      "picture1" : "4/480x360_sealy_wholesale_no_minimums.jpg",
+      "description" : "DOWNLITE offers a full selection of Sealy branded bedding available for your stores. In the event that you need a customized item for your store or you need container load pricing we would love to help you with your needs. Please note container load pricing typically requires a few thousand pieces per item size and has longer lead times appx 120 days out assuming you have all your information ready.\n\n\nPlease send your program needs to our VP of Sales David Lueder.\nDavid Lueder\nVP Of Sales, DOWNLITE\ndlueder@downlite.com\nOffice: 513-229-3696, x323\nCell: 630-561-9979\n\n\nIn the event David is traveling you can also contact Stefan Hunter who will help you talk to the right sales team member (Stefan Hunter, Director of eCommerce - shunter@downlite.com)."
+   },
    ".611-featherbed-versus-mattress-pad" : {
       "banner1" : "8/800x300_landing_page_featherbed_versus_mattress_pad.jpg",
       "fl" : "c-20090113",
@@ -41,6 +68,14 @@
       "fl" : "c-20090113",
       "description" : "== Feathers Versus Down ==\n\n\nDown is the light fluffy coating beneath the feathers of ducks and geese. Each down cluster is made from thousands of tiny fibers, like little cotton balls between the bird's skin and feathers. Mother Nature created down to keep water fowl dry and warm when they swim around in the water. One down comforter provides the warmth and temperature control of 14 wool blankets, but because of down's natural ability to pull moisture away from the skin you never wake up hot and clammy in the middle of the night.\n\n\nHigh quality down comes only from ducks and geese. Chickens and other birds do not produce down because they do not spend a significant portion of their lives in the water. 85% of the world's production of down and feathers comes from Asia; the remaining 15% is generally produced in Eastern Europe. Farmers who raise ducks and geese for their meat sell the unprocessed feathers and down to processing companies around the world, so no usable part of the bird is wasted.\n\n\nDown clusters are naturally very durable, it is not uncommon for people to use a down bedding product for a dozen years or more before replacing it. Down is also naturally flame retardant, making it an excellent choice for safe sleeping.\n\n\nDown and feathers come in various shades ranging from pure white to black speckled gray. There is a premium on pure white down and feathers because of their ability to visually blend better when filled into white bedding products, but the color does not affect the down's loft or warmth. As consumers taste for lighter bird meat increases, white down and feathers are becoming more abundant."
    },
-   ".no-minimums-sealy-bedding" : {},
-   ".open-stock-sealy-bedding" : {}
+   ".no-minimums-sealy-bedding" : {
+      "fl" : "~downlite_c_dataentry",
+      "picture1" : "4/480x360_sealy_wholesale_no_minimums.jpg",
+      "description" : "Who doesn't want to keep their inventory lean? Sealy has partnered with DOWNLITE to offer their stock furniture and mattress store bedding accessory collection available with no minimums. Whether you want to keep your store inventory lean or you want to dropship to a customer - DOWNLITE can help you.\n\n* Our stock collection is made year round, which means we can keep a constant supply ready for your needs.\n* As an added benefit all shipments to stores or consumers include free shipping so you know your costs basis ahead of time.\n* 100 percent of all our pillows are made in the USA!"
+   },
+   ".open-stock-sealy-bedding" : {
+      "fl" : "~downlite_c_dataentry",
+      "picture1" : "4/480x360_sealy_wholesale_no_minimums.jpg",
+      "description" : "Who doesn't want to keep their inventory lean? Sealy has partnered with DOWNLITE to offer their stock furniture and mattress store bedding accessory collection available with no minimums. Whether you want to keep your store inventory lean or you want to dropship to a customer - DOWNLITE can help you.\n\n* Our stock collection is made year round, which means we can keep a constant supply ready for your needs.\n* As an added benefit all shipments to stores or consumers include free shipping so you know your costs basis ahead of time.\n* 100 percent of all our pillows are made in the USA!"
+   }
 }
