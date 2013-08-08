@@ -19,7 +19,7 @@ app.rq.push(['extension',0,'store_sealy','extensions/_sealyb2b.js']);
 app.rq.push(['script',0,app.vars.baseURL+'cycle-2.9998.js']); 
 
 //app.rq.push(['extension',1,'google_analytics','extensions/partner_google_analytics.js','startExtension']);
-app.rq.push(['extension',1,'tools_ABtesting','extensions/tools_ABtesting.js']);
+//app.rq.push(['extension',1,'tools_ABtesting','extensions/tools_ABtesting.js']);
 //app.rq.push(['extension',0,'partner_addthis','extensions/partner_addthis.js','startExtension']);
 //app.rq.push(['extension',1,'resellerratings_survey','extensions/partner_buysafe_guarantee.js','startExtension']); /// !!! needs testing.
 //app.rq.push(['extension',1,'buysafe_guarantee','extensions/partner_buysafe_guarantee.js','startExtension']);
