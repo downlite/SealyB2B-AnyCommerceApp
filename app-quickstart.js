@@ -1494,7 +1494,15 @@ if(ps.indexOf('?') >= 1)	{
 						app.model.destroy(index);
 						}
 					}
-				$('[data-templateid=productTemplate], [data-templateid=categoryTemplate]', '#mainContentArea').remove();
+				$('[data-templateid=productTemplate], [data-templateid=categoryTemplate], [data-templateid=categoryTemplate]', '#mainContentArea').each(function(){
+					if($(this).is(":visible")){
+						$(this).fadeOut(1000).remove();
+						showContent('homepage');
+						}
+					else{
+						$(this).remove();
+						}
+					});
 				},
 			
 			
@@ -1502,13 +1510,19 @@ if(ps.indexOf('?') >= 1)	{
 				$('body').removeClass('buyerLoggedIn');
 				$('.username').empty();
 				app.u.logBuyerOut();
+				
+				$('#loginSuccessContainer').hide(); //contains 'continue' button.
+				$('#loginMessaging').empty().hide();
+				$('#loginFormContainer').show(); //contains actual form.
+				$('#recoverPasswordContainer').show();
+				
 				showContent('homepage',{});
 				for(var index in app.data){
 					if(index.indexOf("appProductGet|") == 0){
 						app.model.destroy(index);
 						}
 					}
-				$('[data-templateid=productTemplate], [data-templateid=categoryTemplate]', '#mainContentArea').remove();
+				$('[data-templateid=productTemplate], [data-templateid=categoryTemplate], [data-templateid=categoryTemplate]', '#mainContentArea').remove();
 				},
 
 /*
