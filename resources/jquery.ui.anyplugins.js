@@ -615,6 +615,143 @@ either templateID or (data or datapointer) are required.
 
 
 
+///// anydropzone \\\\\
+/*
+turn any element into a drop zone for files to be dragged from a users desktop onto the browser.
+
+a lot of this code came from here:
+https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
+
+*/
+
+(function($) {
+	$.widget("ui.anydropzone",{
+		options : {
+			filetypes : null, //pass in an array of file types supported. ex ['csv','xls']
+			imageAttributes : null, //an object: {h:100,w:100,b:'ffffff'}.
+			folder : null, //folder in media library where images are placed.
+			_preview : null, //used to store the preview.
+//events
+			drop : null, //a function executed when a file is dropped. executed for each file. file,event passed in.
+			upload : null //a function executed after the upload has occured. executed for each file. file,event,responsedata passed in. executed whether response contains errors or not.
+			},
+		_init : function(){
+			console.log('got to init');
+			var
+				$dropzone = this.element,
+				anyfiledrop = this; //inside the event handlers below, 'this' loses context.
+			
+			if($dropzone.data('widget-anydropzone'))	{} //already an anyfileupload
+			else{
+				$dropzone.data('widget-anydropzone',true);
+				if(this.options.status instanceof jQuery)	{
+					console.log(" -> status element IS defined.");
+					}
+
+				if(this.options.thumbList instanceof jQuery)	{
+					console.log(" -> thumblist element IS defined.");
+					}
+
+				$dropzone.on("dragover dragenter", function(event) {
+					event.stopPropagation();
+					event.preventDefault();
+					})
+
+				$dropzone.on("drop",function(event){
+					event.preventDefault();
+					event.stopPropagation();
+					anyfiledrop._drop(event);
+					});
+				}			
+
+			}, //_init
+
+		_setOption : function(option,value)	{
+			$.Widget.prototype._setOption.apply( this, arguments ); //method already exists in widget factory, so call original.
+			}, //_setOption
+
+		_sendFiles : function()	{
+			var imgs = document.querySelectorAll(".newMediaFile");
+			for (var i = 0; i < imgs.length; i++) {
+				this._fileUpload(imgs[i], imgs[i].file);
+				}
+			},
+
+		_fileUpload : function(img, file)	{
+			var o = this.options;
+			var reader = new FileReader();  
+			reader.onload = function(evt) {
+				app.model.addDispatchToQ({
+					'_cmd':'adminImageUpload',
+					'base64' : btoa(evt.target.result), //btoa is binary to base64
+					'folder' : o.folder || file.name.charAt(0).toLowerCase(),
+					'filename' : file.name,
+					'_tag':	{
+						'callback' : function(rd){
+//							if(typeof o.upload === 'function')	{
+//								o.upload(file,event,rd);
+//								}
+							}
+						}
+					},'passive');
+				app.model.dispatchThis('passive');
+//				xhr.sendAsBinary(evt.target.result);
+				};
+			reader.readAsBinaryString(file);
+			},
+
+//adds files to the DOM.
+		_handleFiles : function(files,event)	{
+			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				var imageType = /image.*/;
+
+				if(typeof this.options.drop === 'function')	{
+					this.options.drop(files[i],event);
+					}
+
+				if (!file.type.match(imageType)) {
+					continue;
+					}
+			
+				var img = document.createElement("img");
+				img.classList.add("obj");
+				img.file = file;
+				img.height = 75;
+				img.width = 75;
+				img.classList.add('newMediaFile');
+
+				var $target = this.element;
+				if($target.is('ul') || $target.is('ol'))	{
+					$("<li \/>").append(img).appendTo($target);
+					}
+				else	{
+					$target.append(img);
+					}
+//				preview.appendChild(img);
+				
+				var reader = new FileReader();
+				reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+				reader.readAsDataURL(file);
+				}
+			},
+//executed when a file is dropped onto a dropzone.
+		_drop : function(event)	{
+			event.preventDefault();
+			var dt = event.originalEvent.dataTransfer; //moz def. wants to look in orginalEvent. docs online looked just in event.dataTransfer.
+			this._handleFiles(dt.files,event);
+			this._sendFiles();
+			}, //_drop
+
+
+		_destroy : function(){
+			this.element.empty();
+			} //_destroy
+		}); // create the widget
+})(jQuery); 
+
+
+
 
 
 
