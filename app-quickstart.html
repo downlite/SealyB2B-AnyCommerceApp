@@ -20,7 +20,7 @@ var _gaq = _gaq || {'push':function(){}} //here for testing. REPLACE BEFORE DEPL
 var myCreole;
 
 var app = {vars:{
-	"release":"201318.a",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
+	"release":"201232.a",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"", //used in non-local mode.
 	"checkoutAuthMode" : "required",//can be passive, active or required
@@ -160,9 +160,6 @@ COMMONLY EDITED TEMPLATES
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
 <div id='homepageTemplate' class='homeTemplate'>
-	
-
-
 	
 	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
 
@@ -868,11 +865,11 @@ subscribeListsArticle is used for authenticated buyers
 			<h1>Change Password</h1>
 			<div id='changepasswordContainer'>
 
-<form action='#' id='changePasswordForm' name='changePasswordForm' onSubmit="app.ext.store_crm.u.handleChangePassword('changePasswordForm',{'callback':'showMessaging','message':'Thank you, your password has been changed','targetID':'changepasswordContainer'}); return false">
+<form action='#' id='changePasswordForm' name='changePasswordForm' onSubmit="app.ext.store_crm.u.handleChangePassword($(this),{'callback':'showMessaging','message':'Thank you, your password has been changed','jqObj':$(this).parent()}); return false">
 <fieldset class='borderNone'>
-
-<div class='marginBottom'><label for='changePassword'>Password</label><input type='password' name='password' id='changePassword' size='35' /></div>
-<div class='marginBottom'><label for='changePassword2'>Confirm Password</label><input type='password' name='password2' id='changePassword2' size='35' /></div>
+<div class="messaging"></div>
+<div class='marginBottom'><label for='changePassword'>Password</label><input type='password' name='password' size='35' /></div>
+<div class='marginBottom'><label for='changePassword2'>Confirm Password</label><input type='password' name='password2' size='35' /></div>
 <div class='marginBottom'><input type='submit' value='Change Password' class='loadingButton ui-button-text ui-button ui-state-default ui-corner-all'></div>
 
 </fieldset>
@@ -1048,12 +1045,12 @@ So the cart template should contain these two elements and the extension should 
 
 	<!-- some buttons that are alternatives to checkout. fewer is better -->
 	<menu class='cartAltButtonsContainer noPadOrMargin'>
-	<button class='ui-button-text ui-button ui-state-default ui-corner-all continueShoppingButton' onClick="$('#modalCart').dialog('close');">Continue Shopping</button>
+	<button class='ui-button-text-only ui-button ui-state-default ui-corner-all continueShoppingButton' onClick="$('#modalCart').dialog('close');"><span class="ui-button-text">Continue Shopping</span></button>
 	</menu>
 
 	<div class='checkoutButtonsContainer'>
 
-		<span title='proceed to secure checkout'><button class='ui-button ui-button-text ui-state-default ui-corner-all checkoutButton' onClick="showContent('checkout',{});">Store Checkout</button></span>
+		<span title='proceed to secure checkout'><button class='ui-button ui-button-text-only ui-state-default ui-corner-all checkoutButton' onClick="showContent('checkout',{});"><span class="ui-button-text">Store Checkout</span></button></span>
 
 		<span id='paypalECButton' data-bind='var: cart(cart/cartid); format:paypalECButton;'></span>
 
@@ -1440,18 +1437,18 @@ The 'data-action' attribute is used to assign an onclick.
 <p id='loginMessaging' class='marginBottom appMessaging'></p>
 
 <div id='loginFormContainer'>
-<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm'>
+<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("input[name=login]", $(this)).val(),$("input[name=password]", $(this)).val()); return false;'>
 <input type='hidden' name='loginCallback' id='loginCallback' value='' /><!-- used to save a callback action in -->
 	<fieldset>
 
 	<div>
-	<label for='modalLoginlogin'>Login/Email</label>
-	<input type='email' class='zform_textbox zform_email'  name='login' id='modalLoginlogin' value='' size='25' />
+	<label for='login'>Login/Email</label>
+	<input type='email' class='zform_textbox zform_email'  name='login' value='' size='25' />
 	</div>
 
 	<div>
-	<label for='modalLoginpassword'>Password</label>
-	<input type='password' class='zform_textbox zform_password'   name='password' id='modalLoginpassword' value='' size='25' />
+	<label for='password'>Password</label>
+	<input type='password' class='zform_textbox zform_password'   name='password' value='' size='25' />
 	</div>
 
 	<div>
@@ -1464,8 +1461,8 @@ The 'data-action' attribute is used to assign an onclick.
 <hr />
 
 <h3 class='marginBottom'>Recover Password</h3>
-<div id='recoverPasswordMessaging'></div>
-<form action='#' onSubmit="app.calls.appBuyerPasswordRecover.init($('#passwordRecoveryLogin').val(),{'callback':'showMessaging','message':'Thank you, will receive an email shortly','targetID':'recoverPasswordMessaging'}); app.model.dispatchThis('immutable'); return false;">
+<div id='recoverPasswordMessaging' class='appMessaging'></div>
+<form action='#' onSubmit="app.calls.appBuyerPasswordRecover.init($('#passwordRecoveryLogin').val(),{'callback':'showMessaging','message':'Thank you, will receive an email shortly','jqObj':$('.appMessaging', $(this).parent())}); app.model.dispatchThis('immutable'); return false;">
 <fieldset>
 <div class='marginBottom'><label for='passwordRecoveryLogin'>Login/Email</label> <input type='text' name='login' required='required' id='passwordRecoveryLogin' size='25' /></div>
 

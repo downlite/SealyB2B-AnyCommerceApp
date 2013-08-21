@@ -68,9 +68,6 @@ obj.PATH = .cat.safe.id
 			init : function(obj,tagObj,Q)	{
 //				app.u.dump("BEGIN store_navcats.calls.appPageGet.init");
 //				app.u.dump(" -> @get: "); app.u.dump(obj['@get']);
-
-				obj.project="CC18FA14-8ACF-11E2-A3F2-BFC9F271";
-	
 				obj['_tag'] = typeof tagObj == 'object' ? tagObj : {};
 				obj['_tag'].datapointer = 'appPageGet|'+obj.PATH;  //no local storage of this. ### need to explore solutions.
 				var r = 0;

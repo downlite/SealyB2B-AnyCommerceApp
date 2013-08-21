@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>Zoovy.com - Administrative Interface Login</title>
+<title>Administrative Interface Login</title>
 
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache"><!-- don't cache this file. -->
 <META NAME="ROBOTS" CONTENT="NONE">
@@ -26,7 +26,7 @@ else {
 
 var app = {vars:{
 	/////////////////////////////////\
-	"release":"201318.d",   ///|> Increment this with each change. model version followed by each deployed update getting a new letter in the alphabet.
+	"release":"201332.c",   ///|> Increment this with each change. model version followed by each deployed update getting a new letter in the alphabet.
 	//////////////////////////////////
 	"thisSessionIsAdmin": true,
 	"_clientid":"admin",
@@ -43,9 +43,10 @@ all css includes need to be after the js that changes the base url.
 css files should be included before any .js file to ensure they are downloaded in parallel
 -->
 
-<link rel="stylesheet" type="text/css" href="extensions/admin/jquery-ui-1.9.2.custom.min.css" />
-<link rel="STYLESHEET" type="text/css" href="extensions/admin/standard.css" /><!-- legacy compat css. goal is to be rid of this file -->
-<link rel="STYLESHEET" type="text/css" href="extensions/admin/styles.css" /><!-- lots of UI specific styles. load early to avoid popping -->
+<!-- <link rel="stylesheet" type="text/css" href="app-admin/jquery-ui-1.9.2.custom.min.css" /> -->
+<link rel="stylesheet" type="text/css" href="app-admin/jquery-ui-1.10.3.custom.css" />
+<link rel="STYLESHEET" type="text/css" href="app-admin/standard.css" /><!-- legacy compat css. goal is to be rid of this file -->
+<link rel="STYLESHEET" type="text/css" href="app-admin/styles.css" /><!-- lots of UI specific styles. load early to avoid popping -->
 
 
 
@@ -53,9 +54,11 @@ css files should be included before any .js file to ensure they are downloaded i
 <script src="extensions/admin/resources/load-image.min.js"></script><!-- required for media lib. loading in extension causes issues. -->
 
 
-<!-- not much is going to run without these two. load em early -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<!-- not much is going to run without these two. load em early
+ pre 201324 -> 	1.9.1/jquery.min.js and 1.9.2/jquery-ui.min.js
+ -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 
@@ -118,7 +121,7 @@ app.u.loadScript(app.vars.baseURL+"app-admin-init.js");
 
 <div id='appLogin' class='displayNone ui-widget ui-widget-content ui-corner-all stdPadding'>
 	
-	<div class='logo alignCenter'><a href="/index.html"><img src='extensions/admin/images/zoovy_logo-173x30.png' width='173' height='30' alt='zoovy' /></a></div>
+	<div class='logo alignCenter'><a href="/index.html"><img src='app-admin/images/zoovy_logo-173x30.png' width='173' height='30' alt='zoovy' /></a></div>
 
 	<div class='appMessaging'></div>
 
@@ -135,7 +138,7 @@ app.u.loadScript(app.vars.baseURL+"app-admin-init.js");
 <!--			<button class='floatRight' data-app-event="admin|showPasswordRecover">Recover Password</button> -->
 			<div class="hint">App Release #: <span id="appversion">??</span></div>
 			<label class='hint'><input type='checkbox' name='persistentAuth' value='1' checked='checked' /> Keep me logged in</label>
-			<div class="hint"><b><a href='/app/201314/admin.html'> &#187; Use previous version</a></b></div>
+			<div class="hint"><b><a href='/app/201324/app-admin.html'> &#187; Use previous version</a></b></div>
 
 		</fieldset>
 		</form>
@@ -155,7 +158,7 @@ app.u.loadScript(app.vars.baseURL+"app-admin-init.js");
 	
 
 <div id='createAccountContainer' class='displayNone ui-widget ui-widget-content ui-corner-all stdPadding'>
-	<div class='logo alignCenter'><img src='extensions/admin/images/zoovy_logo-173x30.png' width='173' height='30' alt='zoovy' /></div>
+	<div class='logo alignCenter'><img src='app-admin/images/zoovy_logo-173x30.png' width='173' height='30' alt='zoovy' /></div>
 	<form action='#'>
 	<fieldset class='authNewAccountCreate labelsAsBreaks alignedInputs alignedLabels'>
 		<legend>Create Account</legend>
@@ -185,10 +188,11 @@ app.u.loadScript(app.vars.baseURL+"app-admin-init.js");
 	<div id='mastHead'>
 	
 		<div class='headerTop'>
-			<div class='logo pointer alignCenter' onClick="navigateTo('#!dashboard');" title='home'><img src='extensions/admin/images/zoovy_logo-173x30.png' width='173' height='30' alt='zoovy' /></div>
+			<div class='logo pointer alignCenter' onClick="navigateTo('#!dashboard');" title='home'><img src='app-admin/images/zoovy_logo-173x30.png' width='173' height='30' alt='zoovy' /></div>
 			<div class='menu floatRight'>
 				<span class='pointer lookLikeLink showForZoovyOnly' onClick="return navigateTo('/biz/downloads/index.cgi');" title='Use our windows clients for managing orders and product'>Downloads</span>
 				| <span class='pointer lookLikeLink' onClick="showUI('#!help',{'tab':'support'})">Help</span>
+				| <span class='pointer lookLikeLink' onClick="showUI('#!showPlatformInfo')">About</span>
 				| <span class='pointer lookLikeLink' onClick="return navigateTo('#!taskManager');" title='view and edit your task list'>Tasks</span>
 				| <span class='pointer lookLikeLink' onClick="app.ext.admin.a.logout(); return false;" title='log out of your account' >Exit</span>
 			</div>
@@ -207,7 +211,7 @@ app.u.loadScript(app.vars.baseURL+"app-admin-init.js");
 			<li class='productsTab' onClick="navigateTo('#:product');"><span class='text'>Products</span><span class='icon'></span></li>
 			<li class='ordersTab' onClick="navigateTo('#:orders');"><span class='text'>Orders</span><span class='icon'></span></li>
 			<li class='crmTab' onClick="navigateTo('#:crm');"><span class='text'>CRM</span><span class='icon'></span></li>
-			<li class='syndicationTab' onClick="navigateTo('#:syndication');"><span class='text'>Syndication</span><span class='icon'></span></li>
+			<li class='syndicationTab' onClick="navigateTo('#:syndication');"><span class='text'>Marketplaces</span><span class='icon'></span></li>
 			<li class='reportsTab' onClick="navigateTo('#:reports');"><span class='text'>Reports</span><span class='icon'></span></li>
 			<li class='kpiTab' onClick="navigateTo('#:kpi');"><span class='text'>KPI</span><span class='icon'></span></li>
 			<li class='utilitiesTab' onClick="navigateTo('#:utilities');"><span class='text'>Utilities</span><span class='icon'></span></li>
@@ -354,50 +358,37 @@ These two pieces of data are used for mapping after the uploads to set what fold
 <div id='debugPanel' class='ui-widget ui-widget-content ui-corner-all smallPadding displayNone'>
 <h5>Debugificator</h5>
 <ul class='debugMenu'>
-	<li><a href='#'>Tools</a>
-	<ul>
-		<li><a href='#' onClick="app.ext.admin.u.selectivelyNukeLocalStorage(); return false;">Selectively Clear LocalStorage (keep login &amp; preferences)</a></li>
-		<li><a href='#' onClick="localStorage.clear(); return false;">Clear LocalStorage for domain</a></li>
-	</ul>
-	</li>
 	<li><a href='#'>Pages</a>
 	<ul>
+
+		<li><a href='#' onClick='app.model.addDispatchToQ({"_cmd":"adminNavTreeList"},"mutable"); app.model.dispatchThis("mutable"); return false;'>adminNavTreeList</a></li>	
+
+		<li><a href='#' onClick="$(app.u.jqSelector('#',app.ext.admin.vars.tab+'Content')).empty().append(app.ext.admin_navcats.u.getTree('full',{'templateID':'catTreeItemTemplate','safe':'.'})); return false;">navTree</a></li>
+
+		<li><a href='#' onClick="app.ext.admin_prodEdit.a.showPanelsFor('MODEL07');; return false;">edit model07</a></li>
+		<li><a href='#' onClick="app.ext.admin_prodEdit.a.showProductVariationManager($('#productTabMainContent'),'MODEL07');; return false;">model07 variations </a></li>
+
+		
+		<li><a href='#' onClick="app.model.addDispatchToQ({'_cmd':'adminConfigDetail','tuning':'1'},'mutable'); app.model.dispatchThis('mutable'); return false;">adminConfigDetail -> tuning</a></li>
+
 		<li><a href='#' onClick="navigateTo('#!launchpad'); return false;">Launchpad</a></li>
-		<li><a href='#' onClick="navigateTo('#!batchManager'); return false;">batchjobs</a></li>
-		<li><a href='#' onClick="navigateTo('#!supplierManager'); return false;">Supplier Manager</a></li>
 		<li><a href='#' onClick="navigateTo('#!appChooser'); return false;">App Chooser</a></li>
 		<li><a href='#' onClick="$('#setupContent').empty(); app.ext.admin.a.showAchievementList($('#setupContent')); return false;">showAchievementList (in setup)</a></li>
 	</ul>
 	</li>
 	<li><a href='#'>Test</a>
 	<ul>
+		<li><a href='#' onClick='app.model.addDispatchToQ({"mode":"elastic-native","size":250,"filter":{"and":[{"range":{"base_price":{"from":0,"to":50000}}},{"term":{"pogs":"AC"}}]},"_cmd":"appPublicSearch","type":"product"},"mutable"); app.model.dispatchThis("mutable"); return false;'>elastic-native</a></li>	
+		<li><a href='#' onClick="$('#globalMessaging').anymessage(app.u.successMsgObject('Changes have been saved. and then there is this other text to make the text block a bit more texty and long, which is good for testing because it sometimes happens.')); return false;">throw success message</a></li>
+		
+		<li><a href='#' onClick="app.model.destroy('adminSyndicationList'); app.model.addDispatchToQ({'_cmd':'adminSyndicationList'},'mutable'); app.model.dispatchThis('mutable');">adminSyndicationList</a></li>
 
-		<li><a href='#' onClick="app.model.destroy('adminReportDownload'); app.ext.admin.calls.adminReportDownload.init('39A81CB2-9706-11E2-8FFD-99F4EA1F',{},'mutable'); app.model.dispatchThis('mutable');">adminReportDownload</a></li>
-		
-		<li><a href='#' onClick="app.model.destroy('adminKPIDBCollectionList'); app.ext.admin.calls.adminKPIDBCollectionList.init({},'mutable'); app.model.dispatchThis('mutable');">adminKPIDBCollectionList</a></li>
-		<li><a href='#' onClick="app.model.destroy('adminKPIDBCollectionDetail|1528'); app.ext.admin.calls.adminKPIDBCollectionDetail.init(1528,{},'mutable'); app.model.dispatchThis('mutable');">adminKPIDBCollectionDetail</a></li>
-		<li><a href='#' onClick="app.ext.admin.calls.adminMessagesList.init(0,{},'mutable'); app.model.dispatchThis('mutable');">adminMessagesList</a></li>
-		<li><a href='#' onClick="app.model.destroy('adminKPIDBUserDataSetsList'); app.ext.admin.calls.adminKPIDBUserDataSetsList.init({},'mutable'); app.model.dispatchThis('mutable');">adminKPIDBUserDataSetsList</a></li>
-		
-		
-		
-		<li><a href='#' onClick="app.model.addDispatchToQ({'_cmd':'adminUIExecuteCGI','uri':'/biz/syndication/buycom/index.cgi'},'mutable'); app.model.dispatchThis('mutable');">UIExecCGI addDispatchToQ</a></li>
-		<li><a href='#' onClick="app.ext.admin.calls.adminUIExecuteCGI.init('/biz/syndication/buycom/index.cgi'); app.model.dispatchThis('mutable');">adminUIExecuteCGI call</a></li>
-		<li><a href='#' onClick="app.u.throwMessage('Something Wicked This Way Comes');">throwMessage</a></li>
-		
+		<li><a href='#' onClick="app.model.destroy('adminConfigDetail'); app.ext.admin.calls.adminConfigDetail.init({'inventory':true},{},'mutable'); app.model.dispatchThis('mutable');">adminConfigDetail</a></li>
+	
 	</ul>
-	</li>	
+	</li>
 </ul>
 
-<!--
-<button onClick="app.ext.admin.calls.appResource.init('email_macros.json',{},'mutable'); app.model.dispatchThis('mutable');">appResource</button>
-<button onClick="app.ext.admin.calls.appResource.init('shipcodes.json',{},'mutable'); app.model.dispatchThis('mutable');">shipcodes.json</button>
-<button onClick="app.ext.admin.calls.adminEmailList.init({},'mutable'); app.model.dispatchThis('mutable');">adminEmailList</button>
-<button onClick="app.model.addDispatchToQ({'_cmd':'adminDataQuery','query':'listing-active','since_gmt':app.u.unixNow() - (60*60*24*10)},'mutable'); app.model.dispatchThis('mutable');">adminDataQuery</button>
-<button onClick="app.ext.admin.calls.appConfig.init(); app.model.dispatchThis();">appConfig</button>
-
--->
-
 
 </div>
 
@@ -410,39 +401,6 @@ These two pieces of data are used for mapping after the uploads to set what fold
 
 
 
-
-<!--
-
-This is content that isn't template worthy, but still necessary (most likely for modals or static pages)
-
--->
-
-
-
-
-<div id='orderListTab' class='ui-widget ui-widget-content displayNone'>
-	<div class='positionRelative'>
-		<div class='tab ui-state-default ui-corner-right smallPadding'><span>Order&nbsp;Results</span></div><!-- non breaking space to prevent word wrap -->
-		<div class='ordersContainer minimalMode'>
-		<table class='gridTable'>
-			<thead><tr></tr></thead><!-- will get a clone of order list thead -->
-			<tbody></tbody><!-- will get appended w/ the children of the order list -->
-		</table>
-		</div>
-	</div>
-</div>
-
-<div id='productListTab' class='ui-widget ui-widget-content displayNone'>
-	<div class='positionRelative'>
-		<div class='tab ui-state-default ui-corner-right smallPadding'><span>Product&nbsp;Results</span></div><!-- non breaking space to prevent word wrap -->
-		<div class='productContainer minimalMode'>
-		<table class='gridTable'>
-			<thead><tr></tr></thead><!-- will get a clone of order list thead -->
-			<tbody></tbody><!-- will get appended w/ the children of the order list -->
-		</table>
-		</div>
-	</div>
-</div>
 
 
 </body>
