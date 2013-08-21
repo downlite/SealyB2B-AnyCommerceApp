@@ -29,7 +29,6 @@ var store_product = function() {
 
 
 
-
 					////////////////////////////////////   CALLS    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\		
 
 
@@ -488,9 +487,9 @@ it has no inventory AND inventory matters to merchant
 					var L = variations.length;
 					for(var i = 0; i < L; i += 1)	{
 						r[variations[i].id] = {'prompt':variations[i].prompt};
-						var OL = variations[i].options.length;
+						var OL = variations[i]['@options'].length;
 						for(var oi = 0; oi < OL; oi += 1)	{
-							r[variations[i].id][variations[i].options[oi].v] = variations[i].options[oi].prompt;
+							r[variations[i].id][variations[i]['@options'][oi].v] = variations[i]['@options'][oi].prompt;
 							}
 						}
 					}

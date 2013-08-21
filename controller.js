@@ -326,6 +326,10 @@ If the data is not there, or there's no data to be retrieved (a Set, for instanc
 			},//appCategoryDetail		
 
 
+
+
+
+
 //get a list of newsletter subscription lists. partition specific.
 		appNewsletterList : {
 			init : function(_tag,Q)	{
@@ -471,7 +475,30 @@ see jquery/api webdoc for required/optional param
 				app.model.addDispatchToQ(obj,Q || 'immutable');
 				}
 			},//appReviewAdd
-			
+
+		appStash : {
+			init : function(obj,_tag,Q)	{
+				this.dispatch(obj,_tag,Q);
+				return 1;
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj["_cmd"] = "appStash";
+				obj['_tag'] = _tag;
+				app.model.addDispatchToQ(obj,Q || 'immutable');	
+				}
+			},//appStash
+
+		appSuck : {
+			init : function(obj,_tag,Q)	{
+				this.dispatch(obj,_tag,Q);
+				return 1;
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj["_cmd"] = "appSuck";
+				obj['_tag'] = _tag;
+				app.model.addDispatchToQ(obj,Q || 'immutable');	
+				}
+			},//appSuck
 
 
 //the authentication through FB sdk has already taken place and this is an internal server check to verify integrity.	
@@ -970,28 +997,7 @@ app.u.throwMessage(responseData); is the default error handler.
 				}
 			},//convertSessionToOrder
 
-//executed when appCartExists is requested.
-//app.app.vars.cartID is already set by this point. need to reset it onError.
-// onError does NOT need to nuke app.vars.cartID because it's handled in handleResponse_appCartExists 
-// NOTE - may be obsolete 201314+
-/*		handleTrySession : {
-			onSuccess : function(_rtag)	{
-//				app.u.dump('BEGIN app.callbacks.handleTrySession.onSuccess');
-//				app.u.dump(" -> exists: "+app.data.appCartExists.exists);
-				if(app.data.appCartExists.exists >= 1)	{
-					app.u.dump(' -> valid cart id.  Proceed.');
-// if there are any  extensions(and most likely there will be) add then to the controller.
-// This is done here because a valid cart id is required.
-					app.model.addExtensions(app.vars.extensions);
-					}
-				else	{
-					app.u.dump(' -> UH OH! invalid cart ID. Generate a new session. nuke localStorage if domain is ssl.zoovy.com.');
-					app.calls.appCartCreate.init({'callback':'handleNewSession'});
-					app.model.dispatchThis('immutable');
-					}
-				}
-			}, //handleTrySession
-*/		
+	
 //very similar to the original translate selector in the control and intented to replace it. 
 //This executes the handleAppEvents in addition to the normal translation.
 //jqObj is required and should be a jquery object.
@@ -1006,7 +1012,19 @@ app.u.throwMessage(responseData); is the default error handler.
 /*					$target.anycontent({data: app.data[.datapointer],'templateID':_rtag.templateID}); */
 // * 201318 -> anycontent should have more flexibility. templateID isn't always required, template placeholder may have been added already.
 					$target.anycontent(_rtag);
+// * 201320 -> these are a few commonly used plugins that can now be applied w/out a custom callback.
+					$('.toolTip',$target).tooltip();
+					$('.applyAnycb',$target).anycb();
+					$('table.applyAnytable',$target).andSelf().anytable(_rtag.anytable || {});
+					$('.applyAnytabs',$target).anytabs();
 					app.u.handleAppEvents($target);
+
+					if(_rtag.applyEditTrackingToInputs)	{
+						app.ext.admin.u.applyEditTrackingToInputs($target); //applies 'edited' class when a field is updated. unlocks 'save' button.
+						}
+					if(_rtag.handleFormConditionalDelegation)	{
+						app.ext.admin.u.handleFormConditionalDelegation($('form',$target)); //enables some form conditional logic 'presets' (ex: data-panel show/hide feature)
+						}
 
 					}
 				else	{
@@ -1060,6 +1078,16 @@ app.u.throwMessage(responseData); is the default error handler.
 		showMessaging : {
 			onSuccess : function(_rtag)	{
 //				app.u.dump("BEGIN app.callbacks.showMessaging");
+				if(_rtag.jqObj)	{
+					_rtag.jqObj.hideLoading();
+					if(_rtag.jqObjEmpty)	{
+						_rtag.jqObj.empty();
+						}
+//you can't restore AND empty. it's empty, there's nothing to restore.
+					else if(_rtag.restoreInputsFromTrackingState)	{
+						app.ext.admin.u.restoreInputsFromTrackingState(_rtag.jqObj)
+						}
+					}
 				var msg = app.u.successMsgObject(_rtag.message);
 				msg['_rtag'] = _rtag; //pass in _rtag as well, as that contains info for parentID.
 				app.u.throwMessage(msg);
@@ -1177,6 +1205,9 @@ css : type, pass, path, id (id should be unique per css - allows for not loading
 			}, //loadResourceFile
 
 
+
+
+
 //filename is full path of .css file (or valid relative path)
 //domID is optional id to add to <link> allows for removal or changing later.
 //if you pass a domID that already exists, that file is 'saved over'.
@@ -1203,7 +1234,6 @@ css : type, pass, path, id (id should be unique per css - allows for not loading
 			}, //loadCSSFile
 
 
-
 //a UI Action should have a databind of data-app-event (this replaces data-btn-action).
 //value of action should be EXT|buttonObjectActionName.  ex:  admin_orders|orderListFiltersUpdate
 //good naming convention on the action would be the object you are dealing with followed by the action being performed OR
@@ -1215,6 +1245,7 @@ css : type, pass, path, id (id should be unique per css - allows for not loading
 				obj = obj || {}; //needs to be outside 'each' or obj gets set to blank.
 				if($target && $target.length && typeof($target) == 'object')	{
 //					app.u.dump(" -> target exists"); app.u.dump($target);
+//don't auto-pass context. will be harder for event delegation
 					$("[data-app-event]",$target).each(function(){
 						var $ele = $(this),
 						extension = $ele.data('app-event').split("|")[0],
@@ -1340,7 +1371,8 @@ and model that needed to be permanently displayed had to be converted into an ob
 
 			if(typeof msg === 'object')	{
 //				app.u.dump(" -> msg: "); app.u.dump(msg);
-				if(msg.parentID){$target = $(app.u.jqSelector('#',msg.parentID));}
+				if(msg._rtag && msg._rtag.jqObj)	{$target = msg._rtag.jqObj}
+				else if(msg.parentID){$target = $(app.u.jqSelector('#',msg.parentID));}
 				else if(msg._rtag && (msg._rtag.parentID || msg._rtag.targetID || msg._rtag.selector))	{
 					if(msg._rtag.parentID)	{$target = $(app.u.jqSelector('#',msg._rtag.parentID))}
 					else if(msg._rtag.targetID)	{$target = $(app.u.jqSelector('#',msg._rtag.targetID))}
@@ -1425,6 +1457,7 @@ URI PARAM
 //				app.u.dump(s.replace(/"/g, "\",\x22"));
 				s = s.replace(/&amp;/g, '&'); //needs to happen before the decodeURIComponent (specifically for how banner elements are encoded )
 				// .replace(/"/g, "\",\x22")
+				app.u.dump('{"' + s.replace(/&/g, "\",\"").replace(/=/g,"\":\"") + '"}');
 				r = JSON.parse(decodeURIComponent('{"' + s.replace(/&/g, "\",\"").replace(/=/g,"\":\"") + '"}'));
 				}
 			else	{}
@@ -1491,6 +1524,8 @@ AUTHENTICATION/USER
 			return r;
 			}, //determineAuthentication
 
+
+
 //pass in a simple array and all the duplicates will be removed.
 //handy for dealing with product lists created on the fly (like cart accessories)
 		removeDuplicatesFromArray : function(arrayName)	{
@@ -1504,6 +1539,35 @@ AUTHENTICATION/USER
 				}
 			return newArray;
 			},
+
+//pass an object in as first param and an array as the second.
+//This will return a NEW object, removing any keys from 'obj' that are not declared in 'whitelist'.
+		getWhitelistedObject : function(obj,whitelist)	{
+			var r = {};
+			for(index in obj)	{
+// ** 201332 indexOf changed to $.inArray for IE8 compatibility, since IE8 only supports the indexOf method on Strings
+				if($.inArray(index, whitelist) >= 0)	{
+					r[index] = obj[index];
+					}
+				else	{} //not in whitelist
+				}
+			return r;
+			},
+//pass an object in as first param and an array as the second.
+//This will return a NEW object, removing any keys from 'obj' that ARE declared in 'blacklist'
+		getBlacklistedObject : function(obj,blacklist)	{
+			var r = $.extend({},obj);
+			for(index in obj)	{
+// ** 201332 indexOf changed to $.inArray for IE8 compatibility, since IE8 only supports the indexOf method on Strings
+				if($.inArray(index, blacklist) >= 0)	{
+					delete r[index];
+					}
+				else	{} //is not in blacklist
+				}
+			return r;
+			},
+
+
 
 //used in checkout to populate username: so either login or bill/email will work.
 //never use this to populate the value of an email form field because it may not be an email address.
@@ -1660,12 +1724,16 @@ VALIDATION
 				return false //disable key press
 				}
 			},
-		
+
+//* 201320 -> changed to support tab key.
 		alphaNumeric : function(event)	{
 			var r = true; //what is returned.
-			if((event.keyCode ? event.keyCode : event.which) == 8) {} //backspace. allow.
+//			if((event.keyCode ? event.keyCode : event.which) == 8) {} //backspace. allow.
+			var keyCode = event.keyCode ? event.keyCode : event.which
+			if(keyCode == 8 || keyCode == 9)	{} //allows backspace and tabs now. 
 			else	{
-				var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+//				var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+				var key = String.fromCharCode(keyCode);
 				var regex = new RegExp("^[a-zA-Z0-9]+$");
 				if (!regex.test(key)) {
 					event.preventDefault();
@@ -1691,33 +1759,60 @@ VALIDATION
 
 				
 				var r = true; //what is returned. false if any required fields are empty.
+				var radios = {};  //an object used to store whether or not radios are required and, if so, whether one is selected.
 				$form.showLoading({'message':'Validating'});
 
 				$('.formValidationError',$form).empty().remove(); //clear all previous error messaging
 				
 				$('input, select, textarea',$form).each(function(){
-					var $input = $(this),
-					$span = $("<span \/>").css('padding-left','6px').addClass('formValidationError');
+					var
+						$input = $(this),
+						radios = new Array(),
+						$span = $("<span \/>").css('padding-left','6px').addClass('formValidationError');
 					
 					$input.removeClass('ui-state-error'); //remove previous error class
 
-//					app.u.dump(" -> validating input."+$input.attr('name'));
+//					if($input.prop('type') != 'radio')	{
+//						app.u.dump(" -> validating input name: "+$input.attr('name')+" required: "+$input.attr('required') || 'no')
+//						}
 					
 					function removeClass($t){
 						$t.off('focus.removeClass').on('focus.removeClass',function(){$t.removeClass('ui-state-error')});
 						}
+
 //					app.u.dump(" -> "+$input.attr('name')+" - required: "+$input.attr('required'));
 					if($input.is(':hidden') && $input.data('validation-rules') && $input.data('validation-rules').indexOf('skipIfHidden') >= 0)	{
 						//allows for a form to allow hidden fields that are only validated if they're displayed. ex: support fieldset for topic based questions.
+						//indexOf instead of == means validation-rules (notice the plural) can be a comma seperated list
 						}
-//					else if($input.is("[type='radio']")){
-///						app.u.dump("IS A RADIO BUTTON");
-//						}
+					else if($input.prop('type') == 'radio'){
+//keep a list of all required radios. only one entry per name.
+//app.u.dump(" -> $input.attr('name'): "+$input.attr('name'));
+						if($input.attr('required') && $.inArray($input.attr('name'), radios) == -1)	{radios.push($input.attr('name'))}
+						}
+//only validate the field if it's populated. if it's required and empty, it'll get caught by the required check later.
+					else if($input.prop('type') == 'url' && $input.val())	{
+						var urlregex = new RegExp("^(http:\/\/|https:\/\/|ftp:\/\/){1}([0-9A-Za-z]+\.)");
+						if (urlregex.test($input.val())) {}
+						else	{
+							r = false;
+							$input.addClass('ui-state-error');
+							$input.after($span.text('not a valid url. '));
+							$("<span class='toolTip' title='A url must be formatted as http, https, or ftp ://www.something.com/net/org/etc'>?<\/span>").tooltip().appendTo($span);
+							}
+						}
 					else if ($input.attr('type') == 'email' && !app.u.isValidEmail($input.val()))	{
-						r = false;
-						$input.addClass('ui-state-error');
-						$input.after($span.text('not a valid email address'));
-						removeClass($input);
+						//only 'error' if field is required. otherwise, show warning
+// ** 201330 -> field was erroring if email was invalid even if field was not required.						
+						if($input.attr('required') == 'required')	{
+							r = false;
+							$input.addClass('ui-state-error');
+							}
+						else if($input.val())	{
+							$input.after($span.text('not a valid email address'));
+							removeClass($input);
+							}
+						else	{} //field is not required and blank.
 						}
 					else if($input.attr('maxlength') && $input.val().length > $input.attr('maxlength'))	{
 						r = false;
@@ -1732,6 +1827,22 @@ VALIDATION
 						$input.after($span.text('requires a minimum of '+$input.data('minlength')+' characters'));
 						removeClass($input);
 						}
+// * 201320 -> now support 'min' attr which is the minimum numerical value (ex: 0 or 7) for the input value.
+//number input type has a native min for minimum value
+					else if($input.attr('min') && Number($input.val()) < Number($input.attr('min')))	{
+						r = false;
+						$input.addClass('ui-state-error');
+						$input.after($span.text('requires a minimum value of '+$input.attr('min')));
+						removeClass($input);
+						}
+// * 201320 -> now support 'min' attr which is the minimum numerical value (ex: 0 or 7) for the input value.
+//number input type has a native min for minimum value
+					else if($input.attr('max') && Number($input.val()) > Number($input.attr('max')))	{
+						r = false;
+						$input.addClass('ui-state-error');
+						$input.after($span.text('requires a maximum value of '+$input.attr('max')));
+						removeClass($input);
+						}
 //** 201318 -> moved this down so that the more specific error messages would be displayed earlier
 					else if($input.attr('required') == 'required' && !$input.val())	{
 						r = false;
@@ -1740,9 +1851,26 @@ VALIDATION
 						removeClass($input);
 						}
 					else	{
-						$input.removeClass('ui-state-error'); //removed in case added in previous validation attempt.
+						
 						}
+					
+					if($input.hasClass('ui-state-error'))	{
+						app.u.dump(" -> "+$input.attr('name')+" did not validate. ishidden: "+$input.is(':hidden'));
+						}
+					
 					});
+				if(radios.length)	{
+					app.u.dump(" -> radios has length");
+					var L = radios.length;
+					for(var i = 0; i < L; i += 1)	{
+						if($("input:radio[name='"+radios[i]+"']:checked",$form).val())	{} //is selected.
+						else	{
+							$("input:radio[name='"+radios[i]+"']",$form).addClass('ui-state-error');
+							}
+						}
+					//check to see if the required radios have a value set. this list only contains radio input names that are required.
+					//if none are selected. add ui-state-error to each radio input of that name.
+					}
 				$form.hideLoading();
 				}
 			else	{
@@ -1845,7 +1973,6 @@ tag = boolean. Set to true to output the <img tag. set to false or blank to just
 
 app.u.makeImage({"name":"","w":150,"h":150,"b":"FFFFFF","class":"prodThumb","tag":1});
 */
-
 		makeImage : function(a)	{
 //			app.u.dump(a);
 // ** 201318 -> other libs are no longer supported. forced to username
@@ -1868,12 +1995,12 @@ app.u.makeImage({"name":"","w":150,"h":150,"b":"FFFFFF","class":"prodThumb","tag
 //In an admin session, the config.js isn't loaded. The secure domain is set as a global var when a domain is selected or can be retrieved from adminDomainList
 			if(app.vars.thisSessionIsAdmin)	{
 				url = 'https:\/\/'+(app.vars.https_domain || app.ext.admin.a.getDataForDomain(app.vars.domain,'https'))+"\/"
+				url += "media\/img\/"+app.vars.username+"\/";
 				}
 			else	{
 				url = location.protocol === 'https:' ? zGlobals.appSettings.https_app_url : zGlobals.appSettings.http_app_url;
+				url += "media\/img\/"+app.vars.username+"\/";
 				}
-
-			url += "media\/img\/"+app.vars.username+"\/";
 		
 			if((a.w == '') && (a.h == ''))
 				url += '-';
@@ -2332,7 +2459,7 @@ var $r = app.templates[templateID].clone(); //clone is always used so original i
 $r.attr('data-templateid',templateID); //note what templateID was used. handy for troubleshooting or, at some point, possibly re-rendering template
 if(app.u.isSet(eleAttr) && typeof eleAttr == 'string')	{
 //	app.u.dump(' -> eleAttr is a string.');
-	$r.attr('id',app.u.makeSafeHTMLId(eleAttr))  
+	$r.attr('id',app.u.makeSafeHTMLId(eleAttr)) 
 	}
 //NOTE - eventually, we want to get rid of this check and just use the .data at the bottom.
 else if(typeof eleAttr == 'object')	{
@@ -2356,7 +2483,10 @@ else if(typeof eleAttr == 'object')	{
 			}
 		$r.data(eleAttr);
 		}
-	if(eleAttr.id)	{$r.attr('id',app.u.makeSafeHTMLId(eleAttr.id))} //override the id with a safe id, if set.
+// * 201324 -> absence of eleAttr check caused JS error
+// ** 201324 -> attempting to get rid of this makeSafe function. jqSelector on the selector side should handle these.
+//	if(eleAttr && eleAttr.id)	{$r.attr('id',app.u.makeSafeHTMLId(eleAttr.id))} //override the id with a safe id, if set.
+	if(eleAttr && eleAttr.id)	{$r.attr('id',eleAttr.id)} //override the id with a safe id, if set.
 	}
 //app.u.dump(" -> got through transmogrify. now move on to handle translation and return it.");
 return this.handleTranslation($r,data);
@@ -2388,7 +2518,6 @@ most likely, this will be expanded to support setting other data- attributes. ##
 				
 			if(templateID && app.templates[templateID])	{
 				r = app.templates[templateID].clone();
-				
 				if(typeof eleAttr == 'string')	{r.attr('id',app.u.makeSafeHTMLId(eleAttr))}
 				else if(typeof eleAttr == 'object')	{
 //an attibute will be set for each. {data-pid:PID} would output data-pid='PID'
@@ -2668,6 +2797,7 @@ return $r;
 //				$tag.css('display','none'); //if there is no image, hide the src. 
 				}
 			}, //imageURL
+		
 
 		stuffList : function($tag,data)	{
 //			app.u.dump("BEGIN renderFormat.stuffList");
@@ -2689,7 +2819,7 @@ return $r;
 //handy for enabling tabs and whatnot based on whether or not a field is populated.
 //doesn't actually do anything with the value.
 		showIfSet : function($tag,data)	{
-			app.u.dump("showIfSet: "+data.value);
+//			app.u.dump(" -> showIfSet: "+data.value);
 			if(data.value)	{
 				$tag.show().css('display','block'); //IE isn't responding to the 'show', so the display:block is added as well.
 				}
@@ -2701,6 +2831,17 @@ return $r;
 			if(data.value)	{
 				$tag.hide(); //IE isn't responding to the 'show', so the display:block is added as well.
 				}
+			},
+
+		optionsFromList : function($tag,data)	{
+//			app.u.dump("BEGIN renderFormats.optionsFromList.  data.value: "); app.u.dump(data.value);
+			var L = data.value.length;
+			for(var index in data.value)	{
+				$("<option \/>").val((data.bindData.value) ? data.value[index][data.bindData.value] : data.value[index]).text((data.bindData.text) ? data.value[index][data.bindData.text] : data.value[index]).appendTo($tag);
+				}
+//			for(var i = 0; i < L; i += 1)	{
+//				$("<option \/>").val((data.bindData.value) ? data.value[i][data.bindData.value] : data.value[i]).text((data.bindData.text) ? data.value[i][data.bindData.text] : data.value[i]).appendTo($tag);
+//				}
 			},
 
 //for embedding. There is an action for showing a youtube video in an iframe in quickstart.
@@ -2800,6 +2941,8 @@ else	{
 			for(var i = 0; i < L; i += 1)	{
 //				app.u.dump("whitelist[i]: "+whitelist[i]+" and tagsDisplayed: "+tagsDisplayed+" and maxTagsShown: "+maxTagsShown);
 //				app.u.dump("data.value.indexOf(whitelist[i]): "+data.value.indexOf(whitelist[i]));
+// ** 201332 NOTE: data.value is assumed to be a String, a comma separated list of values.  If it were an array, we would
+//				need to use $.inArray instead of indexOf for IE8 compatibility
 				if(data.value.indexOf(whitelist[i]) >= 0 && (tagsDisplayed <= maxTagsShown))	{
 
 					spans += "<span class='tagSprite "+whitelist[i].toLowerCase()+"'><\/span>";
@@ -2867,20 +3010,65 @@ $tmp.empty().remove();
 			$tag.html(o);
 			}, //text
 
-//for use on inputs. populates val() with the value
+//for use on inputs.
+//populates val() with the value
+// ** 201324 -> rather than having separate renderFormats for different input types, this can now be used for all.
+//				cb needs to use 'prop' not 'attr'. That is the right way to do it.
 		popVal : function($tag,data){
-			$tag.val(data.value);
+			if($tag.is(':checkbox'))	{
+//				app.u.dump(" -> popVal, is checkbox. value: "+data.value+" and number: "+Number(data.value));
+				if(Number(data.value) === 0)	{
+					$tag.prop('checked',false); //have to handle unchecking in case checked=checked when template created.
+					}
+				else	{
+//the value here could be checked, on or some other string. if the value is set (and we won't get this far if it isn't), check the box.
+					$tag.prop('checked',true);
+					}
+				}
+			else if($tag.is(':radio'))	{
+//with radio's the value passed will only match one of the radios in that group, so compare the two and if a match, check it.
+				if($tag.val() == data.value)	{$tag.attr('checked','checked')}
+				}
+			else if($tag.is('select') && $tag.attr('multiple') == 'multiple')	{
+//				app.u.dump("GOT HERE!!!!!!!!!!!!!!!!");
+				if(typeof data.value === 'object')	{
+//					app.u.dump(" -> value is an object.");
+					var L = data.value.length;
+					for(var i = 0; i < L; i += 1)	{
+//						app.u.dump(" -> data.value[i]: "+data.value[i]);
+						$('option[value="' + data.value[i] + '"]',$tag).prop('selected','selected');
+						}
+					}
+				}
+			else	{
+//for all other inputs and selects, simply setting the value will suffice.
+				if($tag.data('stringify'))	{
+					$tag.val(JSON.stringify(data.value));
+					}
+				else	{
+					$tag.val(data.value);
+					}
+				}
+			
+			if($tag.data('trigger'))	{
+				if($tag.is('select'))	{}
+				else	{
+					$tag.trigger($tag.data('trigger'))
+					}
+				}
+			
 			}, //text
 
 // * 201318 -> allows for data-bind on a radio input.
-		popRadio : function($tag,data)	{
+// *** 201324 -> retired in favor of a more versatile popVal.
+/*		popRadio : function($tag,data)	{
 			if($tag.val() == data.value)	{$tag.attr('checked','checked')}
 			},
-
+*/
 //only use this on fields where the value is boolean
 //if setting checked=checked by default, be sure to pass hideZero as false.
-		popCheckbox : function($tag,data){
-//			app.u.dump(" -> popCheckbox data.value: "+data.value);
+// *** 201324 -> retired in favor of a more versatile popVal.
+/*		popCheckbox : function($tag,data){
 			if(Number(data.value))	{$tag.attr('checked',true);}
 			else if(data.value === 'on')	{$tag.attr('checked',true);}
 			else if(data.value == true)	{$tag.attr('checked',true);}
@@ -2888,7 +3076,10 @@ $tmp.empty().remove();
 				$tag.attr('checked',false); //have to handle unchecking in case checked=checked when template created.
 				}
 			else{}
+			app.renderFormats.popVal($tag,data);
+
 			},
+*/
 
 //will allow an attribute to be set on the tag. attribute:data-stid;var: product(sku); would set data-stid='sku' on tag
 //pretext and posttext are added later in the process, but this function needed to be able to put some text before the output
@@ -2902,6 +3093,11 @@ $tmp.empty().remove();
 				o += app.u.makeSafeHTMLId(data.value);
 			else
 				o += data.value
+
+
+			if(data.bindData.valuePosttext)	{
+				o += data.bindData.valuePosttext;
+				}
 
 			$tag.attr(data.bindData.attribute,o);
 			}, //text
@@ -2935,6 +3131,29 @@ $tmp.empty().remove();
 				}
 			}, //money
 
+
+
+
+// ** 201324 -> used for displaying a new format for datastorage.
+//wikihash is the name of the datastorage format. looks like this:
+// key:value\nAnotherkey:AnotherValue\n
+// use 'key' and 'value' in the data-binds of the template.
+//pass template to apply per row as loadsTemplate: on the databind.
+//there's an example of this in admin_syndication (ebay category chooser)
+		wikiHash2Template : function($tag,data)	{
+			var
+				rows = data.value.split("\n"),
+				L = rows.length;
+			
+			for(var i = 0; i < L; i += 1)	{
+				var kvp = rows[i].split(/:(.+)?/);
+				$tag.append(app.renderFunctions.transmogrify({'key':kvp[0],'value':kvp[1]},data.bindData.loadsTemplate,{'key':kvp[0],'value':kvp[1]}));
+				}
+			
+			},
+
+
+
 //This should be used for all lists going forward that don't require special handling (such as stufflist, prodlist, etc).
 //everthing that's in the data lineitem gets passed as first param in transmogrify, which will add each key/value as data-key="value"
 //at this time, prodlist WON'T use this because each pid in the list needs/makes an API call.
@@ -2944,20 +3163,35 @@ $tmp.empty().remove();
 		processList : function($tag,data){
 //			app.u.dump("BEGIN renderFormats.processList");
 			$tag.removeClass('loadingBG');
-			if(data.bindData.loadsTemplate)	{
+// * 201324 -> added check for value to be object, as that's what process list is intended for.
+			if(data.bindData.loadsTemplate && typeof data.value === 'object')	{
 				var $o, //recycled. what gets added to $tag for each iteration.
 				int = 0;
+//				app.u.dump(" -> data.value.length: "+data.value.length);
 				for(var i in data.value)	{
 					if(data.bindData.limit && int >= Number(data.bindData.limit)) {break;}
 					else	{
-						$o = app.renderFunctions.transmogrify(data.value[i],data.bindData.loadsTemplate,data.value[i]);
-						if(typeof $o == 'object')	{
-							if(data.value[i].id){} //if an id was set, do nothing.
-							else	{$o.attr('data-obj_index',i)} //set index for easy lookup later.
-							$tag.append($o);
+//if data.value was an associative array....
+// ** 201320 -> needed processList to support indexed arrays AND associative arrays.
+// ** 201324 -> added data.value check here. if val was null (which happened w/ bad data) then a JS error occured.
+						if(data.value[i] && typeof data.value[i] === 'object')	{
+							if(!data.value[i].index && isNaN(i)) {data.value[i].index = i} //add an 'index' field to the data. handy for hashes (like in flexedit) where the index is something useful to have in the display.
+							$o = app.renderFunctions.transmogrify(data.value[i],data.bindData.loadsTemplate,data.value[i]);
+							if($o instanceof jQuery)	{
+								if(data.value[i].id){} //if an id was set, do nothing. there will error on an array (vs object)
+								else	{$o.attr('data-obj_index',i)} //set index for easy lookup later.
+								$tag.append($o);
+								}
+							else	{
+								//well that's not good.
+								app.u.dump("$o:"); app.u.dump($o);
+								}
 							}
 						else	{
-							$tag.anymessage({'message':'Issue creating template using '+data.bindData.loadsTemplate,'persistent':true});
+							$o = app.renderFunctions.transmogrify({'value':data.value[i],'key':i},data.bindData.loadsTemplate,{'value':data.value[i],'key':i});
+							$tag.append($o);
+							$o.attr('data-obj_index',i);
+//							$tag.anymessage({'message':'Issue creating template using '+data.bindData.loadsTemplate,'persistent':true});
 							}
 						}
 					int += 1;				

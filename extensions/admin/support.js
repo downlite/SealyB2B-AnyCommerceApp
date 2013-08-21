@@ -16,11 +16,6 @@
 
 ************************************************************** */
 
-/*
-An extension for managing the media library in addition to ALL other file uploads,including, but not limited to: csv and zip.
-*/
-
-
 
 var admin_support = function() {
 	var theseTemplates = new Array('supportFileUploadTemplate','supportPageTemplate','supportTicketRowTemplate','supportTicketCreateTemplate','supportTicketDetailTemplate','supportTicketFollowupTemplate','helpPageTemplate','helpDocumentTemplate','helpSearchResultsTemplate');
@@ -102,6 +97,27 @@ var admin_support = function() {
 				},
 
 
+			showPlatformInfo : function()	{
+				var $D = app.ext.admin.i.dialogCreate({
+					'title':'Platform Information',
+					'templateID':'platformInfoTemplate',
+					'data' : app.ext.admin.vars.versionMetaData
+					}).addClass('objectInspector');
+				
+				app.model.addDispatchToQ({'_cmd':'platformInfo','_tag':	{'datapointer' : 'info','callback':function(rd){
+					if(app.model.responseHasErrors(rd)){
+						$D.anymessage({'message':rd});
+						}
+					else	{
+						//
+						$D.append(app.ext.admin_tools.u.objExplore(app.u.getBlacklistedObject(app.data[rd.datapointer],['ts','_uuid','_rtag','_rcmd'])));
+						}
+					}}},'mutable');
+				app.model.dispatchThis('mutable');
+				$D.dialog('option','modal',false);
+				$D.dialog('open');
+				},
+
 			showHelpInterfaceInDialog : function()	{
 				var $container = $('#helpDialog');
 				if($container.length)	{
@@ -141,18 +157,18 @@ var admin_support = function() {
 						$target.effect("highlight", {}, 1500);
 						}
 					else	{
-						$target = $("<div \/>",{'id':targetID,'title':'help doc: '+docid}).addClass('helpDoc').appendTo('body');
+						$target = $("<div \/>",{'id':targetID,'title':'help doc: '+docid}).attr('docid',docid).addClass('helpDoc').appendTo('body');
 						$target.dialog({width:500, height:500});
-						$target.anycontent({'templateID':'helpDocumentTemplate','showLoadingMessage':'Fetching help documentation...'});
+						$target.showLoading({'message':'Fetching help documentation...'});
 
 						app.ext.admin.calls.helpDocumentGet.init(docid,{'callback':function(rd){
 							if(app.model.responseHasErrors(rd)){
 								$('#globalMessaging').anymessage({'message':rd});
 								}
 							else	{
-								$target.anycontent({'datapointer':rd.datapointer});
-								app.u.handleAppEvents($panel);
-								app.ext.admin_support.u.handleHelpDocOverwrites($panel);
+								$target.anycontent({'templateID':'helpDocumentTemplate','datapointer':rd.datapointer});
+								app.u.handleAppEvents($target);
+								app.ext.admin_support.u.handleHelpDocOverwrites($target);
 								}
 							}},'mutable');
 						app.model.dispatchThis('mutable');
@@ -222,7 +238,6 @@ var admin_support = function() {
 			gatherIntel : function()	{
 				var r = "" //what is returned.
 				r += "\n\n ##### The following information is for the admin interface and user computer, not necessarily what was used in the issue of the ticket\n";
-				
 				r += "MVC version: "+app.model.version;
 				r += "\nMVC release: "+app.vars.release;
 				r += "\ndevice id: "+app.vars.deviceid;
@@ -234,6 +249,10 @@ var admin_support = function() {
 				r += "\noscpu: "+navigator.oscpu;
 				r += "\nscreen size: "+screen.width+" X "+screen.height;
 				r += "\nbrowser size: "+$('body').width()+" X "+$('body').height();
+				
+				var info = app.u.getBlacklistedObject(app.data.info,['server-time','ts','_uuid','_rtag','_rcmd']);
+				for(var index in info)	{r+= index+": "+info[index]}
+				
 				return r;
 				},
 
@@ -352,13 +371,22 @@ var admin_support = function() {
 					$btn.off('click.execTicketClose').on('click.execTicketClose',function(event){
 						event.preventDefault();
 						
-						var $tbody = $btn.closest("[data-app-role='dualModeList']").find("[data-app-role='dualModeListContents']"),
-						ticketID = $btn.closest('tr').data('id');
+						var $D = app.ext.admin.i.dialogConfirmRemove({
+							'message':'Are you sure you want to close this ticket?',
+							'removeButtonText' : 'Close Ticket',
+							'removeFunction':function(rd){
+								var
+									$tbody = $btn.closest("[data-app-role='dualModeList']").find("[data-app-role='dualModeListContents']"),
+									ticketID = $btn.closest('tr').data('id');
+								app.model.destroy('adminTicketList');
+								app.ext.admin.calls.adminTicketMacro.init(ticketID,new Array('CLOSE'),{},'immutable');
+								app.ext.admin_support.u.reloadTicketList($tbody,$btn.closest("[data-app-role='dualModeList']").find("[name='disposition']").val(),'immutable'); //handles showloading
+								app.model.dispatchThis('immutable');
+								$D.dialog('close');
+								}
+							});
 						
-						app.model.destroy('adminTicketList');
-						app.ext.admin.calls.adminTicketMacro.init(ticketID,new Array('CLOSE'),{},'immutable');
-						app.ext.admin_support.u.reloadTicketList($tbody,$btn.closest("[data-app-role='dualModeList']").find("[name='disposition']").val(),'immutable'); //handles showloading
-						app.model.dispatchThis('immutable');
+
 						});
 					}
 				}, //execTicketClose
@@ -380,7 +408,7 @@ var admin_support = function() {
 					$panelContents = $btn.closest('.ui-widget-content');
 					
 					if(app.u.validateForm($form))	{
-						$panelContents.showLoading({'message':'Updateing ticket'});
+						$panelContents.showLoading({'message':'Updating ticket'});
 						app.ext.admin.calls.adminTicketMacro.init($panelContents.data('ticketid'),['APPEND?note='+encodeURIComponent($("[name='note']",$form).val())],{'callback':function(rd){
 							$panelContents.hideLoading();
 							if(app.model.responseHasErrors(rd)){
@@ -395,6 +423,28 @@ var admin_support = function() {
 					else	{} //validateForm handles displaying errors.
 					});
 				}, //execTicketUpdate
+
+//executed when the download button for a file is clicked.
+			adminTicketFileGetExec : function($btn)	{
+				$btn.button({icons: {primary: "ui-icon-circle-arrow-s"},text: false});
+				$btn.off('click.helpSearch').on('click.helpSearch',function(event){
+					event.preventDefault();
+					$('#supportContent').showLoading({'message':'Fetching Download'});
+					app.model.addDispatchToQ({
+						'_cmd':'adminTicketFileGet',
+						'ticketid' : $btn.closest("[data-ticketid]").data('ticketid'),
+						'remote' : $btn.closest('tr').data('remote'),
+						'base64' : 1,
+						'_tag':	{
+							'callback':'fileDownloadInModal',
+							'datapointer':'adminTicketFileGet',
+							'extension':'admin',
+							'jqObj' : $('#supportContent')
+							}
+						},'mutable');
+					app.model.dispatchThis('mutable');
+					})
+				},
 
 			execHelpDetailEdit : function($btn)	{
 				$btn.button();
@@ -532,26 +582,33 @@ app.model.dispatchThis('mutable');
 			showTicketLastUpdate : function($ele)	{
 				if($ele.text().charAt(0) == '0')	{} //value will be 00:00: etc if no update has occured.
 				else	{
+					$ele.addClass('lookLikeLink');
 					$ele.off('click.showTicketLastUpdate').on('click.showTicketLastUpdate',function(){
 						var $tr = $ele.closest('tr'),
 						ticketID = $tr.data('id');
-						
-						$ele.addClass('lookLikeLink');
+
 						$tr.closest('tbody').showLoading({'message':'Retrieving last message for ticket '+ticketID});
-						app.ext.admin.calls.adminTicketDetail.init(ticketID,{'callback':function(rd){
-							$tr.closest('tbody').hideLoading();
-							if(app.model.responseHasErrors(rd)){
-								$('#globalMessaging').anymessage({'message':rd});
-								}
-							else	{
-								$ele.off('click.showTicketLastUpdate').removeClass('lookLikeLink');
-								if(app.data[rd.datapointer] && app.data[rd.datapointer]['@FOLLOWUPS'] && app.data[rd.datapointer]['@FOLLOWUPS'].length)	{
-									$tr.after("<tr class='hideInMinimalMode'><td class='alignRight'><span class='ui-icon ui-icon-arrowreturnthick-1-e'><\/span><\/td><td colspan='7'><pre class='preformatted'>"+app.data[rd.datapointer]['@FOLLOWUPS'][(app.data[rd.datapointer]['@FOLLOWUPS'].length - 1)].txt+"<\/pre><\/td><\/tr>"); //responses are in chronological order, so zero is always the first post.
-									}
-								else	{} //no followups. "shouldn't" get here cuz link won't appear if there an update hasn't occured.
-								}
-							}},'mutable');
-						app.model.dispatchThis('mutable');
+app.model.addDispatchToQ({
+	'_cmd':'adminTicketDetail',
+	'ticketid':ticketID,
+	'_tag':	{
+		'datapointer' : 'adminTicketDetail|'+ticketID,
+		'callback':function(rd){
+			$tr.closest('tbody').hideLoading();
+			if(app.model.responseHasErrors(rd)){
+				$('#globalMessaging').anymessage({'message':rd});
+				}
+			else	{
+				$ele.off('click.showTicketLastUpdate').removeClass('lookLikeLink');
+				if(app.data[rd.datapointer] && app.data[rd.datapointer]['@FOLLOWUPS'] && app.data[rd.datapointer]['@FOLLOWUPS'].length)	{
+					$tr.after("<tr class='hideInMinimalMode'><td class='alignRight'><span class='ui-icon ui-icon-arrowreturnthick-1-e'><\/span><\/td><td colspan='7'><pre class='preformatted'>"+app.data[rd.datapointer]['@FOLLOWUPS'][(app.data[rd.datapointer]['@FOLLOWUPS'].length - 1)].txt+"<\/pre><\/td><\/tr>"); //responses are in chronological order, so zero is always the first post.
+					}
+				else	{} //no followups. "shouldn't" get here cuz link won't appear if there an update hasn't occured.
+				}
+			}
+		}
+	},'mutable');
+app.model.dispatchThis('mutable');
 						});
 					}
 				}, //showTicketLastUpdate
@@ -594,19 +651,25 @@ app.model.dispatchThis('mutable');
 						
 						app.ext.admin.u.toggleDualMode($btn.closest("[data-app-role='dualModeContainer']"),'detail');
 						
-						app.ext.admin.calls.adminTicketDetail.init(ticketID,{
-							'callback':function(rd){
-								if(app.model.responseHasErrors(rd)){
-									app.u.throwMessage(rd);
-									}
-								else	{		
-									$panel.anycontent({'datapointer':rd.datapointer});
-									app.u.handleAppEvents($panel);
+						app.model.addDispatchToQ({'_cmd':'adminTicketFileList','ticketid':ticketID,'_tag':	{'datapointer' : 'adminTicketFileList|'+ticketID}},'mutable');
+						app.model.addDispatchToQ({
+							'_cmd':'adminTicketDetail',
+							'ticketid':ticketID,
+							'_tag':	{
+								'datapointer' : 'adminTicketDetail|'+ticketID,
+								'callback':function(rd){
+									if(app.model.responseHasErrors(rd)){
+										app.u.throwMessage(rd);
+										}
+									else	{		
+										$panel.anycontent({'data':$.extend(true,{},app.data[rd.datapointer],app.data['adminTicketFileList|'+ticketID])});
+										app.u.handleAppEvents($panel);
+										}
 									}
 								}
 							},'mutable');
-							$panel.slideDown('fast',function(){$panel.showLoading({'message':'Fetching Ticket Details.'});});
-							app.model.dispatchThis('mutable');
+						app.model.dispatchThis('mutable');
+						$panel.slideDown('fast',function(){$panel.showLoading({'message':'Fetching Ticket Details.'});});
 
 
 						}
