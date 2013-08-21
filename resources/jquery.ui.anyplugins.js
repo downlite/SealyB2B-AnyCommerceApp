@@ -20,13 +20,13 @@ http://net.tutsplus.com/tutorials/javascript-ajax/coding-your-first-jquery-ui-pl
 // ** 201318 -> replacement for obsolete .browser() function.
 //.browser() is deprecated as of jquery 1.3 and removed in 1.9+ however a lot of plugins use it.
 // Figure out what browser is being used
-if(typeof jQuery.browser == 'undefined')	{
+if(typeof typeof jQuery.browser == 'undefined')	{
 	jQuery.browser = {
-		version: (navigator.userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [0,'0'])[1],
-		safari: /webkit/.test( navigator.userAgent ),
-		opera: /opera/.test( navigator.userAgent ),
-		msie: /msie/.test( navigator.userAgent ) && !/opera/.test( navigator.userAgent ),
-		mozilla: /mozilla/.test( navigator.userAgent ) && !/(compatible|webkit)/.test( navigator.userAgent )
+		version: (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [0,'0'])[1],
+		safari: /webkit/.test( userAgent ),
+		opera: /opera/.test( userAgent ),
+		msie: /msie/.test( userAgent ) && !/opera/.test( userAgent ),
+		mozilla: /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent )
 		}
 	}
 
@@ -193,16 +193,6 @@ For the list of available params, see the 'options' object below.
 						}
 					}
 //the validate order request returns a list of issues.
-				else if(msg['@RESPONSES'])	{
-					var L = msg['@RESPONSES'].length;
-//					console.dir("Got to @issues, length: "+L);
-					$r = $("<ul \/>"); //adds a left margin to make multiple messages all align.
-					for(var i = 0; i < L; i += 1)	{
-						$r.append("<li>"+msg['@RESPONSES'][i].type+": "+msg['@RESPONSES'][i].msg+"<\/li>");
-						}
-					}
-
-//the validate order request returns a list of issues.
 				else if(msg['@issues'])	{
 					var L = msg['@issues'].length;
 //					console.dir("Got to @issues, length: "+L);
@@ -296,12 +286,10 @@ or this: $('#bob').find('.ui-tabs-nav li:nth-child(2)').trigger('click');
 			var self = this,
 			o = self.options, //shortcut
 			$t = self.element; //this is the targeted element (ex: $('#bob').anymessage() then $t is bob)
-// * 201320 -> changed attr from widget to data-widget-anytabs. widget isn't a valid attribute plus no conducive to multiple widgets on one element.
-			if($t.attr('data-widget-anytabs'))	{
-				app.u.dump("data-widget-anytabs -> already enabled.");
-				} //element has already been set as tabs.
+			
+			if($t.attr('widget') == 'anytabs')	{} //id has already been set as tabs.
 			else	{
-				$t.attr('data-widget-anytabs',true)
+				$t.attr('widget','anytabs')
 				$t.addClass('ui-tabs ui-widget ui-widget-anytabs')
 				self.tabs = $("ul",$t).first();
 	
@@ -360,7 +348,6 @@ or this: $('#bob').find('.ui-tabs-nav li:nth-child(2)').trigger('click');
 */
 			$('a',this.tabs).each(function(){
 				$(this).on('click.anytabs',function(event){
-//					app.u.dump('tab clicked!');
 					self.reveal($(this).parent());
 					event.preventDefault();
 					return false;
@@ -420,12 +407,11 @@ or this: $('#bob').find('.ui-tabs-nav li:nth-child(2)').trigger('click');
 
 //clear the message entirely. run after a close. removes element from DOM.
 		destroy : function(){
-			this.element.intervaledEmpty(500,true);
+			this.element.empty();
 			this.element.removeClass("ui-tabs");
 			this.element.removeClass("ui-widget");
 			this.element.removeClass("ui-widget-anytabs");
-			this.element.data("widget-anytabs","");
-			this.element.attr("data-widget-anytabs","").removeAttr('data-widget-anytabs');
+			this.element.attr("widget","");
 			}
 		}); // create the widget
 })(jQuery); 
@@ -459,9 +445,6 @@ either templateID or (data or datapointer) are required.
 			templateID : null, //The template to be used
 			datapointer : null, //The data pointer in app.data
 			data : null, //The data used to populate the template
-// ** 201332 -> extendByDatapointers added as a means for having multiple data objects passed into translator at the same time. 
-			extendByDatapointers : new Array(), //an array of datapointers. will merge all the data into one object prior to translation
-			translateOnly : false, //will skip any add template code.
 			showLoading : true, //if no data is passed and createTemplateInstance used, if true will execute show loading.
 			showLoadingMessage : 'Fetching content...', //message passed into showLoading.
 			dataAttribs : {} //will be used to set data attributes on the template [data- not data()].
@@ -473,9 +456,9 @@ either templateID or (data or datapointer) are required.
 			o = self.options, //shortcut
 			$t = self.element; //this is the targeted element (ex: $('#bob').anymessage() then $t is bob)
 // the 'or' portion will attemplate to add a template if the ID is on the DOM.
-//			app.u.dump(" -> _init this.element.data(): "); app.u.dump(this.element.data());
-			
+
 //			app.u.dump("anycontent params: "); app.u.dump(o);
+
 			if(o.templateID && (app.templates[o.templateID] || self._addNewTemplate(o.templateID)))	{
 //				app.u.dump(" -> passed template check.");
 				self._anyContent();
@@ -490,76 +473,39 @@ either templateID or (data or datapointer) are required.
 					gMessage : true,
 					message:"Unable to translate. Either: <br \/>Template ["+o.templateID+"] not specified and/or does not exist ["+typeof app.templates[o.templateID]+"].<br \/> OR does not specified ["+typeof o.data+"] OR no datapointer ["+o.datapointer+"] does not exist in app.data "});
 				}
-// ** 201324 -> for the admin UI, need to make sure data is getting set.
-//always add the dataAttribs as 'data()'. that way they're available even if a failure occurs later.
-//applying theme as data() insteat of attr('data-** means case is preserved.
-			if(o.dataAttribs)	{
-//				app.u.dump(" -> this.element.id: "+this.element.attr('id'));
-				this.element.data(o.dataAttribs);
-				}
-			this.element.data('anycontent',true); //tag as anycontent. allows $(this).data('anycontent') to be used before applying anycontent('option','destroy');
 			}, //_init
 
 		_setOption : function(option,value)	{
 			$.Widget.prototype._setOption.apply( this, arguments ); //method already exists in widget factory, so call original.
 			},
-// when a template is translated, what is returned from this function is the data passed into transmogrify. allows for multiple data sets.
-		_getData : function()	{
-			var
-				o = this.options,
-				eData = {}; //extended data. (didn't use data to avoid confusion w/ o.data)
-			
-			//add all the datapointers into one object. 'may' run into issues here if keys are shared. shouldn't be too much of an issue in the admin interface.
-			if(!$.isEmptyObject(o.extendByDatapointers))	{
-				var L = o.extendByDatapointers.length;
-				for(var i = 0; i < L; i += 1)	{
-					if(app.data[o.extendByDatapointers[i]])	{
-						$.extend(true,eData,app.data[o.extendByDatapointers[i]])
-						}
-					}
-				}
-			
-			//datapointer can be set in addition to data or extendbydatapointers. added near the end to preserve integrity.
-			if(o.datapointer && app.data[o.datapointer])	{$.extend(true,eData,app.data[o.datapointer])}
-
-			//data can be set in addition to datapointer or extendbydatapointers. added near the end to preserve integrity.
-			if(o.data)	{$.extend(true,eData,o.data)}
-			
-			return eData;
-			},
 
 
-// *** 201332 -> there was an issue w/ anycontent being run over the same element and it double-populating the template instead of just translating on the second run. The 'istemplated' should fix that.
 		_anyContent : function()	{
 //			app.u.dump(" -> _anyContent executed.");
 			var o = this.options,
 			r = true; // what is returned. false if not able to create template.
 			//isTranslated is added as a data() var to any template that's been translated. A way to globally identify if translation has already occured.
-//			app.u.dump(" -> _anyContent this.element.data(): "); app.u.dump(this.element.data());
-
-			if(o.templateID && o.datapointer && app.data[o.datapointer] && !o.translateOnly)	{
+			
+			if(o.templateID && o.datapointer && app.data[o.datapointer])	{
 //				app.u.dump(" -> template and datapointer present. transmogrify.");
 				this.element.hideLoading().removeClass('loadingBG');
-				this.element.append(app.renderFunctions.transmogrify(o.dataAttribs,o.templateID,this._getData()));
+				this.element.append(app.renderFunctions.transmogrify(o.dataAttribs,o.templateID,app.data[o.datapointer]));
 				this.element.data('isTranslated',true);
-				this.element.data('isTemplated',true);
 				}
-			else if(o.templateID && o.data && !o.translateOnly)	{
+			else if(o.templateID && o.data)	{
 //				app.u.dump(" -> template and data present. transmogrify.");
 //				app.u.dump(" -> element.tagname: "+this.element.prop("tagName"));
 				if(typeof jQuery().hideLoading == 'function'){this.element.hideLoading().removeClass('loadingBG')}
 //				app.u.dump(" -> hideLoading has run.");
-				this.element.append(app.renderFunctions.transmogrify(o.dataAttribs,o.templateID,this._getData()));
+				this.element.append(app.renderFunctions.transmogrify(o.dataAttribs,o.templateID,o.data));
 //				app.u.dump(" -> transmogrified");
 				this.element.data('isTranslated',true);
-				this.element.data('isTemplated',true);
 //				app.u.dump(" -> data.isTranslated set to true.");
 				}
 //a templateID was specified, just add the instance. This likely means some process outside this plugin itself is handling translation.
-			else if(o.templateID && !o.translateOnly)	{
+			else if(o.templateID)	{
 //				app.u.dump(" -> templateID specified. create Instance.");
 				this.element.append(app.renderFunctions.createTemplateInstance(o.templateID,o.dataAttribs));
-				this.element.data('isTemplated',true);
 				if(o.showLoading)	{
 					this.element.showLoading({'message':o.showLoadingMessage});
 					}
@@ -567,14 +513,14 @@ either templateID or (data or datapointer) are required.
 //if just translating because the template has already been rendered
 			else if(o.data)	{
 //				app.u.dump(" -> data specified, translate selector");
-				app.renderFunctions.translateSelector(this.element,this._getData());
+				app.renderFunctions.translateSelector(this.element,o.data);
 				this.element.hideLoading().removeClass('loadingBG');
 				this.element.data('isTranslated',true);
 				}
 //if just translating because the template has already been rendered
 			else if(o.datapointer  && app.data[o.datapointer])	{
 //				app.u.dump(" -> data specified, translate selector");
-				app.renderFunctions.translateSelector(this.element,this._getData());
+				app.renderFunctions.translateSelector(this.element,app.data[o.datapointer]);
 				this.element.hideLoading().removeClass('loadingBG');
 				this.element.data('isTranslated',true);
 				}
@@ -582,14 +528,10 @@ either templateID or (data or datapointer) are required.
 				//should never get here. error handling handled in _init before this is called.
 				r = false;
 				}
-			
-
-			
 			return r;
 			},
 
 		_addNewTemplate : function()	{
-
 			var r = false; //what's returned. true if able to create template.
 			var $tmp = $(app.u.jqSelector('#',this.options.templateID));
 			if($tmp.length > 0)	{
@@ -597,15 +539,11 @@ either templateID or (data or datapointer) are required.
 				r = true;
 				}
 			else{} //do nothing. Error will get thrown later.
-			return r;
 			},
 
-//clear the contents. leave the parent.
-		_destroy : function(){
-//			app.u.dump(" -> anycontent.destroy EXECUTED");
-			this.element.intervaledEmpty();
-			this.element.removeData();
-//			app.u.dump(" --> this.element.data():"); app.u.dump(this.element.data());
+//clear the message entirely. run after a close. removes element from DOM.
+		destroy : function(){
+			this.element.empty().remove();
 			}
 		}); // create the widget
 })(jQuery); 
@@ -719,68 +657,64 @@ run $('#someTable').anytable() to have the headers become clickable for sorting 
 (function($) {
 	$.widget("ui.anytable",{
 		options : {
-			inverse : false,
-			defaultSortColumn : undefined
 			},
 		_init : function(){
-
-			var
-				$table = this.element,
-				o = this.options;			
-			
-			if($table.data('widget-anytable'))	{} //already an anytable
-			else{
-
-			$table.attr('data-widget-anytable',true);
 			this._styleHeader();
+			var $table = this.element;
 			
-			
+	
 			$('th',$table).each(function(){
 
-				var th = $(this),
-				thIndex = th.index();
-				
-				// * 201318 -> support for data-anytable-nosort='true' which will disable sorting on the th.
-				if(th.data('anytable-nosort'))	{} //sorting is disabled on this column. good for columns that only have buttons.
-				else	{
-					th.on('click.anytablesort',function(){
-						app.u.dump("anytable click triggered");
-						$table.find('td').filter(function(){
-							return $(this).index() === thIndex;
-							}).sortElements(function(a, b){
-								var r;
-								var numA = Number($.text([a]).replace(/[^\w\s]/gi, ''));
-								var numB = Number($.text([b]).replace(/[^\w\s]/gi, ''));
-								if(numA && numB)	{
-					//				console.log('is a number');
-									r = numA > numB ? o.inverse ? -1 : 1 : o.inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
-									}
-								else	{
-									r = $.text([a]).toLowerCase() > $.text([b]).toLowerCase() ? o.inverse ? -1 : 1 : o.inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
-									}
-								return r
-								},function(){
-							// parentNode is the element we want to move
-							return this.parentNode; 
-							});
-						o.inverse = !o.inverse;
-						});
+var th = $(this),
+thIndex = th.index(),
+inverse = false;
+// * 201318 -> support for data-anytable-nosort='true' which will disable sorting on the th.
+if(th.data('anytable-nosort'))	{} //sorting is disabled on this column. good for columns that only have buttons.
+else	{
+	th.on('click.anytablesort',function(){
+		$table.find('td').filter(function(){
+			return $(this).index() === thIndex;
+			}).sortElements(function(a, b){
+				var r;
+				var numA = Number($.text([a]).replace(/[^\w\s]/gi, ''));
+				var numB = Number($.text([b]).replace(/[^\w\s]/gi, ''));
+				if(numA && numB)	{
+	//				console.log('is a number');
+					r = numA > numB ? inverse ? -1 : 1 : inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
 					}
+				else	{
+					r = $.text([a]).toLowerCase() > $.text([b]).toLowerCase() ? inverse ? -1 : 1 : inverse ? 1 : -1; //toLowerCase make the sort case-insensitive.
+					}
+				return r
+				},function(){
+			// parentNode is the element we want to move
+			return this.parentNode; 
+			});
+		inverse = !inverse;
+		});
+	}
 
 				}); //ends 'each'
-				}
-			
-if(!isNaN(o.defaultSortColumn))	{
-	app.u.dump(" -> $table.length: "+$table.length);
-	app.u.dump(" -> th,$table.length: "+$('th',$table).length);
-	app.u.dump("nthchild length: "+$("th:nth-child("+Number(o.defaultSortColumn)+")",$table).length);
-	$("thead:first th:nth-child("+Number(o.defaultSortColumn)+")",$table).trigger('click.anytablesort');
-	}			
-
 			}, //_init
 
 		_setOption : function(option,value)	{
 			$.Widget.prototype._setOption.apply( this, arguments ); //method already exists in widget factory, so call original.
+			switch (option)	{
+				case 'state':
+					(value === 'close') ? this.close() : this.open(); //the open/close function will change the options.state val as well.
+					break;
+
+				case 'settingsMenu':
+					$.extend(this.options.menu,value); //add the new menu to the existing menu object. will overwrite if one already exists.
+					this.destroySettingsMenu();
+					this.buildSettingsMenu();
+					break;
+				
+				default:
+					console.log("Unrecognized option passed into anytable via setOption");
+					console.log(" -> option: "+option);
+					break;
+				}
 			}, //_setOption
 
 		_styleHeader : function()	{
@@ -854,10 +788,9 @@ and it'll turn the cb into an ios-esque on/off switch.
 			else if($label.length)	{
 //				app.u.dump(" -> anycbifying. is label: "+$label.is('label'));
 				var $input = $("input",$label).first(),
-				$container = $("<span \/>").addClass('ui-widget ui-widget-content ui-corner-all ui-widget-header').css({'position':'relative','display':'block','width':'55px','margin-right':'6px','height':'20px','z-index':1,'padding':0,'float':'left'}),
+				$container = $("<span \/>").addClass('ui-widget ui-widget-content ui-corner-all ui-widget-header').css({'position':'relative','display':'block','width':'55px','margin-right':'6px','height':'20px','z-index':1,'padding':0,'float':'left','float':'left'}),
 				$span = $("<span \/>").css({'padding':'0px','width':'30px','text-align':'center','height':'20px','line-height':'20px','position':'absolute','top':-1,'z-index':2,'font-size':'.75em'});
 	
-				this.$input = $input;
 				$label.data('anycb',true).css({'min-height':'20px','cursor':'pointer'}); // allows for plugin to check if it's already been run on this element.
 				self.span = $span; //global (within instance) for easy reference.
 //				self.input = $input;//global (within instance) for easy reference.
@@ -871,8 +804,7 @@ and it'll turn the cb into an ios-esque on/off switch.
 				$label.prepend($container);
 				$input.is(':checked') ? self._turnOn() : self._turnOff(); //set default
 //				app.u.dump('got here');
-// * 201324 -> changed from click to change. 'supposedly' this listens for programatic changes. I think that's a lie.
-				$input.on('change.anycb',function(){
+				$input.on('click.anycb',function(){
 //					app.u.dump(" -> anycb is toggled. checked: "+$input.is(':checked'));
 					if($input.is(':checked')){self._turnOn();}
 					else	{self._turnOff();}
@@ -896,11 +828,6 @@ and it'll turn the cb into an ios-esque on/off switch.
 			this.span.addClass('ui-state-default ui-corner-right').removeClass('ui-state-highlight ui-corner-left');
 			this.span.animate({'left': 24},'fast');
 //			this.input.prop('checked',false);
-			},
-//if a checkbox is generated and 'checked' w/ js
-		update : function()	{
-//			app.u.dump(' -> running update on: '+this.$input.attr('name')+' and checked: '+this.$input.is(':checked'));
-			this.$input.is(':checked') ? this._turnOn() : this._turnOff(); //set default
 			},
 		_setOption : function(option,value)	{
 			$.Widget.prototype._setOption.apply( this, arguments ); //method already exists in widget factory, so call original.
@@ -965,7 +892,6 @@ Additional a settings button can be added which will contain a dropdown of selec
 			extension : '', //used in conjunction w/ persist.
 			name : '', //used in conjunction w/ persist.
 			persistent : false, //if set to true and name AND extension set, will save to localStorage
-			persistentStateDefault : 'expand',
 			settingsMenu : {}
 			},
 		_init : function(){
@@ -996,8 +922,8 @@ Additional a settings button can be added which will contain a dropdown of selec
 				self._handleButtons($header);
 			
 				$content = self._anyContent();
-//* 201320 -> if _anyContent returned false, this caused a js error.
-				if($content && $content.length)	{$content.appendTo($t);} //content generated via template of some kind.
+
+				if($content.length)	{$content.appendTo($t);} //content generated via template of some kind.
 				else if(o.title)	{$content = $t.children(":first");} //no content yet, title specified. use first child.
 				else	{$content = $t.children(":nth-child(2)");} //no content. first child is title. second child is content.
 				
@@ -1033,8 +959,8 @@ Additional a settings button can be added which will contain a dropdown of selec
 					break;
 				
 				default:
-//					console.log("Unrecognized option passed into anypanel via setOption");
-//					console.log(" -> option: "+option);
+					console.log("Unrecognized option passed into anypanel via setOption");
+					console.log(" -> option: "+option);
 					break;
 				}
 			},
@@ -1060,10 +986,6 @@ Additional a settings button can be added which will contain a dropdown of selec
 			//a templateID was specified, just add the instance. This likely means some process outside this plugin itself is handling translation.
 			else if(o.templateID)	{
 				$content = app.renderFunctions.createTemplateInstance(o.templateID,o.dataAttribs);
-				}
-			else if(o.dispatch)	{
-				app.model.addDispatchToQ(o.dispatch,o.Q);
-				app.model.dispatchThis(o.Q);
 				}
 			else	{
 				
@@ -1101,16 +1023,12 @@ Additional a settings button can be added which will contain a dropdown of selec
 			if(o.settingsMenu)	{self._buildSettingsMenu()}			
 
 			},
-// ** 201324 -> added means of setting a default for 'persistent' state so a panel could be closed if it has never been opened before.
+
 		_handleInitialState : function()	{
 			if(this.options.state == 'persistent' && this.options.name && this.options.extension)	{
-//				app.u.dump(" -> using persistent settings");
 				var settings = app.ext.admin.u.dpsGet(this.options.extension,'anypanel');
 				if(settings && settings[this.options.name])	{
 					this.options.state = settings[this.options.name].state; //if not defined, default to expand.
-					}
-				else if(this.options.persistentStateDefault == 'expand' || this.options.persistentStateDefault == ' collapse') {
-					this.options.state = this.options.persistentStateDefault;
 					}
 				else	{
 					this.options.state = 'expand';
@@ -1234,8 +1152,7 @@ supported options include tabID (given to the container), tabtext (what appears 
 //			console.log('init sticktab');
 			var self = this,
 			o = self.options, //shortcut
-			$t = self.element, //this is the targeted element (ex: $('#bob').anymessage() then $t is bob)
-			guid = app.u.guidGenerator()
+			$t = self.element; //this is the targeted element (ex: $('#bob').anymessage() then $t is bob)
 			
 			if($t.data('isstickytab'))	{
 				//already in a stickytab. do nothing.
@@ -1245,7 +1162,7 @@ supported options include tabID (given to the container), tabtext (what appears 
 //add an id if one doesn't already exist.
 				if($t.attr('id'))	{}
 				else	{
-					$t.attr({'id':(o.tabID) ? 'stickycontents_'+o.tabID : 'stickycontents_'+guid}); //the ID goes onto the element this is run on.  allows for methods to easily be run later.
+					$t.attr({'id':(o.tabID || 'stickytab_'+app.u.guidGenerator())}); //the ID goes onto the element this is run on.  allows for methods to easily be run later.
 					}
 				
 				var 
@@ -1254,8 +1171,7 @@ supported options include tabID (given to the container), tabtext (what appears 
 					$stickytabText = $('.ui-widget-stickytab-tab-text',$sticky)
 	
 				this.sticky = $sticky; //global reference to container for easy access.
-//* 202324  -> tabid wasn't getting applied to tab.
-				$sticky.attr({'id':(o.tabID) ? o.tabID : 'stickytab_'+guid});
+	
 				$sticky.appendTo($tabContainer);
 				this._moveAnimate();
 	//			$('.ui-widget-stickytab-content',$sticky).append(this.element);
@@ -1293,7 +1209,7 @@ supported options include tabID (given to the container), tabtext (what appears 
 					'position':'fixed',
 					'left':0,
 					'top':'120px',
-					'width':'25px', // ** 201320 -> changed from 120 to 25 to solve a z-index issue. probably a typo to begin with.
+					'width':'120px',
 					'height':'300px',
 					'z-index':500
 					}).appendTo('body');
@@ -1326,7 +1242,7 @@ supported options include tabID (given to the container), tabtext (what appears 
 			var 
 				$sticky = $("<div \/>").css({'position':'relative'}).addClass('ui-widget ui-widget-stickytab'),
 				$stickytab = $("<div \/>").addClass("ui-widget-stickytab-tab ui-corner-right "+this.options.tabclass),
-				$stickyContent = $("<div \/>").addClass("ui-widget-stickytab-content minimalMode detailMode ui-widget ui-widget-content ui-corner-right");
+				$stickyContent = $("<div \/>").addClass("ui-widget-stickytab-content minimalMode ui-widget ui-widget-content ui-corner-right");
 
 			this._addTabEvents($stickytab);
 			$stickytab.append("<div class='ui-widget-stickytab-tab-text'>"+this.options.tabtext+"</div>");
@@ -1336,7 +1252,7 @@ supported options include tabID (given to the container), tabtext (what appears 
 		_addTabEvents : function($stickytab)	{
 			var self = this;
 			$stickytab.on('click.stickytab',function(){
-//				console.log(self.sticky.position().left);
+				console.log(self.sticky.position().left);
 				if(self.sticky.position().left >= 0)	{
 					self.close();
 					}
@@ -1349,18 +1265,17 @@ supported options include tabID (given to the container), tabtext (what appears 
 			$('.ui-widget-stickytab-tab',this.sticky).trigger('click.stickytab');
 			},
 		open : function()	{
-//			console.log('open tab');
+			console.log('open tab');
 			if(this.sticky.position().left != 0)	{
 				this.sticky.animate({left: 0}, 'slow');
 				}
 			else	{} //already open.
 			},
 		close : function()	{
-//			console.log('close tab');
+			console.log('close tab');
 			this.sticky.animate({left: -(this.sticky.outerWidth())}, 'slow');
 			},
 		destroy : function()	{
-			app.u.dump(" -> stickytab destroy called. this.sticky.id: "+this.sticky.attr('id'));
 			this.sticky.empty().remove();
 			},
 		_setOption : function(option,value)	{
@@ -1368,6 +1283,7 @@ supported options include tabID (given to the container), tabtext (what appears 
 			}
 		}); // create the widget
 })(jQuery);
+
 
 
 
@@ -1381,11 +1297,8 @@ $.fn.intervaledEmpty = function(interval, remove){
 			i++;
 			});
 		}
-	else	{
-// ** only remove in the last iteration, when there are no children, or this could still potentially lock up the browser.
-		if(remove){
-			$(this).remove();
-			}
+	if(remove){
+		$(this).remove();
 		}
 	return this;
 	}
@@ -1404,24 +1317,28 @@ jQuery.fn.toCSV = function() {
 	var tmpArr = [];
 	var tmpStr = '';
 	data.find("tr").each(function() {
-	  if($(this).find("th").length) {
-		  $(this).find("th").each(function() {
+	if($(this).find("th").length) {
+		$(this).find("th").each(function() {
 			tmpStr = $(this).text().replace(/"/g, '""');
 			tmpArr.push('"' + tmpStr + '"');
-		  });
-		  csvData.push(tmpArr);
-	  } else {
-		  tmpArr = [];
-			 $(this).find("td").each(function() {
-				  if($(this).text().match(/^-{0,1}\d*\.{0,1}\d+$/)) {
-					  tmpArr.push(parseFloat($(this).text()));
-				  } else {
-					  tmpStr = $(this).text().replace(/"/g, '""');
-					  tmpArr.push('"' + tmpStr + '"');
-				  }
-			 });
-		  csvData.push(tmpArr.join(','));
-	  }
+			});
+		csvData.push(tmpArr);
+		}
+	else {
+		tmpArr = [];
+		$(this).find("td").each(function() {
+			$(this).find("td").each(function() {
+				if($(this).text().match(/^-{0,1}\d*\.{0,1}\d+$/)) {
+					tmpArr.push(parseFloat($(this).text()));
+					}
+				else {
+					tmpStr = $(this).text().replace(/"/g, '""');
+					tmpArr.push('"' + tmpStr + '"');
+					}
+				});
+			});
+		csvData.push(tmpArr.join(','));
+		}
 	});
 	var output = csvData.join('\n');
 	var uri = 'data:application/csv;charset=UTF-8,' + encodeURIComponent(output);

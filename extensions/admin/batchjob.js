@@ -18,7 +18,7 @@
 
 
 var admin_batchJob = function() {
-	var theseTemplates = new Array('batchJobStatusTemplate','batchJobRowTemplate');
+	var theseTemplates = new Array('batchJobStatusTemplate','batchJobManagerPageTemplate','batchJobRowTemplate');
 	var r = {
 
 
@@ -45,13 +45,7 @@ var admin_batchJob = function() {
 		
 		showBatchJobStatus : {
 			onSuccess : function(tagObj){
-				if(tagObj.parentID)	{
-					$(app.u.jqSelector('#',tagObj.parentID)).hideLoading();
-					}
-				else if(tagObj.jqObj && typeof tagObj.jqObj === 'object')	{
-					tagObj.jqObj.hideLoading();
-					}
-				else	{} //nothing to hideloading on.
+				$(app.u.jqSelector('#',tagObj.parentID)).hideLoading();
 //error handling for no jobid is handled inside this function.
 				app.ext.admin_batchJob.a.showBatchJobStatus(app.data[tagObj.datapointer].jobid);
 				},
@@ -70,24 +64,21 @@ var admin_batchJob = function() {
 
 		a : {
 			
-			showBatchJobManager : function($target){
-				$target.empty();
-				var $table = app.ext.admin.i.DMICreate($target,{
-					'header' : 'Batch Jobs',
-					'className' : 'batchjobManager',
-					'buttons' : ["<button data-app-event='admin|refreshDMI'>Refresh List<\/button>"],
-					'thead' : ['ID','Job Name','Job Type','User','Create','Status',''],
-					'tbodyDatabind' : "var: users(@JOBS); format:processList; loadsTemplate:batchJobRowTemplate;",
-					'cmdVars' : {
-						'_cmd' : 'adminBatchJobList',
-						'_tag' : {
-							'anytable' : {
-								'inverse' : true,
-								'defaultSortColumn' : 1
-								},
-							'datapointer' : 'adminBatchJobList'},
-							}
-						});
+			showBatchJobManager : function($tabContent){
+				$tabContent.empty();
+//generate some of the task list content right away so the user knows something is happening.
+				$tabContent.showLoading({'message':'Fetching list of batch jobs'});
+				app.ext.admin.calls.adminBatchJobList.init('',{'callback':function(rd){
+					$tabContent.hideLoading();
+					if(app.model.responseHasErrors(rd)){
+						$tabContent.anymessage({'message':rd});
+						}
+					else	{
+						$tabContent.anycontent({'templateID':'batchJobManagerPageTemplate','dataAttribs':{'id':'batchJobManagerContent'},'datapointer':rd.datapointer});
+						$(".gridTable",$tabContent).anytable();
+						app.u.handleAppEvents($tabContent);
+						}
+					}},'mutable');
 				app.model.dispatchThis('mutable');
 				},
 
@@ -95,10 +86,7 @@ var admin_batchJob = function() {
 			adminBatchJobCreate : function(opts){
 				$(app.u.jqSelector('#',app.ext.admin.vars.tab+"Content")).showLoading({'message':'Registering Batch Job'});
 //parentID is specified for error handling purposes. That's where error messages should go and also what the hideLoading() selector should be.
-				app.model.addDispatchToQ($.extend({
-					'_cmd':'adminBatchJobCreate',
-					'_tag':	{'callback':'showBatchJobStatus','extension':'admin_batchJob','parentID':app.ext.admin.vars.tab+"Content",datapointer : opts.guid ? "adminBatchJobCreate|"+opts.guid : "adminBatchJobCreate"}
-					},opts),'immutable');
+				app.ext.admin.calls.adminBatchJobCreate.init(opts,{'callback':'showBatchJobStatus','extension':'admin_batchJob','parentID':app.ext.admin.vars.tab+"Content"},'immutable');
 				app.model.dispatchThis('immutable');
 				},
 
@@ -108,18 +96,13 @@ var admin_batchJob = function() {
 					var $target = $('#batchJobStatusModal'); //modal id.
 					if($target.length)	{$target.empty()}
 					else	{
-						$target = $("<div \/>").attr({'id':'batchJobStatusModal'}).appendTo('body');
+						$target = $("<div \/>").attr({'id':'batchJobStatusModal','title':'Batch Job Status'}).appendTo('body');
 						$target.dialog({'modal':true,'width':500,'height':300,'autoOpen':false});
 						}
-					$target.dialog('option','title','Batch Job Status: '+jobid);
 					$target.dialog('open');
 					$target.showLoading({'message':'Fetching Batch Job Details'});
-app.model.addDispatchToQ({
-	'_cmd':'adminBatchJobStatus',
-	'jobid':jobid,
-	'_tag':	{'callback':'anycontent','datapointer':'adminBatchJobStatus|'+jobid,'jqObj':$target,'templateID':'batchJobStatusTemplate','dataAttribs': {'jobid':jobid}}
-	},'mutable');
-app.model.dispatchThis('mutable');
+					app.ext.admin.calls.adminBatchJobStatus.init(jobid,{'callback':'anycontent','jqObj':$target,'templateID':'batchJobStatusTemplate','dataAttribs': {'jobid':jobid}},'immutable');
+					app.model.dispatchThis('immutable');
 					}
 				else	{
 					app.u.throwMessage("No jobid specified in admin_batchJob.a.showBatchJobStatus");
@@ -144,42 +127,16 @@ app.model.dispatchThis('mutable');
 							
 							if(app.data[rd.datapointer]['@BODY'] && app.data[rd.datapointer]['@BODY'].length)	{
 //google visualization will error badly if the # of columns in the each body row doesn't match the # of columns in the head.
-//								app.u.dump(" -> app.data[rd.datapointer]['@BODY'][0].length: "+app.data[rd.datapointer]['@BODY'][0].length);
-//								app.u.dump(" -> app.data[rd.datapointer]['@HEAD'][0].length: "+app.data[rd.datapointer]['@HEAD'][0].length);
-								if(app.data[rd.datapointer]['@BODY'][0].length == app.data[rd.datapointer]['@HEAD'].length)	{
+								if(app.data[rd.datapointer]['@BODY'][0].length == app.data[rd.datapointer]['@HEAD'][0].length)	{
 //@HEAD is returned with each item as an object. google visualization wants a simple array. this handles the conversion.							
 									for(var i = 0; i < L; i += 1)	{
 										tableHeads.push(app.data[rd.datapointer]['@HEAD'][i].name);
 										}
 
-									var $expBtn = $("<button \/>").text('Export to CSV').button().addClass('floatRight').on('click',function(){
-//										$('.google-visualization-table-table').toCSV();  //exports just the page in focus.
-										var L = app.data[rd.datapointer]['@BODY'].length;
-										//first row of CSV is the headers.
-										var csv = $.map(app.data[rd.datapointer]['@HEAD'],function(val){
-												return '"'+val.name+'"';
-												})
-
-										for(var i = 0; i < L; i += 1)	{
-											csv += "\n"+$.map(app.data[rd.datapointer]['@BODY'][i],function(val){
-//												return '"'+((val == null) ? '' : escape(val))+'"';
-												return '"'+((val == null) ? '' : val.replace(/"/g,'""'))+'"'; //don't return 'null' into report.
-												})
-											}
-										
-										app.ext.admin.u.fileDownloadInModal({
-											'skipDecode':true,
-											'filename':app.data[rd.datapointer].title+'.csv',
-											'mime_type':'text/csv',
-											'body':csv});
-										}).appendTo($target);
-
-
 									$target.append("<h1>"+app.data[rd.datapointer].title || ""+"<\/h1>");
 									$target.append("<h2>"+app.data[rd.datapointer].subtitle || ""+"<\/h2>");
 									$target.append($("<div \/>",{'id':reportElementID+"_toolbar"})); //add element to dom for visualization toolbar
 									$target.append($("<div \/>",{'id':reportElementID}).addClass('smallTxt')); //add element to dom for visualization table
-									
 
 									app.ext.admin_reports.u.drawTable(reportElementID,tableHeads,app.data[rd.datapointer]['@BODY']);
 									app.ext.admin_reports.u.drawToolbar(reportElementID+"_toolbar");
@@ -221,25 +178,42 @@ app.model.dispatchThis('mutable');
 ////////////////////////////////////   UTIL [u]   \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
-		u : {
-			
-			
-			
-			}, //u
+		u : {}, //u
+
 		e : {
 
 
-
+			execAdminBatchJobCreate : function($btn)	{
+				$btn.button();
+				$btn.off('click.execAdminBatchJobCreate').on('click.execAdminBatchJobCreate',function(event){
+					event.preventDefault();
+					var $form = $btn.closest('form');
+					if(app.u.validateForm($form))	{
+						var sfo = $form.serializeJSON();
+						sfo.guid = app.u.guidGenerator();
+						app.ext.admin_batchJob.a.adminBatchJobCreate(sfo);
+						}
+					else	{} //validateForm handles error display.
+				});
+				},
+			
+			showBatchDetail : function($btn)	{
+				$btn.button({text: false,icons: {primary: "ui-icon-info"}});
+				$btn.off('click.showBatchDetail').on('click.showBatchDetail',function(event){
+					event.preventDefault();
+					app.ext.admin_batchJob.a.showBatchJobStatus($btn.closest("tr").data('id'));
+					});
+				},
 
 //NOTE -> the batch_exec will = REPORT for reports.
 			showReport : function($btn)	{
-				if($btn.closest('tr').data('batch_exec') == 'REPORT' && $btn.closest('tr').data('status').indexOf('END') >= 0)	{
-					$btn.button({text: false,icons: {primary: "ui-icon-image"}}).show();
+				if($btn.closest('tr').data('batch_exec') == 'REPORT')	{
+					$btn.button().show();
 					$btn.off('click.showReport').on('click.showReport',function(event){
 						event.preventDefault();
 						var $table = $btn.closest('table');
 						
-						$table.stickytab({'tabtext':'batch jobs','tabID':'batchJobsStickyTab'});
+						$table.stickytab({'tabtext':'batch jobs'});
 						$('button',$table).removeClass('ui-state-focus'); //removes class added by jqueryui onclick.
 						$('button',$table).removeClass('ui-state-highlight');
 						$btn.addClass('ui-state-highlight');
@@ -255,65 +229,31 @@ app.model.dispatchThis('mutable');
 				else	{
 //btn hidden by default. no action needed.
 					}
-				}, //showReport
+				},
 
 
-			showDownload : function($btn)	{
-				if($btn.closest('tr').data('batch_exec') == 'EXPORT' && $btn.closest('tr').data('status').indexOf('END-SUCCESS') >= 0)	{
-					$btn.button({text: false,icons: {primary: "ui-icon-arrowthickstop-1-s"}}).show();
-					$btn.off('click.showDownload').on('click.showDownload',function(event){
-						event.preventDefault();
-app.model.addDispatchToQ({
-	'_cmd':'adminBatchJobDownload',
-	'guid':$btn.closest('tr').data('guid'),
-	'base64' : '1',
-	'_tag':	{
-		'datapointer' : 'adminBatchJobDownload', //big dataset returned. only keep on in memory.
-		'callback' : 'fileDownloadInModal',
-		'extension' : 'admin'
-		}
-	},'mutable');
-app.model.dispatchThis('mutable');
-						
+			
+			execBatchCleanup : function($btn)	{
+				var $row = $btn.closest('tr');
+				if($row.data('status') == 'ERROR' || $row.data('status') == 'finished' || $row.data('status') == 'abort')	{
+					$btn.show({text: false,icons: {primary: "ui-icon-trash"}});
+					$btn.button(); //daisy-chaining the button on the show didn't work. button didn't get classes.
+					$btn.off('click.execBatchCleanup').on('click.execBatchCleanup',function(){
+						var jobid = $btn.closest('[data-jobid]').data('jobid');
+						if(jobid)	{
+							$('#batchJobStatusModal').empty().addClass('loadingBG');
+							app.ext.admin.calls.adminBatchJobCleanup.init(jobid,{'callback':'showMessaging','message':'Batch job has been cleaned up','parentID':'batchJobStatus_'+jobid},'immutable');
+							app.model.dispatchThis('immutable');
+							}
+						else	{
+							$('.appMessaging').anymessage({'message':'In admin_batchJob.e.execBatchCleanup, unable to ascertain jobID from DOM tree.','gMessage':true});
+							}
 						});
 					}
-				else	{
-//btn hidden by default. no action needed.
-					}
-				}, //showDownload
-			
-			adminBatchJobCleanupExec : function($btn)	{
-				var $row = $btn.closest('tr');
-				$btn.show({text: false,icons: {primary: "ui-icon-trash"}});
-				$btn.button(); //daisy-chaining the button on the show didn't work. button didn't get classes.
-				$btn.off('click.adminBatchJobCleanupExec').on('click.adminBatchJobCleanupExec',function(){
-					var jobid = $btn.closest('[data-jobid]').data('jobid');
-					if(jobid)	{
-						$('#batchJobStatusModal').empty().addClass('loadingBG');
-						app.model.addDispatchToQ({
-							'_cmd':'adminBatchJobCleanup',
-							'jobid' : jobid,
-							'_tag':	{
-								'callback':'showMessaging',
-								'message':'Batch job has been cleaned up',
-								'parentID':'batchJobStatus_'+jobid
-								}
-							},'immutable');
-						app.model.dispatchThis('immutable');
-						}
-					else	{
-						$('.appMessaging').anymessage({'message':'In admin_batchJob.e.adminBatchJobCleanupExec, unable to ascertain jobID from DOM tree.','gMessage':true});
-						}
-					});
-				},
-			
-			showBatchDetail : function($btn)	{
-				$btn.button({text: false,icons: {primary: "ui-icon-info"}});
-				$btn.off('click.showBatchDetail').on('click.showBatchDetail',function(event){
-					event.preventDefault();
-					app.ext.admin_batchJob.a.showBatchJobStatus($btn.closest("tr").data('id'));
-					});
+
+				else	{} //do nothing (do NOT show button.
 				}
+
 			
 			} //e
 

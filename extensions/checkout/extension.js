@@ -473,11 +473,8 @@ _gaq.push(['_trackEvent','Checkout','App Event','Order NOT created. error occure
 							$("input[name='bill/region']",$fieldset).attr('required','required');
 							}
 						else	{
-//							$("input[name='bill/postal']",$fieldset).removeAttr('required').removeAttr('data-minlength');
-//							$("input[name='bill/region']",$fieldset).removeAttr('required');
-// *** 201324 -> best practice is to empty the attrib before removing it. (fixed an issue for Clinton)
-							$("input[name='bill/postal']",$fieldset).attr('required','').removeAttr('required').removeAttr('data-minlength');
-							$("input[name='bill/region']",$fieldset).attr('required','').removeAttr('required');
+							$("input[name='bill/postal']",$fieldset).removeAttr('required').removeAttr('data-minlength');
+							$("input[name='bill/region']",$fieldset).removeAttr('required');
 							}
 						
 						if(app.u.validateForm($fieldset))	{valid = 1;} //the validateForm field takes care of highlighting necessary fields and hints.
@@ -515,11 +512,8 @@ _gaq.push(['_trackEvent','Checkout','App Event','Order NOT created. error occure
 							$("input[name='ship/region']",$fieldset).attr('required','required');
 							}
 						else	{
-//							$("input[name='bill/postal']",$fieldset).removeAttr('required').removeAttr('data-minlength');
-//							$("input[name='bill/region']",$fieldset).removeAttr('required');
-// *** 201324 -> best practice is to empty the attrib before removing it. (fixed an issue for Clinton)
-							$("input[name='bill/postal']",$fieldset).attr('required','').removeAttr('required').removeAttr('data-minlength');
-							$("input[name='bill/region']",$fieldset).attr('required','').removeAttr('required');
+							$("input[name='ship/postal']",$fieldset).removeAttr('required').removeAttr('data-minlength');
+							$("input[name='ship/region']",$fieldset).removeAttr('required');
 							}
 						
 						if(app.u.validateForm($fieldset))	{valid = 1;} //the validateForm field takes care of highlighting necessary fields and hints.
@@ -751,13 +745,9 @@ an existing user gets a list of previous addresses they've used and an option to
 					}
 //no shipping methods present and buyer is logged out.
 				else {
-// *** 201324 -> 	correct typos. nice catch MikeC. The absence of a 'not' was causing messaging to appear at the wrong time.
-//					only impacted merchants who had 'require zip to quote shipping' enabled.
-//					if(formObj['want/bill_to_ship'] && formObj['bill/postal'])	{
 					if(formObj['want/bill_to_ship'] && !formObj['bill/postal'])	{
 						$fieldset.anymessage({"message":"<p>Please enter a billing/shipping zip code for a list of shipping options.</p>","persistent":true});
 						}
-//					else if(!formObj['want/bill_to_ship'] && formObj['ship/postal'])	{						
 					else if(!formObj['want/bill_to_ship'] && !formObj['ship/postal'])	{
 						$fieldset.anymessage({"message":"<p>Please enter a shipping zip code for a list of shipping options.</p>","persistent":true});
 						}

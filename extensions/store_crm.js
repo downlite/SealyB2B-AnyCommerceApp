@@ -418,17 +418,18 @@ This is used to get add an array of skus, most likely for a product list.
 				return csvArray;
 				}, //getSkusFromList
 
-			handleChangePassword : function($form,tagObj)	{
+			handleChangePassword : function(formID,tagObj)	{
 				
-$('.messaging', $form).empty(); //clear any existing messaging
-var formObj = $form.serializeJSON();
+$('#'+formID+' .ui-widget-anymessage').empty().remove(); //clear any existing messaging
+var formObj = $('#'+formID).serializeJSON();
 if(app.ext.store_crm.validate.changePassword(formObj)){
 	app.calls.buyerPasswordUpdate.init(formObj.password,tagObj);
 	app.model.dispatchThis('immutable');
 	}
 else{
 	var errObj = app.u.youErrObject("The two passwords do not match.",'42');
-	$(".messaging",$form).anymessage(errObj);
+	errObj.parentID = formID
+	app.u.throwMessage(errObj);
 	}
 				
 				}, //handleChangePassword

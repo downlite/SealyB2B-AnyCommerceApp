@@ -220,9 +220,9 @@
 	<div class='floatLeft marginRight'>
 		<div class='label'>Data Columns:</div>
 	
-		<label><input type='radio' name='dataColumns' value='dynamic' data-app-event="admin_reports|addTriggerKPIDataColumnsChange" data-bind="var:chart(dataColumns); format:popVal;" /> Dynamic <span class='toolTip' title="Will provide a fixed set of data choices displayed with a predetermined number of columns.">?</span></label>
+		<label><input type='radio' name='dataColumns' value='dynamic' data-app-event="admin_reports|addTriggerKPIDataColumnsChange" data-bind="var:chart(dataColumns); format:popRadio;" /> Dynamic <span class='toolTip' title="Will provide a fixed set of data choices displayed with a predetermined number of columns.">?</span></label>
 		
-		<label><input type='radio' name='dataColumns' value='fixed' data-app-event="admin_reports|addTriggerKPIDataColumnsChange" data-bind="var:chart(dataColumns); format:popVal;" /> Fixed <span class='toolTip' title="Allows you more flexibility on the data source and how many columns appear in the graph.">?</span></label>
+		<label><input type='radio' name='dataColumns' value='fixed' data-app-event="admin_reports|addTriggerKPIDataColumnsChange" data-bind="var:chart(dataColumns); format:popRadio;" /> Fixed <span class='toolTip' title="Allows you more flexibility on the data source and how many columns appear in the graph.">?</span></label>
 
 	</div>
 	
@@ -233,9 +233,9 @@
 	<div class='floatLeft displayNone' data-app-role='datasetTypeContainer'>
 		<div class='label'>Data:</div>
 	
-		<label><input type='radio' name='column' value='gms' data-bind="var:chart(column); format:popVal;" /> Gross Sales</label>
-		<label><input type='radio' name='column' value='distinct' data-bind="var:chart(column); format:popVal;" /> # Orders</label>
-		<label><input type='radio' name='column' value='total' data-bind="var:chart(column); format:popVal;" /> # Units Sold</label>
+		<label><input type='radio' name='column' value='gms' data-bind="var:chart(column); format:popRadio;" /> Gross Sales</label>
+		<label><input type='radio' name='column' value='distinct' data-bind="var:chart(column); format:popRadio;" /> # Orders</label>
+		<label><input type='radio' name='column' value='total' data-bind="var:chart(column); format:popRadio;" /> # Units Sold</label>
 	
 	</div>
 	
@@ -403,12 +403,10 @@
 		<section data-anytab-content='reports' class='clearfix'>
 
 			<div data-app-role='recentReportsList' class='floatRight'>
-			<h2>Recently Run Reports</h2>
-<table class='gridTable fullWidth marginBottom marginTop' >
+<table class='gridTable fullWidth marginBottom' >
 <!-- thead is needed, whether visible or not, so that the data-name attributes can be used to look up column # -->
 <thead>
 <tr>
-	<th class='alignLeft'>Job ID</th>
 	<th class='alignLeft'>Job Name</th>
 	<th data-anytable-nosort='true'></th>
 </tr>
@@ -474,14 +472,13 @@
 <!-- sales/order reporting -->
 		<section data-anytab-content='salesReports'>
 <!-- orders/sales reporting -->
-			
 			<form onsubmit="return false">
 			<div class='clearfix'>
 		
 				<fieldset class='twoColumn labelsAsBreaks noPadOrMargin'>
 					<legend>Report Type</legend>
 					
-					<label><input type="radio" value="SALES" name="REPORT" checked="checked" /> Order Details <span class='toolTip' title='Displays a row for each item in each order.'>?</span></label>
+					<label><input type="radio" value="SALES" name="REPORT" required='required' /> Order Details <span class='toolTip' title='Displays a row for each item in each order.'>?</span></label>
 					
 					<label><input type="radio" value="SALE_SUMMARY" name="REPORT" /> Order Summary <span class='toolTip' title='Displays only one summary row per order.'>?</span></label>
 					
@@ -511,21 +508,18 @@
 					
 					<label>
 						<span>Dates</span>
-						<select name='PERIOD' data-app-event="admin_reports|showSalesReportPeriodInputs" required='required'>
+						<select name='period' data-app-event="admin_reports|showSalesReportPeriodInputs" required='required'>
 							<option value=''>please choose</option>
-							<option value="today">Today Only</option><!-- lowercase is rel -->
-							<option value="thismonth">Month to Date</option>
-							<option value="4week">Last 4 Weeks</option>
-							<option value="all">All Orders</option>
-							<option value='BYMONTH'>by month</option><!-- uppercase is range -->
-							<option value='BYINVOICE'>invoice range</option>
-							<option value='BYTIMESTAMP'>Date range</option>
+							<option value='month'>by month</option>
+							<option value='daterange'>date range</option>
+							<option value='period'>by period</option>
+							<option value='invoicerange'>invoice range</option>
 						</select>
 					</label>
 					
 		
 		
-		<div class='formPeriodRange formPeriodRange-BYMONTH displayNone'>
+		<div class='formPeriodRange formPeriodRange-month displayNone'>
 		<select name="month">
 			<option value="1">January</option>
 			<option value="2">February</option>
@@ -551,13 +545,21 @@
 		</select>
 		</div>
 		
-		<div class='formPeriodRange formPeriodRange-BYTIMESTAMP displayNone'>
-			<label>Begins <input type="text" name="begints" size="20" class='datepicker' ></label>
-			<label>Ends <input type="text" name="endts" size="20" class='datepicker' ></label>
+		<div class='formPeriodRange formPeriodRange-daterange displayNone'>
+			<label>Begins <input type="text" name="begins" maxlength="8" size="8" class='datepicker' > MM/DD/YY</label>
+			<label>Ends <input type="text" name="ends" maxlength="8" size="8" class='datepicker' > MM/DD/YY</label>
 		</div>
 		
+		<div class='formPeriodRange formPeriodRange-period displayNone'>
+		<select name="PERIOD">
+			<option value="today">Today Only</option>
+			<option value="thismonth">Month to Date</option>
+			<option value="4week">Last 4 Weeks</option>
+			<option value="all">All Orders</option>
+		</select>
+		</div>
 		
-		<div class='formPeriodRange formPeriodRange-BYINVOICE displayNone'>
+		<div class='formPeriodRange formPeriodRange-invoicerange displayNone'>
 			<label>First Invoice: <input type="text" name="startinv" maxlength="15" size="15"> ####-##-####</label>
 			<label>Last Invoice: <input type="text" name="endinv" maxlength="15" size="15"> ####-##-####</label>
 		</div>
@@ -570,6 +572,7 @@
 			</div>
 		
 			<div class='buttonset'><button data-app-event="admin_reports|execAdminReportCreate">Build Report</button></div>
+
 		
 			</form>		
 		</section>
@@ -604,8 +607,7 @@
 
 <table>
 <tr id='reportsRowTemplate'>
-	<td data-bind="var: user(ID); format:text;"></td>
 	<td data-bind="var: user(TITLE); format:truncText; numCharacters:45;"></td>
-	<td><button data-app-event="admin_batchJob|showReport" class='displayNone'>View Report</button><button data-app-event="admin_batchJob|showBatchDetail">Batch Details</button></td>
+	<td><button data-app-event="admin_batchJob|showReport" class='displayNone'>View Report</button></td>
 </tr>
 </table>

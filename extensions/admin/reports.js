@@ -100,43 +100,38 @@ var admin_reports = function() {
 				$('.datepicker',$target).datepicker({
 					changeMonth: true,
 					changeYear: true,
-					dateFormat : "@"
+					dateFormat : "mmddyy"
 					});
 				
 				
 				var $reportsList = $("[data-app-role='recentReportsList']",$target);
-				$reportsList.showLoading({'message':'Fetching Recently Run Reports'});
-				app.model.addDispatchToQ({
-					'_cmd':'adminBatchJobList',
-					'_tag':	{
-						'datapointer' : 'adminBatchJobList',
-						'callback':function(rd){
-							$reportsList.hideLoading();
-							if(app.model.responseHasErrors(rd)){
-								$reportsList.anymessage({'message':rd});
-								}
-							else	{
-								var reports = new Array(), //used to store a small portion of the batch list. 10 reports.
-								L = app.data[rd.datapointer]['@JOBS'].length - 1;
-		//reports are in chronological order, oldest to newest. here, we want to show the ten newest.
-								for(var i = L; i >= 0; i -= 1)	{
-									if(app.data[rd.datapointer]['@JOBS'][i].BATCH_EXEC == 'REPORT')	{
-										reports.push(app.data[rd.datapointer]['@JOBS'][i]);
-										}
-									else	{}
-									if(reports.length >= 10)	{break} //only need ten.
-									}
-								
-		//						app.u.dump("$reportsList.length: "+$reportsList.length);
-								if(reports.length)	{
-									$reportsList.anycontent({data:{'@JOBS': reports}});
-									app.u.handleAppEvents($reportsList);
-									$('table',$reportsList).anytable();
-									}
-								}
-							}
+				$reportsList.showLoading({'message':'Fetching Recent Reports'});
+				app.ext.admin.calls.adminBatchJobList.init('',{'callback':function(rd){
+					$reportsList.hideLoading();
+					if(app.model.responseHasErrors(rd)){
+						$reportsList.anymessage({'message':rd});
 						}
-					},'mutable');
+					else	{
+						var reports = new Array(), //used to store a small portion of the batch list. 10 reports.
+						L = app.data[rd.datapointer]['@JOBS'].length - 1;
+//reports are in chronological order, oldest to newest. here, we want to show the ten newest.
+						for(var i = L; i >= 0; i -= 1)	{
+							if(app.data[rd.datapointer]['@JOBS'][i].BATCH_EXEC == 'REPORT')	{
+								reports.push(app.data[rd.datapointer]['@JOBS'][i]);
+								}
+							else	{}
+							if(reports.length >= 10)	{break} //only need ten.
+							}
+						
+//						app.u.dump("$reportsList.length: "+$reportsList.length);
+						if(reports.length)	{
+							$reportsList.anycontent({data:{'@JOBS': reports}});
+							app.u.handleAppEvents($reportsList);
+							$('table',$reportsList).anytable();
+							}
+						
+						}
+					}},'mutable');
 				app.model.dispatchThis('mutable');
 				
 				},
@@ -497,7 +492,7 @@ var admin_reports = function() {
 						];
 					
 					var container = document.getElementById(id);
-//					google.visualization.drawToolbar(container, components); //doens't work. need to use the google docs API !!!
+					google.visualization.drawToolbar(container, components);
 					}
 				else	{
 					$('#globalMessaging').anymessage({'message':'In admin_reports.u.drawToolbar, no ID passed.','gMessage':true});
@@ -692,6 +687,7 @@ if(graphVars.graph == 'pie')	{
 				color: '#000000',
 				connectorColor: '#000000',
 				formatter: function() {return (this.percentage == 0) ? null : '<b>'+ this.point.name +'</b>: '+ (Math.round(this.percentage*100)/100 ) +' %';}
+
 				}
 			}
 		}
@@ -723,6 +719,7 @@ else	{
 				}
 			}
 		}
+
 	highChartObj.series = myDataSet
 
 	}
@@ -933,7 +930,7 @@ else	{
 				}, //showChartAdd
 
 
-			
+
 			showKPIGraphPreview : function($btn)	{
 				$btn.button({icons: {primary: "ui-icon-image"},text: true});
 				
@@ -1250,6 +1247,7 @@ $btn.off('click.execAdminKPIDBCollectionUpdate').on('click.execAdminKPIDBCollect
 
 				}, //execAdminKPIDBCollectionUpdate
 			
+
 			ebayReportView : function($btn)	{
 				$btn.button();
 				$btn.off('ebayReportCreate').on('click.ebayReportCreate',function(event){
@@ -1283,7 +1281,7 @@ $btn.off('click.execAdminKPIDBCollectionUpdate').on('click.execAdminKPIDBCollect
 					app.model.dispatchThis('mutable');
 					});
 				}, //ebayReportView
-			
+
 			handleCollectionMenu : function($btn)	{
 				$btn.button({text: false,icons: {primary: "ui-icon-wrench"}}).addClass('floatRight');
 
@@ -1361,15 +1359,11 @@ $btn.off('click.execAdminKPIDBCollectionUpdate').on('click.execAdminKPIDBCollect
 						var sfo = {'%vars':$form.serializeJSON()}
 						sfo.type = 'REPORT';
 						sfo.guid = app.u.guidGenerator();
-						if(sfo['%vars'].PERIOD == 'BYTIMESTAMP')	{
-							sfo['%vars'].begints = (sfo['%vars'].begints / 1000)
-							sfo['%vars'].endts = (sfo['%vars'].endts / 1000) 
-							}
 						app.ext.admin_batchJob.a.adminBatchJobCreate(sfo);
 						}
 					else	{} //validateForm handles error display.
 					});
-				},
+				}
 
 			
 			

@@ -1,8 +1,4 @@
-﻿$(document).ready(function(){
-	$.browser = (typeof $.browser == 'function') ? $.browser() : {ie:false}; //if browser() not available, default to IE false. currenlty, our UI doesn't support IE anyway.
-	});
-
-/*
+﻿/*
 * jHtmlArea 0.7.5 - WYSIWYG Html Editor jQuery Plugin
 * Copyright (c) 2012 Chris Pietschmann
 * http://jhtmlarea.codeplex.com
@@ -125,7 +121,7 @@
                 r.insertNode($(this.iframe[0].contentWindow.document.createElement("span")).append($((html.indexOf("<") != 0) ? "<span>" + html + "</span>" : html))[0]);
             }
             r.collapse(false);
-            if(typeof r.select == 'function')	{r.select();} //JT -> this was causing a JS error in FF when adding html via custom toolbar.
+            r.select();
         },
         cut: function () {
             this.ec("cut");
