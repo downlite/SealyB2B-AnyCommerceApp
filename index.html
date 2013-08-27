@@ -1674,7 +1674,7 @@ For general product questions and order inquiries you can also email us at <a hr
 
 		<div id='ordersArticle' class='displayNone textContentArea'>
 			<h1>Order History</h1>
-			<div id='orderHistoryContainer' class='ui-accordion ui-widget ui-helper-reset ui-accordion-icons '></div>
+			<div data-bind="var: orders(@orders); format:processList; loadsTemplate:orderLineItemTemplate;" data-app-role='orderList' class='ui-accordion ui-widget ui-helper-reset ui-accordion-icons '></div>
 		</div>
 
 
