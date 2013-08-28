@@ -243,14 +243,21 @@ Welcome,
 
 	<div class="footer">
     <section class="signmain">
-    <div class="signup">
-    <form action='#' id='subscribeFrmFooter' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe(this.id); return false">
+    <div class="loginHide signup">
+    <form action='#' id='subscribeFrmFooter' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe($(this)); return false">
     <div class="deals"><b>SIGN UP FOR OUR NEWSLETTER</b><br>
     Stay updated on important product information</div>
-    <div class="name"><input required='required' type='email' value='email address' class='newsSubscribeInput textbox email'  maxlength='50' size='25' name='login' id='subscribeLoginFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
+    <!--
+	<span class="loginHide">
+	-->
+	<div class="name"><input required='required' type='email' value='email address' class='newsSubscribeInput textbox email'  maxlength='50' size='25' name='login' id='subscribeLoginFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
     <div class="email"><input required='required' type='text'  value='full name' class='newsSubscribeInput textbox fullname' maxlength='50' size='25' name='fullname' id='subscribeFullnameFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
       <input type="image" class="submit" src="images/signup.gif" alt="Sign Up" title="Sign Up" style="width:70px; height:30px;padding:0;"/>
-      </form></div>
+	<!--
+	</span>
+	<span class="loginShow"><a href="#" class="signupHeight" onClick="return showContent('customer',{'show':'subscriberLists'});">Your Newsletter Settings (<span class="username"></span>)</a></span>
+    -->
+	</form></div>
 
     <div class="cb"></div>
 </section>
@@ -1498,6 +1505,17 @@ For general product questions and order inquiries you can also email us at <a hr
 		<div id='newsletterArticle' class='displayNone textContentArea'>
 			<h1>Subscribe to our Newsletter and Save!</h1>
 			<div id='newsletterFormContainer'></div>
+		</div>
+		
+		<div id='subscriberListsArticle' class='displayNone textContentArea'>
+			<h1>Manage your Subscriptions</h1>
+<!-- save onchange -->
+<form action='#' name='subscribeFrm'>
+
+<fieldset data-bind="var:newsletters(@lists); format:subscribeCheckboxes; extension:store_crm;" class='borderNone subscriberLists'></fieldset>
+
+</form>
+
 		</div>
 		
 <div id='createaccountArticle' style="position: relative; z-index: 9999;" class='displayNone textContentArea'>

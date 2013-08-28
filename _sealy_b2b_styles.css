@@ -64,3 +64,12 @@ address[data-templateid=chkoutBuyerAddressTemplate] .address {
 	text-decoration: underline;
 	margin: 0px 8px;
 }
+
+.signupHeight {
+	line-height: 39px;
+}
+
+#subscribeFrmFooter .submit {
+	margin-top: 10px;
+	margin-left: 5px;
+}

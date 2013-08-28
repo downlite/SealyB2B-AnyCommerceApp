@@ -2553,6 +2553,7 @@ elasticsearch.size = 50;
 					case 'changepassword':
 					case 'lists':
 					case 'orders':
+					case 'subscriberLists':
 						r = true;
 						break;
 					default:

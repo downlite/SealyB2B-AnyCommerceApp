@@ -782,7 +782,7 @@ nav a:hover{ color:#007dc0; text-decoration:none;}
 .name input{ width:127px; height:30px; margin:0px; background:#fff; border:0px;padding:0 10px;font-family: 'Montserrat', sans-serif; font-size:12px;}
 .email input{ width:140px; height:30px; float:left; border:0px; padding:0 10px;font-family: 'Montserrat', sans-serif; font-size:12px;}
 .email img{ margin:0 0 -10px -2px;}
-.email{ width:232px; float:left; padding:10px; margin:0 0px 0 10px;background:#f3f3f3;}
+.email{ /*width:232px;*/ float:left; padding:10px; margin:0 0px 0 10px;background:#f3f3f3;}
 .icons{ width:273px; float:left; padding:10px 0 0 0;}
 .icons img{ margin-right:21px;}
 .resultsMenuContainer {
