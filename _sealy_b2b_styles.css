@@ -59,3 +59,8 @@ address[data-templateid=chkoutBuyerAddressTemplate] .addressFullname,
 address[data-templateid=chkoutBuyerAddressTemplate] .address {
 	width: 250px;
 }
+
+.hint {
+	text-decoration: underline;
+	margin: 0px 8px;
+}
