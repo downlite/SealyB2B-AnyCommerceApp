@@ -2278,18 +2278,18 @@ The 'data-action' attribute is used to assign an onclick.
 <p id='loginMessaging' class='marginBottom appMessaging'></p>
 
 <div id='loginFormContainer'>
-<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("#modalLoginlogin").val(),$("#modalLoginpassword").val()); return false;' id='modalLoginForm'>
+<form action='#' onSubmit='app.ext.myRIA.u.loginFrmSubmit($("input[name=login]", $(this)).val(),$("input[name=password]", $(this)).val()); return false;' id='modalLoginForm'>
 <input type='hidden' name='loginCallback' id='loginCallback' value='' /><!-- used to save a callback action in -->
 	<fieldset>
 
 	<div>
 	<!--<label for='modalLoginlogin'>Login/Email</label>-->
-	<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' id='modalLoginlogin' size='25' />
+	<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' size='25' />
 	</div>
 	
 	<div>
 	<!--<label for='modalLoginpassword'>Password</label>-->
-	<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' id='modalLoginpassword' size='25' />
+	<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' size='25' />
 	</div>
 	
 	<div>
