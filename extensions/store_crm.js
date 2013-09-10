@@ -539,12 +539,13 @@ else{
 
 					r = true;
 					var $editor = $("<div \/>");
-					$editor.append("<input type='text' maxlength='10' name='shortcut' placeholder='nickname' \/>")
+					var $nick = $("<div><label class='addrCreateLabel'>Nickname:</label><input type='text' maxlength='10' name='shortcut' placeholder='nickname' \/></div>")
 					var $hint = $('<span class="hint pointer" title="A nickname for this address- max 10 characters, no spaces">?</span>');
 					$hint.tooltip();
-					$editor.append($hint);
+					$nick.append($hint);
+					$editor.append($nick);
 					$editor.append("<input type='hidden' name='type' value='"+vars.addressType.toUpperCase()+"' \/>");
-					$editor.anycontent({'templateID':(vars.addressType == 'ship') ? 'chkoutAddressShipTemplate' : 'chkoutAddressBillTemplate','data':{},'showLoading':false});
+					$editor.anycontent({'templateID':(vars.addressType == 'ship') ? 'chkoutAddressCreateShipTemplate' : 'chkoutAddressCreateBillTemplate','data':{},'showLoading':false});
 					$editor.wrapInner('<form \/>'); //needs this for serializeJSON later.
 					
 				

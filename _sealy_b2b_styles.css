@@ -73,3 +73,8 @@ address[data-templateid=chkoutBuyerAddressTemplate] .address {
 	margin-top: 10px;
 	margin-left: 5px;
 }
+
+.addrCreateLabel {
+	display: inline-block;
+	width: 100px;
+}
