@@ -34,7 +34,7 @@ var store_sealy = function() {
 		init : {
 			onSuccess : function()	{
 				var r = false; //return false if extension won't load for some reason (account config, dependencies, etc).
-				
+					
 				app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
 					var $target=$('#wideSlideshow');
 					if(!$target.hasClass('slideshowrendered')){

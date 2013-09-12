@@ -1298,6 +1298,7 @@ if you change these, you should move them above this comment so that when you (o
 
 	<div class='sideline' >
     <div class="rightA1">
+<!--
 <h3>HELPFUL LINKS</h3>
 <ul>
 <li><a href="#">Selecting a Pillow</a></li>
@@ -1306,20 +1307,21 @@ if you change these, you should move them above this comment so that when you (o
 <li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
 
 </ul>
+-->
 <h3>CUSTOMER SERVICE</h3>
 <ul>
-<li><a href="#company?show=contact" class='bindByAnchor'>Contact us</a></li>
-<li><a href="#company?show=shipping" class='bindByAnchor'>Shipping Policy</a></li>
-<li><a href='#company?show=return' id='navLink_return' class='bindByAnchor'>Return Policy</a></li>
-<li><a href="#company?show=payment" class='bindByAnchor'>Payment Policy</a></li>
-<li><a href="#company?show=privacy" class='bindByAnchor'>Privacy Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'contact'});" href="#" >Contact us</a></li>
+<li><a onClick="return showContent('company',{'show':'shipping'});" href="#" >Shipping Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'return'});" href='#' >Return Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'payment'});" href="#" >Payment Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'privacy'});" href="#" >Privacy Policy</a></li>
 </ul>
 <h3>MY ACCOUNT</h3>
 <ul>
-<li><a href="#customer?show=myaccount" class='bindByAnchor'>Log-in or Sign-up</a></li>
-<li><a href="#customer?show=orders" class='bindByAnchor'>Order Tracking</a></li>
-<li><a href="#customer?show=newsletter" class='bindByAnchor'>Join our Newsletter</a></li>
-<li><a href="#">Sign Out</a></li>
+<li><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
+<li><a onClick="return showContent('customer',{'show':'orders'});" href="#" >Order Tracking</a></li>
+<li><a onClick="return showContent('customer',{'show':'newsletter'});" href="#" >Join our Newsletter</a></li>
+<li><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
 </ul>
 <div class="needhelp">
 <br><br>
@@ -1332,7 +1334,7 @@ or<br>
 
 <b>FREE SHIPPING</b><br>
 ON ALL U.S. ORDERS<br>
-<a href="#">Learn more</a>
+<a href="#company?show=shipping" class="bindByAnchor">Learn more</a>
 </div>
 </div>
 
@@ -1495,19 +1497,49 @@ For general product questions and order inquiries you can also email us at <a hr
 <!-- loadingBG needed on this for app init (content may take a moment to load) -->
 <div id='customerTemplate' class='clearfix loadingBG'>
 
-	<!--<div class='sideline' >
-	<nav id='customerNav'>
-	<ul class='listStyleNone noPadOrMargin' style="line-height:22px;">
- before restoring this, test cuz news form on left was causing some conflicts -->
-<!--		<li><a href='#newsletter' id='navLink_newsletter'>Newsletter Subscription</a></li>
-		<li><a href='#recoverpassword' id='navLink_recoverpassword'>Recover Password</a></li> 
-		<li><a href='#customer?show=myaccount' id='navLink_myaccount'>My Account</a></li>
-		<li><a href='#customer?show=changepassword' id='navLink_changepassword'>Change Password</a></li>
-		<li><a href='#customer?show=orders' id='navLink_orders'>Order History</a></li>
-		<li><a href='#customer?show=lists' id='navLink_orders'>Manage Lists</a></li>
-	</ul>
-	</nav>
-	</div>-->
+	<div class='sideline' >
+    <div class="rightA1">
+<!--
+<h3>HELPFUL LINKS</h3>
+<ul>
+<li><a href="#">Selecting a Pillow</a></li>
+<li><a href="#">Different Types of Sleep</a></li>
+<li><a href="#">Positions</a></li>
+<li><a href="#company?show=faq" class='bindByAnchor'>Frequently Asked Questions</a></li>
+
+</ul>
+-->
+<h3>CUSTOMER SERVICE</h3>
+<ul>
+<li><a onClick="return showContent('company',{'show':'contact'});" href="#" >Contact us</a></li>
+<li><a onClick="return showContent('company',{'show':'shipping'});" href="#" >Shipping Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'return'});" href='#' >Return Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'payment'});" href="#" >Payment Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'privacy'});" href="#" >Privacy Policy</a></li>
+</ul>
+<h3>MY ACCOUNT</h3>
+<ul>
+<li><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
+<li><a onClick="return showContent('customer',{'show':'orders'});" href="#" >Order Tracking</a></li>
+<li><a onClick="return showContent('customer',{'show':'newsletter'});" href="#" >Join our Newsletter</a></li>
+<li><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
+</ul>
+<div class="needhelp">
+<br><br>
+Need help? Call Us!<br>
+<b>855-769-3696</b><br>
+or<br>
+<a href="http://messenger.providesupport.com/messenger/1jz93amcu7bu108sbhe3gwkhul.html" target="_blank">Click for live chat</a>
+
+<br><br>
+
+<b>FREE SHIPPING</b><br>
+ON ALL U.S. ORDERS<br>
+<a href="#company?show=shipping" class="bindByAnchor">Learn more</a>
+</div>
+</div>
+
+	</div>
 
 	<div class='mainColumn'>
 <!-- .textContentArea is used as a selector because IE8 doesn't play well  with tag type article as a selector -->
