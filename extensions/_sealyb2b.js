@@ -144,6 +144,8 @@ var store_sealy = function() {
 					app.u.dump(data);
 					$tag.append(data.value.carrier +' Tracking #: '+data.value.track);
 					var href;
+					//Tracking link values taken from http://verysimple.com/2011/07/06/ups-tracking-url/
+					//Functional and tested as of 9/13/2013
 					switch(data.value.carrier){
 						case "UPS": 
 							href = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=" + data.value.track;
