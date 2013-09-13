@@ -137,6 +137,27 @@ var store_sealy = function() {
 		renderFormats : {
 			dumper : function($tag, data){
 				app.u.dump(data.value);
+				},
+			
+			trackingLink : function($tag,data){
+				if(data.value.carrier && data.value.track){
+					app.u.dump(data);
+					$tag.append(data.value.carrier +' Tracking #: '+data.value.track);
+					var href;
+					switch(data.value.carrier){
+						case "UPS": 
+							href = "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=" + data.value.track;
+							break;
+						case "FEDX": 
+							href = "http://www.fedex.com/Tracking?action=track&tracknumbers=" + data.value.track;
+							break;
+						case "USPS":
+						default:
+							href = "https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1=" + data.value.track
+							break;
+						}
+					$tag.attr('href',href);
+					}
 				}
 			}, //renderFormats
 ////////////////////////////////////   UTIL [u]   \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

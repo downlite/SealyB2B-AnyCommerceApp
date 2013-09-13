@@ -78,3 +78,12 @@ address[data-templateid=chkoutBuyerAddressTemplate] .address {
 	display: inline-block;
 	width: 100px;
 }
+
+.shipmentList {
+	margin-top: 0px;
+}
+
+.ui-widget-content a.trackingLink {
+	color: #128EC7;
+	text-decoration: underline;
+}

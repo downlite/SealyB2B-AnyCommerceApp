@@ -2141,11 +2141,13 @@ used for store_crm.js
 <ul>
 	<li id="shipmentTemplate">
 		<div>
-			<span data-bind="var: shipment(carrier); format: text; pretext: Carrier: ;"></span>
-			<span data-bind="var: shipment(track); format: text; pretext: Tracking Number: ;"></span> 
+			<a class="trackingLink" href="#" target="_blank" data-bind="useParentData:true; format: trackingLink; extension: store_sealy;"></a>
 		</div>
-		<div data-bind="var: shipment(notes); format: text;"></div>
-		<div data-bind="useParentData: true; format: dumper; extension: store_sealy;"></div>
+		<div class="displayNone" data-bind="var:shipment(carrier); format: showIfSet;">
+		<div class="displayNone" data-bind="var:shipment(track); format: showIfSet;">
+			<div data-bind="var: shipment(notes); format: text;"></div>
+		</div>
+		</div>
 	</li>
 </ul>
 
@@ -2238,7 +2240,7 @@ The 'data-action' attribute is used to assign an onclick.
 </tr>
 <tr>
 	<td colspan='2'>
-		<ul data-bind="var: order(order/@SHIPMENTS); format: stuffList; loadsTemplate: shipmentTemplate;" class="listStyleNone "></ul>
+		<ul data-bind="var: order(order/@SHIPMENTS); format: stuffList; loadsTemplate: shipmentTemplate;" class="shipmentList listStyleNone "></ul>
 	</td>
 </tr>
 <tr>
