@@ -1780,7 +1780,7 @@ CATEGORY TEMPLATE
 }
 .pfrom{  display: inline-block;
     padding: 7px 0;}
-.cents{ vertical-align:super; font-size:10px;}
+/*.cents{ vertical-align:super; font-size:10px;}*/
 .categoryList li{width:220px;  padding:0px; color:#000; font-size:13px;}
 .categoryList .catName{ 
 	height:34px; 
