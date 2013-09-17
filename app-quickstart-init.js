@@ -131,14 +131,24 @@ app.u.initMVC = function(attempts){
 
 	}
 
-app.u.loadApp = function() {
-//instantiate controller. handles all logic and communication between model and view.
-//passing in app will extend app so all previously declared functions will exist in addition to all the built in functions.
-//tmp is a throw away variable. app is what should be used as is referenced within the mvc.
-	app.vars.rq = null; //to get here, all these resources have been loaded. nuke record to keep DOM clean and avoid any duplication.
-	var tmp = new zController(app);
-//instantiate wiki parser.
-	myCreole = new Parse.Simple.Creole();
+app.u.loadApp = function(attempts) {
+	attempts = attempts || 0;
+	if(typeof zController == 'function' && typeof Parse.Simple.Creole == 'function'){
+		//instantiate controller. handles all logic and communication between model and view.
+		//passing in app will extend app so all previously declared functions will exist in addition to all the built in functions.
+		//tmp is a throw away variable. app is what should be used as is referenced within the mvc.
+		app.vars.rq = null; //to get here, all these resources have been loaded. nuke record to keep DOM clean and avoid any duplication.
+		var tmp = new zController(app);
+		//instantiate wiki parser.
+		myCreole = new Parse.Simple.Creole();
+		}
+	else if(attempts < 50){
+		app.u.dump("requeueing app launch... ["+attempts+"]");
+		setTimeout(function(){app.u.loadApp(attempts+1);}, 250);
+		}
+	else {
+		app.u.dump("ERROR: zController could not be initialized");
+		}
 	}
 
 
