@@ -136,7 +136,7 @@ Welcome,
 </div>
 </div>
 
-<section class="Logos">
+<div class="Logos">
 	<div>
 		<a href="#category?navcat=.brands.100-sealy-brand-bedding" class="bindByAnchor">
 			<img src="images/Slogo.gif" width="59" height="50" style="margin:25px 0 0 160px;" alt="Sealy" title="Sealy" />
@@ -149,7 +149,7 @@ Welcome,
 		</a>
 	</div>
 	<div class="cb"></div>
-</section>
+</div>
 
 <nav class="nav_menu"><ul id='tier1categories'></ul><!-- DUAL NAV WILL GO HERE --></nav>
 
@@ -242,7 +242,7 @@ Welcome,
 
 
 	<div class="footer">
-    <section class="signmain">
+    <div class="signmain">
     <div class="loginHide signup">
     <form action='#' id='subscribeFrmFooter' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe($(this)); return false">
     <div class="deals"><b>SIGN UP FOR OUR NEWSLETTER</b><br>
@@ -260,7 +260,7 @@ Welcome,
 	</form></div>
 
     <div class="cb"></div>
-</section>
+</div>
 <footer>
 <div class="footerM">
 <div class="cust"><b>CUSTOMER SERVICE</b>
@@ -497,7 +497,7 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 
 	<div><img src='blank.gif' width='992' height='120' data-bind="var: category(%page.banner_wide1); format: banner; extension:myRIA; editor:banner;" /></div>
 -->
-<section class="pagecontent">
+<div class="pagecontent">
 <div class="bedtime">
 <h1>Sealy Bedding Wholesale</h1>
 
@@ -543,7 +543,7 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 		<a href="#" onClick="return showContent('category',{'navcat':'.custom-programs-sealy-bedding'});">READ MORE</a>
 	</p>
 </div>
-</section><div class="cb"></div>
+</div><div class="cb"></div>
 
 </div>
 
@@ -1192,9 +1192,9 @@ It's done this way because ID's hard coded into template are bad mojo (templates
 	
 	<div data-bind='var: product(zoovy:ship_latency); format:text;pretext:Normally ships in ;posttext: day(s);' class='latency'></div>
 	
-	<section id='prodViewerReviewSummary' class='marginBottom'>
+	<div id='prodViewerReviewSummary' class='marginBottom'>
 		<span data-bind='var: product(reviews.average); format:addClass; className:review_;' class='reviewSprite'></span>
-		<span data-bind='var: reviews(total); format:text;posttext: from ;posttext: reviews; className:numReviews;'></span>	</section>
+		<span data-bind='var: reviews(total); format:text;posttext: from ;posttext: reviews; className:numReviews;'></span>	</div>
 	
 	<div id="prodDesc" data-bind='var: product(zoovy:prod_desc); format:wiki; wikiFormats:myRIA;'></div>	</td>
 </tr>
@@ -1708,7 +1708,7 @@ ON ALL U.S. ORDERS<br>
 		<div id='myaccountArticle' class='displayNone textContentArea'>
 			<h1>My Account</h1>
 
-			<section>
+			<div>
 
 <div class='billAddressContainer' data-app-role='addressContainer' data-app-addresstype='bill'>
 	<div class='marginBottom'>
@@ -1727,7 +1727,7 @@ ON ALL U.S. ORDERS<br>
 </div>
 
 
-			</section>
+			</div>
 
 
 		</div>
@@ -1888,7 +1888,7 @@ So the cart template should contain these two elements and the extension should 
 		<h2 class='ui-widget-header ui-helper-clearfix ui-corner-all ui-header'><strong>Cart Totals</strong></h2>
 		<div class='cartSummaryContainer'>
 		
-<section id='cartTemplateCostSummary' class='cartSummary'>
+<div id='cartTemplateCostSummary' class='cartSummary'>
 
 	<div data-bind="var: cart(sum/items_total); format:money; className:orderSubtotal; hideZero:false; currencySign: $; pretext:<b>Subtotal:</b> ; "></div>
 	
@@ -1904,14 +1904,14 @@ So the cart template should contain these two elements and the extension should 
 	
 	<div data-bind='var: cart(sum/balance_due_total); format:orderBalance; className:orderBalanceDue; hideZero:false; currencySign: $; pretext:Estimated Total: ; extension:store_cart;'></div>
 
-</section>
+</div>
 
-<section id='cartTemplateShippingContainer'>
+<div id='cartTemplateShippingContainer'>
 	<h3>Shipping:</h3>
 	<ul class='noPadOrMargin listStyleNone cartShipMethods' data-bind='var: cart(@SHIPMETHODS); format:shipMethodsAsRadioButtons; extension:store_cart;'></ul>
-</section>
+</div>
 		
-<section class='stdMargin'>
+<div class='stdMargin'>
 
 	<div class='cartZipCodeContainer'>
 	<label for='data-ship_zip'>Zip/Postal Code:</label>
@@ -1940,7 +1940,7 @@ So the cart template should contain these two elements and the extension should 
 
 	</div>
 			
-</section>
+</div>
 
 <span id="buySAFE_Kicker" name="buySAFE_Kicker" type="Kicker Guaranteed PostIt 170x52"></span>
 
@@ -2127,7 +2127,7 @@ used for store_crm.js
 
 <!-- used in the /customer section for order view -->
 
-<section id='orderLineItemTemplate' class='appAccordianesque' data-bind='var:order(ORDERID);format:assignAttribute; attribute:data-orderid;'>
+<div id='orderLineItemTemplate' class='appAccordianesque' data-bind='var:order(ORDERID);format:assignAttribute; attribute:data-orderid;'>
 
 	<div data-app-role='orderHeader' onClick="app.ext.myRIA.u.showOrderDetails($(this).parent());" class='ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom' >
 	
@@ -2138,7 +2138,7 @@ used for store_crm.js
 
 	<div data-app-role='orderContents' class='ui-accordion-content ui-helper-reset displayNone ui-widget-content '></div>
 
-</section>
+</div>
 
 <ul>
 	<li id="shipmentTemplate">
@@ -2159,7 +2159,7 @@ used for store_crm.js
 
 
 
-<section  id='faqTopicTemplate'>
+<div  id='faqTopicTemplate'>
 
 	<div class='ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom' data-bind='var:faq(TOPIC_ID);format:assignAttribute; attribute:data-topicid;' onClick="app.ext.myRIA.a.showFAQbyTopic($(this).attr('data-topicid'));">
 	<span class="ui-icon ui-icon-triangle-1-e floatLeft marginRight"></span>
@@ -2168,7 +2168,7 @@ used for store_crm.js
 
 	<div data-bind='var:faq(TOPIC_ID);format:assignAttribute; attribute:id; valuePretext:faqDetails4Topic_;' class='ui-accordion-content ui-helper-reset ui-widget-content displayNone'></div>
 
-</section>
+</div>
 
 
 <div id='faqQnATemplate'>
