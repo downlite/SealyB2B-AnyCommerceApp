@@ -1318,10 +1318,11 @@ if you change these, you should move them above this comment so that when you (o
 </ul>
 <h3>MY ACCOUNT</h3>
 <ul>
-<li><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
+<li class="loginHide"><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
+<li><a onClick="return showContent('customer',{'show':'myaccount'});" href="#">My Account</a></li>
 <li><a onClick="return showContent('customer',{'show':'orders'});" href="#" >Order Tracking</a></li>
 <li><a onClick="return showContent('customer',{'show':'newsletter'});" href="#" >Join our Newsletter</a></li>
-<li><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
+<li class="loginShow"><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
 </ul>
 <div class="needhelp">
 <br><br>
@@ -1519,10 +1520,11 @@ For general product questions and order inquiries you can also email us at <a hr
 </ul>
 <h3>MY ACCOUNT</h3>
 <ul>
-<li><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
+<li class="loginHide"><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
+<li><a onClick="return showContent('customer',{'show':'myaccount'});" href="#">My Account</a></li>
 <li><a onClick="return showContent('customer',{'show':'orders'});" href="#" >Order Tracking</a></li>
 <li><a onClick="return showContent('customer',{'show':'newsletter'});" href="#" >Join our Newsletter</a></li>
-<li><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
+<li class="loginShow"><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
 </ul>
 <div class="needhelp">
 <br><br>
@@ -2332,13 +2334,13 @@ The 'data-action' attribute is used to assign an onclick.
 	<fieldset>
 
 	<div>
-	<!--<label for='modalLoginlogin'>Login/Email</label>-->
-	<input type='email' class='zform_textbox zform_email textf' onBlur="if (this.value == '') {this.value = 'E-mail address';}" onFocus="if (this.value == 'E-mail address') {this.value = '';}" value="E-mail address" name='login' size='25' />
+	<label>Login/Email: </label>
+	<input type='email' class='zform_textbox zform_email textf' name='login' size='25' />
 	</div>
 	
 	<div>
-	<!--<label for='modalLoginpassword'>Password</label>-->
-	<input type='password' class='zform_textbox zform_password textf' onBlur="if (this.value == '') {this.value = 'Password';}" onFocus="if (this.value == 'Password') {this.value = '';}" value="Password" name='password' size='25' />
+	<label>Password: </label>
+	<input type='password' class='zform_textbox zform_password textf' name='password' size='25' />
 	</div>
 	
 	<div>
@@ -2352,9 +2354,9 @@ The 'data-action' attribute is used to assign an onclick.
 
 <h3 class='marginBottom'>Recover Password</h3>
 <div id='recoverPasswordMessaging' class='appMessaging'></div>
-<form action='#' onSubmit="app.calls.appBuyerPasswordRecover.init($('#passwordRecoveryLogin').val(),{'callback':'showMessaging','message':'Thank you, will receive an email shortly','targetID':'recoverPasswordMessaging'}); app.model.dispatchThis('immutable'); return false;">
+<form action='#' onSubmit="app.calls.appBuyerPasswordRecover.init($('input[name=login]', $(this)).val(),{'callback':'showMessaging','message':'Thank you, will receive an email shortly','targetID':'recoverPasswordMessaging'}); app.model.dispatchThis('immutable'); return false;">
 <fieldset>
-<div class='marginBottom'><!--<label for='passwordRecoveryLogin'>Login/Email</label> --><input type='text' name='login' required='required' id='passwordRecoveryLogin' size='25' class="textf"/></div>
+<div class='marginBottom'><label>Login/Email: </label><input type='text' name='login' required='required' size='25' class="textf"/></div>
 
 <div><input type='submit' class='ui-button-text ui-button ui-state-default ui-corner-all ' value='Email Password to Me' /></div>
 
