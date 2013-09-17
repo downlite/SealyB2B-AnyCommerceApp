@@ -36,10 +36,8 @@ var store_sealy = function() {
 				var r = false; //return false if extension won't load for some reason (account config, dependencies, etc).
 					
 				app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
-					var $target=$('#wideSlideshow');
-					if(!$target.hasClass('slideshowrendered')){
-						$target.addClass('slideshowrendered').cycle({fx:'fade',speed:'slow',timeout:5000});  
-						}
+					app.ext.store_sealy.u.showHomepageSlideshow();
+					
 					}]); 
 				
 				app.rq.push(['templateFunction','customerTemplate','onCompletes',function(P) {
@@ -167,6 +165,21 @@ var store_sealy = function() {
 //utilities are typically functions that are exected by an event or action.
 //any functions that are recycled should be here.
 		u : {
+			showHomepageSlideshow : function(attempts){
+				attempts = attempts || 0;
+				var $target=$('#wideSlideshow');
+				if(typeof $.cycle == 'function'){
+					if(!$target.hasClass('slideshowrendered')){
+						$target.addClass('slideshowrendered').cycle({fx:'fade',speed:'slow',timeout:5000});  
+						}
+					}
+				else if(attempts < 50){
+					setTimeout(function(){app.ext.store_sealy.u.showHomepageSlideshow(attempts+1);},250);
+					}
+				else {
+					app.u.dump('-> store_sealy ERROR: could not initialize homepage slideshow');
+					}
+				}
 			}, //u [utilities]
 
 //app-events are added to an element through data-app-event="extensionName|functionName"
