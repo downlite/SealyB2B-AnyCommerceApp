@@ -684,7 +684,7 @@ a:hover{ text-decoration: underline; color:#128ec7;}
 .cb{ clear:both;}
 img{ border:0;}
 #wrapper{ width:100%;margin:0px auto; padding:0px;}
-.header{width:940px;margin:0px auto; padding:0px;}
+.headerSection{width:940px;margin:0px auto; padding:0px;}
 .topbar{ box-shadow:2px 0 10px #999999; height:48px;}
 .welcome{ width:940px; margin:0px auto; padding:15px 0 0 0;}
 .fl{ float:left;}
