@@ -168,7 +168,7 @@ var store_sealy = function() {
 			showHomepageSlideshow : function(attempts){
 				attempts = attempts || 0;
 				var $target=$('#wideSlideshow');
-				if(typeof $.cycle == 'function'){
+				if(typeof $.fn.cycle == 'function'){
 					if(!$target.hasClass('slideshowrendered')){
 						$target.addClass('slideshowrendered').cycle({fx:'fade',speed:'slow',timeout:5000});  
 						}
