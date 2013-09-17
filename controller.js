@@ -1944,9 +1944,9 @@ VALIDATION
 				r = a+b.substr(1);//remove the 0 from b, then return a + b = 12,345,678.90
 	
 	//if the character before the decimal is just a zero, remove it.
-				if(r.split('.')[0] == 0){
-					r = '.'+r.split('.')[1]
-					}
+				//if(r.split('.')[0] == 0){
+				//	r = '.'+r.split('.')[1]
+				//	}
 				
 	//			app.u.dump(" -> r = "+r);
 				if(currencySign)	{
