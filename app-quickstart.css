@@ -717,9 +717,9 @@ img{ border:0;}
 }
 .Logos div{ width:940px; margin:0px auto;}
 #companyNav{ width:auto;}
-nav{ width:940px; margin:0px auto; padding:0px;}
-nav a{ font-size:18px; color:#000000; margin:0;}
-nav a:hover{ color:#007dc0; text-decoration:none;}
+.nav_menu{ width:940px; margin:0px auto; padding:0px;}
+.nav_menu a{ font-size:18px; color:#000000; margin:0;}
+.nav_menu a:hover{ color:#007dc0; text-decoration:none;}
 
 .wrapper{ margin:0px auto; width:100%; padding:0px;display: block; padding:40px 0 0 0;position: relative;}
 .wrapper:after {
