@@ -242,25 +242,21 @@ Welcome,
 
 
 	<div class="footer">
-    <div class="signmain">
+    <!--
+	<div class="signmain">
     <div class="loginHide signup">
     <form action='#' id='subscribeFrmFooter' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe($(this)); return false">
     <div class="deals"><b>SIGN UP FOR OUR NEWSLETTER</b><br>
     Stay updated on important product information</div>
-    <!--
-	<span class="loginHide">
-	-->
+    
 	<div class="name"><input required='required' type='email' value='email address' class='newsSubscribeInput textbox email'  maxlength='50' size='25' name='login' id='subscribeLoginFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
     <div class="email"><input required='required' type='text'  value='full name' class='newsSubscribeInput textbox fullname' maxlength='50' size='25' name='fullname' id='subscribeFullnameFooter' onFocus="app.ext.myRIA.u.handleFormField(this);"  onBlur="app.ext.myRIA.u.handleFormField(this);" /></div>
       <input type="image" class="submit" src="images/signup.gif" alt="Sign Up" title="Sign Up" style="width:70px; height:30px;padding:0;"/>
-	<!--
-	</span>
-	<span class="loginShow"><a href="#" class="signupHeight" onClick="return showContent('customer',{'show':'subscriberLists'});">Your Newsletter Settings (<span class="username"></span>)</a></span>
-    -->
+	
 	</form></div>
 
     <div class="cb"></div>
-</div>
+</div>-->
 <footer>
 <div class="footerM">
 <div class="cust"><b>CUSTOMER SERVICE</b>
@@ -1321,7 +1317,6 @@ if you change these, you should move them above this comment so that when you (o
 <li class="loginHide"><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
 <li><a onClick="return showContent('customer',{'show':'myaccount'});" href="#">My Account</a></li>
 <li><a onClick="return showContent('customer',{'show':'orders'});" href="#" >Order Tracking</a></li>
-<li><a onClick="return showContent('customer',{'show':'newsletter'});" href="#" >Join our Newsletter</a></li>
 <li class="loginShow"><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
 </ul>
 <div class="needhelp">
@@ -1474,10 +1469,10 @@ For general product questions and order inquiries you can also email us at <a hr
 			<ul>
 			  <li>DOWNLITE does not accept returns that have been used or laundered.</li>
 			  <li>All products require a Return Authorization (R/A) prior to return shipping. Products returned to DOWNLITE without an R/A number will be refused.</li>
-			  <li>Returned products are subject to a25% restocking fee.</li>
+			  <li>Returned products are subject to a 25% restocking fee.</li>
 			  <li>Shipping costs back to DOWNLITE are the responsibility of the customer (unless it is a DOWNLITE  error)</li>
 			  <li>DOWNLITE will accept returns up to 30 days after shipment unless the product is defective.</li>
-			  <li>Regardless of any scenario - you have to have an R/A number issued before returning any items.</li>
+			  <li>Regardless of any scenario - you have to have an R/A number issued before returning any items.</li>
 			</ul>
 			<div data-bind='var: profile(zoovy:return_policy); format:wiki; wikiFormats:myRIA;' id='returnContent'></div>
 		</div>
@@ -1523,7 +1518,6 @@ For general product questions and order inquiries you can also email us at <a hr
 <li class="loginHide"><a onClick="return showContent('customer',{'show':'createaccount'});" href="#">Log-in or Sign-up</a></li>
 <li><a onClick="return showContent('customer',{'show':'myaccount'});" href="#">My Account</a></li>
 <li><a onClick="return showContent('customer',{'show':'orders'});" href="#" >Order Tracking</a></li>
-<li><a onClick="return showContent('customer',{'show':'newsletter'});" href="#" >Join our Newsletter</a></li>
 <li class="loginShow"><a href="#" onClick="app.ext.myRIA.u.handleLogoutActions(); return false;">Sign Out</a></li>
 </ul>
 <div class="needhelp">
@@ -2367,7 +2361,7 @@ The 'data-action' attribute is used to assign an onclick.
 
 <div style="text-align:center;">
 <hr />
-<button class='ui-button-text ui-button ui-state-default ui-corner-all ' onClick="showContent('customer',{'show':'newsletter'});" style="border:none;"><img src="images/create_account.gif" width="300" height="54"></button>
+<button class='ui-button-text ui-button ui-state-default ui-corner-all ' onClick="showContent('customer',{'show':'createaccount'});" style="border:none;"><img src="images/create_account.gif" width="300" height="54"></button>
 </div>
 
 
