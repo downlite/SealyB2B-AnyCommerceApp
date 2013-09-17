@@ -133,7 +133,7 @@ app.u.initMVC = function(attempts){
 
 app.u.loadApp = function(attempts) {
 	attempts = attempts || 0;
-	if(typeof zController == 'function' && typeof Parse.Simple.Creole == 'function'){
+	if(typeof zController == 'function' && typeof Parse.Simple.Creole == 'function' && typeof zoovyModel == 'function'){
 		//instantiate controller. handles all logic and communication between model and view.
 		//passing in app will extend app so all previously declared functions will exist in addition to all the built in functions.
 		//tmp is a throw away variable. app is what should be used as is referenced within the mvc.
