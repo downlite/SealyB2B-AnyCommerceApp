@@ -87,3 +87,11 @@ address[data-templateid=chkoutBuyerAddressTemplate] .address {
 	color: #128EC7;
 	text-decoration: underline;
 }
+
+.Logos img {
+	margin: 0px 55px;
+}
+
+.Logos img.bumpDown {
+	margin-top: 12px;
+}
