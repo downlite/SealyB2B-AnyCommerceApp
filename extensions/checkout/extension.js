@@ -1663,10 +1663,17 @@ note - the order object is available at app.data['order|'+P.orderID]
 				else if(L > 0)	{
 					for(var i = 0; i < L; i += 1)	{
 						id = data.value[i].id;
-
+						var label = "";
+						//app.u.dump(data.value[i].pretty);
+						if(data.value[i].pretty.indexOf("Purchase Order") >= 0){
+							label += "Credit Line From DOWNLITE (only some accounts applicable - do not use if not sure)";
+							}
+						else {
+							label += data.value[i].pretty;
+							}
 //onClick event is added through an app-event. allows for app-specific events.
 						o += "<div class='headerPadding' data-app-role='paymentMethodContainer'><label><input type='radio' name='want/payby' value='"+id+"' ";
-						o += " />"+data.value[i].pretty+"<\/label></div>";
+						o += " />"+label+"<\/label></div>";
 						}
 					$tag.html(o);
 					if(app.data.cartDetail && app.data.cartDetail.want && app.data.cartDetail.want.payby)	{
