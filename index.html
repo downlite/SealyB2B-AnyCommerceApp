@@ -270,6 +270,7 @@ Welcome,
 <li><a href="#company?show=about" class='bindByAnchor'>About Us</a></li>
 <li><a href="#company?show=contact" class='bindByAnchor'>Contact Us</a></li>
 <li><a href="#company?show=privacy" class='bindByAnchor'>Your Privacy</a></li>
+<li><a href="#company?show=warranty" class='bindByAnchor'>Warranty Info</a></li>
 </ul>
 </div>
 
@@ -1314,6 +1315,7 @@ if you change these, you should move them above this comment so that when you (o
 <li><a onClick="return showContent('company',{'show':'return'});" href='#' >Return Policy</a></li>
 <li><a onClick="return showContent('company',{'show':'payment'});" href="#" >Payment Policy</a></li>
 <li><a onClick="return showContent('company',{'show':'privacy'});" href="#" >Privacy Policy</a></li>
+<li><a onClick="return showContent('company',{'show':'warranty'});" href="#" >Warranty Policy</a></li>
 </ul>
 <h3>MY ACCOUNT</h3>
 <ul>
@@ -1484,6 +1486,13 @@ For general product questions and order inquiries you can also email us at <a hr
 		
 		<div class='displayNone textContentArea' id='shippingArticle'>
 			<h1>Shipping Information</h1>
+			<!--<div data-bind='var: profile(zoovy:shipping_policy); format:wiki; wikiFormats:myRIA;' id='shippingContent'></div>-->
+		</div>
+		
+		
+		<div class='displayNone textContentArea' id='warrantyArticle'>
+			<h1>Warranty Policy</h1>
+			<p>Unless stated otherwise all bedding sold by DOWNLITE under the Sealy, Sealy Posturepedic, Optimum and Stearns & Foster collections carry a one year limited manufacturer warranty. Some items have a longer warranty period such as pillow protectors and mattress protectors/encasements. Each item has a detailed description and any warranty periods longer than 1 year would be mentioned in that copy.</p>
 			<!--<div data-bind='var: profile(zoovy:shipping_policy); format:wiki; wikiFormats:myRIA;' id='shippingContent'></div>-->
 		</div>
 	
